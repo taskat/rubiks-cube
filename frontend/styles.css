@@ -38,12 +38,24 @@ body {
     background-color: #1E1E1E;
 }
 
-#config_editor {
+.up {
     height: calc(50% - 20px);
     margin-bottom: 20px;
 }
 
-#algo_editor {
+.down {
     height: 50%;
     background-color: #1E1E1E;
+}
+
+.simulator {
+    background-color: red;
+}
+
+.output {
+    background-color: blue;
+}
+
+.placeholder {
+    margin-top: 0px;
 }

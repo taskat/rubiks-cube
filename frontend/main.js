@@ -8,6 +8,17 @@ function main() {
 
     document.querySelector("#change_tab").addEventListener("click", editor.change_tab);
 
+    document.addEventListener('keyup', (e) => keyboard_shortcuts(e, editor), false);
+}
+
+function keyboard_shortcuts(e, editor) {
+    if (e.ctrlKey && e.keyCode == 13) {
+        solve();
+    } else if (e.shiftKey && e.keyCode == 13) {
+        check();
+    } else if (e.shiftKey && e.keyCode == 9) {
+        editor.change_tab();
+    }
 }
 
 function check() {

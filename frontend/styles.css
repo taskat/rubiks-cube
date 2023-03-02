@@ -33,29 +33,32 @@ body {
     margin-left: 10px;
 }
 
-#config_editor,
-#algo_editor {
-    background-color: #1E1E1E;
-}
-
-.up {
+.simulator {
+    background-color: red;
     height: calc(50% - 20px);
     margin-bottom: 20px;
 }
 
-.down {
-    height: 50%;
-    background-color: #1E1E1E;
-}
-
-.simulator {
-    background-color: red;
-}
-
 .output {
     background-color: blue;
+    height: 50%;
 }
 
 .placeholder {
     margin-top: 0px;
+}
+
+#buttons {
+    height: calc(5% - 20px);
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#editor {
+    height: calc(95%);
+    background-color: #1E1E1E;
 }

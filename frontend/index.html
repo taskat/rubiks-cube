@@ -6,14 +6,19 @@
     <link rel="stylesheet" type="text/css" href="styles.css">
     <link rel="stylesheet" href="https://unpkg.com/monaco-editor@0.23.0/min/vs/editor/editor.main.css" />
     <script src="https://unpkg.com/monaco-editor@0.23.0/min/vs/loader.js"></script>
-    <script src="editor/editor.js"></script>
+    <script type="module" src="editor/editor.js"></script>
+    <script type="module" src="main.js"></script>
 </head>
 
 <body>
     <div class="container">
         <div class="left">
-            <div id="config_editor" class="up"></div>
-            <div id="algo_editor" class="down"></div>
+            <div id="buttons">
+                <button id="change_tab">Algorithm</button>
+                <button id="check">Check</button>
+                <button id="solve">Solve</button>
+            </div>
+            <div id="editor"></div>
         </div>
         <div class="right">
             <div class="simulator up">

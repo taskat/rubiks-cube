@@ -1,23 +1,35 @@
 require.config({ paths: { "vs": "https://unpkg.com/monaco-editor@0.23.0/min/vs" } });
-require(["vs/editor/editor.main"], function() {
-    var conifg_editor = monaco.editor.create(document.getElementById("config_editor"), {
-        value: [
-            `function x() {`,
-            `\tconsole.log("Hello world!");`,
-            `}`
-        ].join("\n"),
-        language: "javascript",
-        theme: "vs-dark",
+import Tab from "./tab.js";
 
-    });
-    var algo_editor = monaco.editor.create(document.getElementById("algo_editor"), {
-        value: [
-            `function x() {`,
-            `\tconsole.log("Hello world!");`,
-            `}`
-        ].join("\n"),
-        language: "javascript",
-        theme: "vs-dark",
+export default class Editor {
+    constructor() {
+        require(["vs/editor/editor.main"], function () {
+            let map = new Map();
+            map.set("config", new Tab(monaco.editor.createModel("Hello from config", "txt"), null));
+            map.set("algo", new Tab(monaco.editor.createModel("Hello from algo", "txt"), null));
+            this.tabs = map;
+            this.editor = monaco.editor.create(document.getElementById("editor"), {
+                model: tabs.get("config").model,
+                theme: "vs-dark",
+            });
+        });
+    }
 
-    });
-});
+    change_tab() {
+        let button = document.getElementById("change_tab");
+        let currentState = editor.saveViewState();
+        let nextModel = null;
+        if (button.textContent == "Algorithm") {
+            button.textContent = "Configuration";
+            tabs.get("config").updateState(currentState);
+            nextModel = tabs.get("algo").get_model();
+        } else if (button.textContent == "Configuration") {
+            button.textContent = "Algorithm";
+            tabs.get("algo").updateState(currentState);
+            nextModel = tabs.get("config").get_model();
+        }
+        editor.setModel(nextModel);
+        editor.restoreViewState(nextModel);
+        editor.focus();
+    }
+}

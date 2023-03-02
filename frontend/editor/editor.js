@@ -9,7 +9,7 @@ export default class Editor {
             map.set("algo", new Tab(monaco.editor.createModel("Hello from algo", "txt"), null));
             this.tabs = map;
             this.editor = monaco.editor.create(document.getElementById("editor"), {
-                model: tabs.get("config").model,
+                model: this.tabs.get("config").model,
                 theme: "vs-dark",
             });
         });

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Rubik's cube</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/monaco-editor@0.23.0/min/vs/editor/editor.main.css" />
+    <script src="https://unpkg.com/monaco-editor@0.23.0/min/vs/loader.js"></script>
+    <script type="module" src="editor/editor.js"></script>
+    <script type="module" src="main.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="left">
+            <div id="buttons">
+                <button id="change_tab">Algorithm</button>
+                <button id="check">Check</button>
+                <button id="solve">Solve</button>
+            </div>
+            <div id="editor"></div>
+        </div>
+        <div class="right">
+            <div class="simulator up">
+                <h1 class="placeholder">Cube visualization</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            </div>
+            <div class="output down">
+                <h1 class="placeholder">Output</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

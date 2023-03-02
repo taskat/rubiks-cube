@@ -1,0 +1,64 @@
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    width: calc(100% - 40px);
+    height: calc(100% - 40px);
+    margin: 20px;
+    padding: 0;
+    background-color: lightgreen;
+    overflow: hidden;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.left,
+.right {
+    width: 50%;
+    height: 100%;
+}
+
+.left {
+    margin-right: 10px;
+}
+
+.right {
+    margin-left: 10px;
+}
+
+.simulator {
+    background-color: red;
+    height: calc(50% - 20px);
+    margin-bottom: 20px;
+}
+
+.output {
+    background-color: blue;
+    height: 50%;
+}
+
+.placeholder {
+    margin-top: 0px;
+}
+
+#buttons {
+    height: calc(5% - 20px);
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#editor {
+    height: calc(95%);
+    background-color: #1E1E1E;
+}

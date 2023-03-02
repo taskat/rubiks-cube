@@ -8,6 +8,10 @@ export default class Tab {
         return this.model;
     }
 
+    get_state() {
+        return this.state;
+    }
+
     updateState(state) {
         this.state = state;
     }

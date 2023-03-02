@@ -18,18 +18,18 @@ export default class Editor {
     change_tab() {
         let button = document.getElementById("change_tab");
         let currentState = editor.saveViewState();
-        let nextModel = null;
+        let nextTab = null;
         if (button.textContent == "Algorithm") {
             button.textContent = "Configuration";
             tabs.get("config").updateState(currentState);
-            nextModel = tabs.get("algo").get_model();
+            nextTab = tabs.get("algo");
         } else if (button.textContent == "Configuration") {
             button.textContent = "Algorithm";
             tabs.get("algo").updateState(currentState);
-            nextModel = tabs.get("config").get_model();
+            nextTab = tabs.get("config");
         }
-        editor.setModel(nextModel);
-        editor.restoreViewState(nextModel);
+        editor.setModel(nextTab.get_model());
+        editor.restoreViewState(nextTab.get_state());
         editor.focus();
     }
 }

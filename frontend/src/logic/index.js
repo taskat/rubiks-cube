@@ -66,9 +66,9 @@ const makeKvpsForSlice = ([rotationMatrices3, coordsList], index) => {
 }
 
 const angles = [90, 180, 270]
-const xRotationMatrices3 = angles.map(R.makeXRotation)
-const yRotationMatrices3 = angles.map(R.makeYRotation)
-const zRotationMatrices3 = angles.map(R.makeZRotation)
+const xRotationMatrices3 = angles.map(R.rotateX)
+const yRotationMatrices3 = angles.map(R.rotateY)
+const zRotationMatrices3 = angles.map(R.rotateZ)
 
 const makeMoveIdsToMoves = cubeSize => {
   const { values } = CL.getCubeDimensions(cubeSize)

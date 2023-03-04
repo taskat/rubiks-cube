@@ -1,7 +1,5 @@
 {
   "name": "rubiks-cube",
-  "description": "A three.js visualisation of solving a Rubik's cube",
-  "homepage": "https://taylorjg.github.io/rubiks-cube",
   "version": "0.0.62",
   "private": true,
   "dependencies": {
@@ -40,26 +38,5 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "npm run build && gh-pages -d build"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "gh-pages": "^3.2.3"
   }
 }

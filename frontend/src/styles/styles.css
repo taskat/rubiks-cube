@@ -65,6 +65,7 @@ body {
 
 #editor {
     height: calc(93%);
+    padding-top: 10px;
     background-color: #1E1E1E;
 }
 

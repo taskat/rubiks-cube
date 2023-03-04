@@ -1,4 +1,4 @@
-import Editor from "./editor/editor.js";
+import Editor from "./src/editor/editor.js";
 
 function main() {
     document.querySelector("#check").addEventListener("click", check);

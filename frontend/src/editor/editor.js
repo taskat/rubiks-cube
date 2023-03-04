@@ -12,23 +12,19 @@ export default class Editor {
             model: this.tabs.get("config").model,
             theme: "vs-dark",
         });
-        console.log("created editor");
-        console.log(this.editor === undefined);
     }
 
     change_tab() {
         let button = document.getElementById("change_tab");
-        console.log(this.constructor.name);
-        console.log(this.editor === undefined);
         let currentState = this.editor.saveViewState();
         let nextTab = null;
-        if (button.textContent == "Algorithm") {
+        if (button.textContent === "Algorithm") {
             button.textContent = "Configuration";
             this.tabs.get("config").updateState(currentState);
             nextTab = this.tabs.get("algo");
-        } else if (button.textContent == "Configuration") {
+        } else if (button.textContent === "Configuration") {
             button.textContent = "Algorithm";
-            this. tabs.get("algo").updateState(currentState);
+            this.tabs.get("algo").updateState(currentState);
             nextTab = this.tabs.get("config");
         }
         this.editor.setModel(nextTab.get_model());

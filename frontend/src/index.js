@@ -1,11 +1,10 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import { injectGlobal } from "@emotion/css"
 import { ThreeAppActionsProvider } from "./context"
 import App from "./App"
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration"
 import threeApp from "./three-app"
-import "./styles.css"
+import "./styles/styles.css"
 import Editor from "./editor/editor.js"
 
 const main = async () => {
@@ -34,11 +33,11 @@ const main = async () => {
 }
 
 function keyboard_shortcuts(e, editor) {
-  if (e.ctrlKey && e.keyCode == 13) {
+  if (e.ctrlKey && e.keyCode === 13) {
     solve();
-  } else if (e.shiftKey && e.keyCode == 13) {
+  } else if (e.shiftKey && e.keyCode === 13) {
     check();
-  } else if (e.shiftKey && e.keyCode == 9) {
+  } else if (e.shiftKey && e.keyCode === 9) {
     editor.change_tab();
   }
 }

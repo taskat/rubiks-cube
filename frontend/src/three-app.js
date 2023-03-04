@@ -1,26 +1,9 @@
-import EventEmitter from "events"
 import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import * as L from "./logic"
 import * as M from "./logic/mymoves"
 import * as U from "./logic/utils"
-
-const url = new URL(document.location)
-const searchParams = url.searchParams
-
-const queryParamInt = (paramName, min, max, defaultValue) => {
-  const clamp = v => {
-    const localMin = min !== undefined ? min : Number.MIN_SAFE_INTEGER
-    const localMax = max !== undefined ? max : Number.MAX_SAFE_INTEGER
-    return Math.max(localMin, Math.min(localMax, v))
-  }
-  if (!searchParams.has(paramName)) return clamp(defaultValue)
-  const valueString = searchParams.get(paramName)
-  const valueInteger = Number(valueString)
-  const value = Number.isInteger(valueInteger) ? valueInteger : defaultValue
-  return clamp(value)
-}
 
 const COLOR_TABLE = {
   "U": new THREE.Color("blue"),
@@ -40,7 +23,7 @@ const PIECE_MATERIAL = new THREE.MeshPhysicalMaterial({
   reflectivity: .5
 })
 
-const threeApp = () => {
+function threeApp() {
 
   const globals = {
     pieceGeometry: undefined,
@@ -60,54 +43,23 @@ const threeApp = () => {
     axesEnabled: false
   }
 
-  const SETTINGS_CHANGED_EVENT_NAME = 'settings-changed'
+  globals.animationSpeed = 750;
+  const BEFORE_DELAY = 2000;
+  const AFTER_DELAY = 2000;
 
-  const eventEmitter = new EventEmitter()
-
-  const addSettingsChangedListener = listener =>
-    eventEmitter.on(SETTINGS_CHANGED_EVENT_NAME, listener)
-
-  const removeSettingsChangedListener = listener =>
-    eventEmitter.off(SETTINGS_CHANGED_EVENT_NAME, listener)
-
-  const getSettings = () => {
-    return {
-      cubeSize: globals.cubeSize,
-      animationSpeed: globals.animationSpeed,
-      autoRotate: globals.controls.autoRotate,
-      autoRotateSpeed: globals.controls.autoRotateSpeed,
-      axesEnabled: globals.axesEnabled
+  function makeRotationMatrix4(rotationMatrix3) {
+    let values = new Array(16).fill(0);
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        values[i * 4 + j] = rotationMatrix3.get([i, j]);
+      }
     }
+    values[15] = 1;
+    return new THREE.Matrix4().fromArray(values);
   }
 
-  const emitSettingsChanged = () => {
-    eventEmitter.emit(SETTINGS_CHANGED_EVENT_NAME, getSettings())
-  }
-
-  globals.animationSpeed = queryParamInt("animationSpeed", 100, 1000, 750)
-  const NUM_RANDOM_MOVES = queryParamInt("randomMoves", 10, 100, 25)
-  const BEFORE_DELAY = queryParamInt("beforeDelay", 0, 5000, 2000)
-  const AFTER_DELAY = queryParamInt("afterDelay", 0, 5000, 2000)
-
-  const makeRotationMatrix4 = rotationMatrix3 => {
-    const n11 = rotationMatrix3.get([0, 0])
-    const n12 = rotationMatrix3.get([1, 0])
-    const n13 = rotationMatrix3.get([2, 0])
-    const n21 = rotationMatrix3.get([0, 1])
-    const n22 = rotationMatrix3.get([1, 1])
-    const n23 = rotationMatrix3.get([2, 1])
-    const n31 = rotationMatrix3.get([0, 2])
-    const n32 = rotationMatrix3.get([1, 2])
-    const n33 = rotationMatrix3.get([2, 2])
-    return new THREE.Matrix4().set(
-      n11, n12, n13, 0,
-      n21, n22, n23, 0,
-      n31, n32, n33, 0,
-      0, 0, 0, 1)
-  }
-
-  const loadGeometry = url =>
-    new Promise((resolve, reject) => {
+  function load3DModel(url) {
+    return new Promise((resolve, reject) => {
       const loader = new GLTFLoader()
       loader.load(
         url,
@@ -117,9 +69,10 @@ const threeApp = () => {
         },
         undefined,
         reject)
-    })
+    });
+  }
 
-  const lookupColorForFaceNormal = (piece, normalX, normalY, normalZ) => {
+  function lookupColorForFaceNormal(piece, normalX, normalY, normalZ) {
     if (U.closeTo(normalY, 1)) return COLOR_TABLE[piece.faces.up]
     if (U.closeTo(normalY, -1)) return COLOR_TABLE[piece.faces.down]
     if (U.closeTo(normalX, -1)) return COLOR_TABLE[piece.faces.left]
@@ -129,7 +82,7 @@ const threeApp = () => {
     return COLOR_TABLE["-"]
   }
 
-  const setGeometryVertexColors = (piece) => {
+  function setGeometryVertexColors(piece) {
     const pieceGeoemtry = globals.pieceGeometry.clone()
     const normalAttribute = pieceGeoemtry.getAttribute("normal")
 
@@ -154,19 +107,19 @@ const threeApp = () => {
     return pieceGeoemtry
   }
 
-  const recreateUiPieces = () => {
+  function recreateUiPieces() {
     globals.cube = L.getSolvedCube(globals.cubeSize)
     createUiPieces()
   }
 
-  const createUiPieces = () => {
+  function createUiPieces() {
     globals.cube.forEach(piece => {
       const uiPiece = createUiPiece(piece)
       globals.puzzleGroup.add(uiPiece)
     })
   }
 
-  const createUiPiece = piece => {
+  function createUiPiece(piece) {
     const pieceGeometryWithColors = setGeometryVertexColors(piece)
     const uiPiece = new THREE.Mesh(pieceGeometryWithColors, PIECE_MATERIAL)
     uiPiece.scale.set(0.5, 0.5, 0.5)
@@ -175,7 +128,7 @@ const threeApp = () => {
     return uiPiece
   }
 
-  const resetUiPiece = (uiPiece, piece) => {
+  function resetUiPiece(uiPiece, piece) {
     const isEvenSizedCube = globals.cubeSize % 2 === 0
     const adjustValue = v => isEvenSizedCube ? v < 0 ? v + 0.5 : v - 0.5 : v
     uiPiece.position.x = adjustValue(piece.x)
@@ -184,17 +137,18 @@ const threeApp = () => {
     uiPiece.setRotationFromMatrix(makeRotationMatrix4(piece.accTransform3))
   }
 
-  const findUiPiece = piece =>
-    globals.puzzleGroup.children.find(child => child.userData === piece.id)
+  function findUiPiece(piece) {
+    return globals.puzzleGroup.children.find(child => child.userData === piece.id)
+  }
 
-  const resetUiPieces = cube => {
+  function resetUiPieces(cube) {
     cube.forEach(piece => {
       const uiPiece = findUiPiece(piece)
       resetUiPiece(uiPiece, piece)
     })
   }
 
-  const animate = () => {
+  function animate() {
     window.requestAnimationFrame(animate)
     globals.controls.update()
     const delta = globals.clock.getDelta() * globals.animationMixer.timeScale
@@ -202,14 +156,14 @@ const threeApp = () => {
     globals.renderer.render(globals.scene, globals.camera)
   }
 
-  const movePiecesBetweenGroups = (uiPieces, fromGroup, toGroup) => {
+  function movePiecesBetweenGroups(uiPieces, fromGroup, toGroup) {
     if (uiPieces.length) {
       fromGroup.remove(...uiPieces)
       toGroup.add(...uiPieces)
     }
   }
 
-  const createAnimationClip = move => {
+  function createAnimationClip(move) {
     const numTurns = move.numTurns
     const t0 = 0
     const t1 = numTurns * (globals.animationSpeed / 1000)
@@ -227,7 +181,7 @@ const threeApp = () => {
     return new THREE.AnimationClip(move.id, duration, tracks)
   }
 
-  const animateMoves = (moves, nextMoveIndex = 0) => {
+  function animateMoves(moves, nextMoveIndex = 0) {
 
     if (globals.cubeSizeChanged) {
       return setTimeout(scramble, 0)
@@ -265,7 +219,7 @@ const threeApp = () => {
     clipAction.play()
   }
 
-  const showSolutionByCheating = randomMoves => {
+  function showSolutionByCheating(randomMoves) {
     const solutionMoves = randomMoves
       .map(move => move.oppositeMoveId)
       .map(id => L.lookupMoveId(globals.cubeSize, id))
@@ -274,12 +228,12 @@ const threeApp = () => {
     animateMoves(solutionMoves)
   }
 
-  const showSolution = moves => {
+  function showSolution(moves) {
     console.log(`solution moves: ${moves.map(move => move.id).join(" ")}`)
     animateMoves(moves)
   }
 
-  const scramble = () => {
+  function scramble() {
 
     if (globals.cubeSizeChanged) {
       globals.cubeSizeChanged = false
@@ -307,15 +261,15 @@ const threeApp = () => {
     setTimeout(showSolution, BEFORE_DELAY, moves)
   }
 
-  const init = async () => {
+  async function init() {
 
-    const container = document.getElementById("visualisation-container")
-    const w = container.offsetWidth
-    const h = container.offsetHeight
-    globals.renderer = new THREE.WebGLRenderer({ antialias: true })
-    globals.renderer.setPixelRatio(window.devicePixelRatio)
-    globals.renderer.setSize(w, h)
-    container.appendChild(globals.renderer.domElement)
+    const container = document.getElementById("visualisation-container");
+    const w = container.offsetWidth;
+    const h = container.offsetHeight;
+    globals.renderer = new THREE.WebGLRenderer({ antialias: true });
+    globals.renderer.setPixelRatio(window.devicePixelRatio);
+    globals.renderer.setSize(w, h);
+    container.appendChild(globals.renderer.domElement);
 
     window.addEventListener("resize", () => {
       globals.renderer.setSize(container.offsetWidth, container.offsetHeight)
@@ -369,90 +323,22 @@ const threeApp = () => {
     globals.controls.maxDistance = 40.0
     globals.controls.enableDamping = true
     globals.controls.dampingFactor = 0.9
-    globals.controls.autoRotate = true
+    globals.controls.autoRotate = false
     globals.controls.autoRotateSpeed = 1.0
 
     globals.clock = new THREE.Clock()
     globals.animationMixer = new THREE.AnimationMixer()
 
     globals.cube = L.getSolvedCube(globals.cubeSize)
-    globals.pieceGeometry = await loadGeometry("/rubiks-cube/cube-bevelled.glb")
+    globals.pieceGeometry = await load3DModel("/rubiks-cube/cube-bevelled.glb")
     createUiPieces()
 
     animate()
     scramble()
-
-    const onDocumentKeyDownHandler = e => {
-      if (e.altKey || e.ctrlKey || e.metaKey || e.ShiftKey) return
-      switch (e.key) {
-        case '2': return setCubeSize(2)
-        case '3': return setCubeSize(3)
-        case '4': return setCubeSize(4)
-        case '5': return setCubeSize(5)
-        case 'a': return toggleAxes()
-        case 'r': return toggleAutoRotate()
-        default: return
-      }
-    }
-
-    document.addEventListener('keydown', onDocumentKeyDownHandler)
-  }
-
-  const addAxesHelper = () => {
-    globals.axesHelper = new THREE.AxesHelper(5)
-    globals.scene.add(globals.axesHelper)
-  }
-
-  const removeAxesHelper = () => {
-    globals.scene.remove(globals.axesHelper)
-    globals.axesHelper = undefined
-  }
-
-  const setCubeSize = value => {
-    globals.cubeSizeChanged = value !== globals.cubeSize
-    globals.cubeSize = value
-    emitSettingsChanged()
-  }
-
-  const setAnimationSpeed = value => {
-    globals.animationSpeed = value
-    emitSettingsChanged()
-  }
-
-  const setAutoRotate = value => {
-    globals.controls.autoRotate = value
-    emitSettingsChanged()
-  }
-
-  const setAutoRotateSpeed = value => {
-    globals.controls.autoRotateSpeed = value
-    emitSettingsChanged()
-  }
-
-  const setAxesEnabled = value => {
-    globals.axesEnabled = value
-    globals.axesEnabled ? addAxesHelper() : removeAxesHelper()
-    emitSettingsChanged()
-  }
-
-  const toggleAxes = () => {
-    setAxesEnabled(!globals.axesEnabled)
-  }
-
-  const toggleAutoRotate = () => {
-    setAutoRotate(!globals.controls.autoRotate)
   }
 
   return {
-    init,
-    addSettingsChangedListener,
-    removeSettingsChangedListener,
-    setCubeSize,
-    setAnimationSpeed,
-    setAutoRotate,
-    setAutoRotateSpeed,
-    setAxesEnabled,
-    getSettings
+    init
   }
 }
 

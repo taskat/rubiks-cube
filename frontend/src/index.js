@@ -8,26 +8,6 @@ import threeApp from "./three-app"
 import "./styles.css"
 import Editor from "./editor/editor.js"
 
-
-// injectGlobal`
-//   html, body, #visualisation-container {
-//     margin: 0;
-//     padding: 0;
-//     width: 100vw;
-//     height: 100vh;
-//     background-color: #000000;
-//   }
-// `
-injectGlobal`
-  #visualisation-container {
-    margin: 0;
-    padding: 0;
-    width: 50vw;
-    height: 50vh;
-    background-color: transparent;
-  }
-`
-
 const main = async () => {
   document.querySelector("#check").addEventListener("click", check);
   document.querySelector("#solve").addEventListener("click", solve);

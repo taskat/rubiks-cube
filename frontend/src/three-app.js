@@ -324,7 +324,7 @@ const threeApp = () => {
     })
 
     globals.scene = new THREE.Scene()
-    globals.scene.background = new THREE.Color(0x000000)
+    globals.scene.background = new THREE.Color("lightgreen")
     globals.camera = new THREE.PerspectiveCamera(34, w / h, 1, 100)
     globals.camera.position.set(3, 3, 12)
     globals.camera.lookAt(new THREE.Vector3(0, 0, 0))

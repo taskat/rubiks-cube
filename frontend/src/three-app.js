@@ -1,10 +1,9 @@
 import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
-import * as L from "./logic"
 import * as M from "./logic/mymoves"
 import * as U from "./logic/utils"
-import { Cube } from "./logic"
+import Cube from "./logic/cube"
 
 const COLOR_TABLE = {
   "U": new THREE.Color("blue"),

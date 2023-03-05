@@ -28,15 +28,3 @@ export default class CubeData {
     return Array.from(this.allCoordsGenerator());
   }
 }
-
-export function xSliceCoordsList(allCoordsList, xSlice) {
-  return allCoordsList.filter(([x]) => x === xSlice);
-} 
-
-export function ySliceCoordsList(allCoordsList, ySlice) {
-  return allCoordsList.filter(([, y]) => y === ySlice);
-}
-
-export function zSliceCoordsList(allCoordsList, zSlice) {
-  return allCoordsList.filter(([, , z]) => z === zSlice);
-}

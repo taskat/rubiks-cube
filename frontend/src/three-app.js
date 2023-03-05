@@ -330,7 +330,7 @@ function threeApp() {
     globals.animationMixer = new THREE.AnimationMixer()
 
     globals.cube = L.getSolvedCube(globals.cubeSize)
-    globals.pieceGeometry = await load3DModel("/rubiks-cube/cube-bevelled.glb")
+    globals.pieceGeometry = await load3DModel("/cube-bevelled.glb")
     createUiPieces()
 
     animate()

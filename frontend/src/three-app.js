@@ -32,32 +32,14 @@ export default class Simulator{
     this.model = null;
     this.modelName = "/cube-bevelled.glb";
     this.cube = null;
+    this.cubeSize = 3;
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
-    this.camera = null;
+    this.camera = new THREE.PerspectiveCamera(34, 1, 1, 100);
     this.scene = new THREE.Scene();
     this.puzzleGroup = new THREE.Group();
     this.animationGroup = new THREE.Group();
     this.clock = new THREE.Clock();
     this.animationMixer = new THREE.AnimationMixer();
-    this.cubeSize = 3;
-  }
-
-  createAnimationClip(move) {
-    const numTurns = move.numTurns;
-    const t0 = 0;
-    const t1 = numTurns * (this.animationSpeed / 1000);
-    const times = [t0, t1];
-    const values = [];
-    const startQuaternion = new THREE.Quaternion();
-    const endQuaternion = new THREE.Quaternion();
-    const rotationMatrix3 = move.rotationMatrix3;
-    const rotationMatrix4 = this.makeRotationMatrix4(rotationMatrix3);
-    endQuaternion.setFromRotationMatrix(rotationMatrix4);
-    startQuaternion.toArray(values, values.length);
-    endQuaternion.toArray(values, values.length);
-    const duration = -1;
-    const tracks = [new THREE.QuaternionKeyframeTrack(".quaternion", times, values)];
-    return new THREE.AnimationClip(move.id, duration, tracks);
   }
 
   makeRotationMatrix4(rotationMatrix3) {
@@ -71,91 +53,59 @@ export default class Simulator{
     return new THREE.Matrix4().fromArray(values);
   }
 
-  resetUiPiece(uiPiece, piece) {
-    const isEvenSizedCube = this.cubeSize % 2 === 0;
-    const adjustValue = v => isEvenSizedCube ? v < 0 ? v + 0.5 : v - 0.5 : v;
-    uiPiece.position.x = adjustValue(piece.x);
-    uiPiece.position.y = adjustValue(piece.y);
-    uiPiece.position.z = adjustValue(piece.z);
-    uiPiece.setRotationFromMatrix(this.makeRotationMatrix4(piece.accTransform3));
-  }
-
-  createUiPiece(piece) {
-    const pieceGeometryWithColors = this.setGeometryVertexColors(piece);
-    const uiPiece = new THREE.Mesh(pieceGeometryWithColors, PIECE_MATERIAL);
-    uiPiece.scale.set(0.5, 0.5, 0.5);
-    uiPiece.userData = piece.id;
-    this.resetUiPiece(uiPiece, piece);
-    return uiPiece;
-  }
-
-  recreateUiPieces() {
-    this.cube = L.getSolvedCube(this.cubeSize);
-    this.createUiPieces();
-  }
-
-  createUiPieces() {
-    this.cube.forEach(piece => {
-      const uiPiece = this.createUiPiece(piece);
-      this.puzzleGroup.add(uiPiece);
-    })
-  }
-
-  init() {
-
-    const container = document.getElementById("visualisation-container");
-    const w = container.offsetWidth;
-    const h = container.offsetHeight;
+  initRenderer(container) {
     this.renderer.setPixelRatio(window.devicePixelRatio);
-    this.renderer.setSize(w, h);
+    this.renderer.setSize(container.offsetWidth, container.offsetHeight);
     container.appendChild(this.renderer.domElement);
+  }
 
+  addResizeListener(w, h) {
     window.addEventListener("resize", () => {
-      this.renderer.setSize(container.offsetWidth, container.offsetHeight);
-      this.camera.aspect = container.offsetWidth / container.offsetHeight;
+      this.renderer.setSize(w, h);
+      this.camera.aspect = w / h;
       this.camera.updateProjectionMatrix();
     });
+  }
 
+  createScene() {
     this.scene.background = new THREE.Color("lightgreen");
-    this.camera = new THREE.PerspectiveCamera(34, w / h, 1, 100);
+    this.scene.add(this.camera);
+    this.createLights().forEach(light => this.scene.add(light));
+    this.scene.add(this.puzzleGroup);
+    this.scene.add(this.animationGroup);
+  }
+
+  initCamera(w, h) {
+    this.camera.aspect = w / h;
     this.camera.position.set(3, 3, 12);
     this.camera.lookAt(new THREE.Vector3(0, 0, 0));
-    this.scene.add(this.camera);
+    this.camera.updateProjectionMatrix();
+  }
 
+  createLights() {
+    let lights = [];
     const LIGHT_COLOR = 0xffffff;
     const LIGHT_INTENSITY = 2;
     const LIGHT_DISTANCE = 4;
 
-    const light1 = new THREE.DirectionalLight(LIGHT_COLOR, LIGHT_INTENSITY);
-    light1.position.set(0, 0, LIGHT_DISTANCE);
-    this.scene.add(light1);
+    const positions = [
+      new THREE.Vector3(0, 0, LIGHT_DISTANCE),
+      new THREE.Vector3(0, 0, -LIGHT_DISTANCE),
+      new THREE.Vector3(0, LIGHT_DISTANCE, 0),
+      new THREE.Vector3(0, -LIGHT_DISTANCE, 0),
+      new THREE.Vector3(LIGHT_DISTANCE, 0, 0),
+      new THREE.Vector3(-LIGHT_DISTANCE, 0, 0)
+    ];
 
-    const light2 = new THREE.DirectionalLight(LIGHT_COLOR, LIGHT_INTENSITY);
-    light2.position.set(0, 0, -LIGHT_DISTANCE);
-    this.scene.add(light2);
+    positions.forEach(position => {
+      const light = new THREE.DirectionalLight(LIGHT_COLOR, LIGHT_INTENSITY);
+      light.position.copy(position);
+      lights.push(light);
+    });
+    return lights;
+  }
 
-    const light3 = new THREE.DirectionalLight(LIGHT_COLOR, LIGHT_INTENSITY);
-    light3.position.set(0, LIGHT_DISTANCE, 0);
-    this.scene.add(light3);
-
-    const light4 = new THREE.DirectionalLight(LIGHT_COLOR, LIGHT_INTENSITY);
-    light4.position.set(0, -LIGHT_DISTANCE, 0);
-    this.scene.add(light4);
-
-    const light5 = new THREE.DirectionalLight(LIGHT_COLOR, LIGHT_INTENSITY);
-    light5.position.set(LIGHT_DISTANCE, 0, 0);
-    this.scene.add(light5);
-
-    const light6 = new THREE.DirectionalLight(LIGHT_COLOR, LIGHT_INTENSITY);
-    light6.position.set(-LIGHT_DISTANCE, 0, 0);
-    this.scene.add(light6)
-
-    
-    this.scene.add(this.puzzleGroup);
-
-    
-    this.scene.add(this.animationGroup);
-
+  initControls() {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.minDistance = 5.0;
     this.controls.maxDistance = 40.0;
@@ -163,14 +113,20 @@ export default class Simulator{
     this.controls.dampingFactor = 0.9;
     this.controls.autoRotate = false;
     this.controls.autoRotateSpeed = 1.0;
+  }
 
-    
-    
-
+  async init() {
+    await this.load3DModel();
+    const container = document.getElementById("visualisation-container");
+    const w = container.offsetWidth;
+    const h = container.offsetHeight;
+    this.initRenderer(container);
+    this.addResizeListener(w, h);
+    this.createScene();
+    this.initCamera(w, h);
+    this.initControls();
     this.cube = L.getSolvedCube(this.cubeSize);
-    
     this.createUiPieces();
-
     this.animate();
     this.scramble();
   }
@@ -259,6 +215,56 @@ export default class Simulator{
   findUiPiece(piece) {
     return this.puzzleGroup.children.find(child => child.userData === piece.id);
   }
+
+  
+  resetUiPiece(uiPiece, piece) {
+    const isEvenSizedCube = this.cubeSize % 2 === 0;
+    const adjustValue = v => isEvenSizedCube ? v < 0 ? v + 0.5 : v - 0.5 : v;
+    uiPiece.position.x = adjustValue(piece.x);
+    uiPiece.position.y = adjustValue(piece.y);
+    uiPiece.position.z = adjustValue(piece.z);
+    uiPiece.setRotationFromMatrix(this.makeRotationMatrix4(piece.accTransform3));
+  }
+
+  createUiPiece(piece) {
+    const pieceGeometryWithColors = this.setGeometryVertexColors(piece);
+    const uiPiece = new THREE.Mesh(pieceGeometryWithColors, PIECE_MATERIAL);
+    uiPiece.scale.set(0.5, 0.5, 0.5);
+    uiPiece.userData = piece.id;
+    this.resetUiPiece(uiPiece, piece);
+    return uiPiece;
+  }
+
+  recreateUiPieces() {
+    this.cube = L.getSolvedCube(this.cubeSize);
+    this.createUiPieces();
+  }
+
+  createUiPieces() {
+    this.cube.forEach(piece => {
+      const uiPiece = this.createUiPiece(piece);
+      this.puzzleGroup.add(uiPiece);
+    })
+  }
+
+  createAnimationClip(move) {
+    const numTurns = move.numTurns;
+    const t0 = 0;
+    const t1 = numTurns * (this.animationSpeed / 1000);
+    const times = [t0, t1];
+    const values = [];
+    const startQuaternion = new THREE.Quaternion();
+    const endQuaternion = new THREE.Quaternion();
+    const rotationMatrix3 = move.rotationMatrix3;
+    const rotationMatrix4 = this.makeRotationMatrix4(rotationMatrix3);
+    endQuaternion.setFromRotationMatrix(rotationMatrix4);
+    startQuaternion.toArray(values, values.length);
+    endQuaternion.toArray(values, values.length);
+    const duration = -1;
+    const tracks = [new THREE.QuaternionKeyframeTrack(".quaternion", times, values)];
+    return new THREE.AnimationClip(move.id, duration, tracks);
+  }
+
 
   showSolution(moves) {
     console.log(`solution moves: ${moves.map(move => move.id).join(" ")}`);

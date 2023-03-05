@@ -23,28 +23,23 @@ const PIECE_MATERIAL = new THREE.MeshPhysicalMaterial({
   reflectivity: .5
 })
 
-const globals = {
-  pieceGeometry: undefined,
-  cube: undefined,
-  renderer: undefined,
-  camera: undefined,
-  scene: undefined,
-  puzzleGroup: undefined,
-  animationGroup: undefined,
-  axesHelper: undefined,
-  controls: undefined,
-  clock: undefined,
-  animationMixer: undefined,
-  cubeSize: 3,
-  cubeSizeChanged: true,
-  axesEnabled: false
-}
 const BEFORE_DELAY = 2000;
 const AFTER_DELAY = 2000;
 
 export default class Simulator{
   constructor() {
     this.animationSpeed = 750;
+    this.model = null;
+    this.modelName = "/cube-bevelled.glb";
+    this.cube = null;
+    this.renderer = new THREE.WebGLRenderer({ antialias: true });
+    this.camera = null;
+    this.scene = new THREE.Scene();
+    this.puzzleGroup = new THREE.Group();
+    this.animationGroup = new THREE.Group();
+    this.clock = new THREE.Clock();
+    this.animationMixer = new THREE.AnimationMixer();
+    this.cubeSize = 3;
   }
 
   createAnimationClip(move) {
@@ -77,7 +72,7 @@ export default class Simulator{
   }
 
   resetUiPiece(uiPiece, piece) {
-    const isEvenSizedCube = globals.cubeSize % 2 === 0;
+    const isEvenSizedCube = this.cubeSize % 2 === 0;
     const adjustValue = v => isEvenSizedCube ? v < 0 ? v + 0.5 : v - 0.5 : v;
     uiPiece.position.x = adjustValue(piece.x);
     uiPiece.position.y = adjustValue(piece.y);
@@ -95,39 +90,37 @@ export default class Simulator{
   }
 
   recreateUiPieces() {
-    globals.cube = L.getSolvedCube(globals.cubeSize);
+    this.cube = L.getSolvedCube(this.cubeSize);
     this.createUiPieces();
   }
 
   createUiPieces() {
-    globals.cube.forEach(piece => {
+    this.cube.forEach(piece => {
       const uiPiece = this.createUiPiece(piece);
-      globals.puzzleGroup.add(uiPiece);
+      this.puzzleGroup.add(uiPiece);
     })
   }
 
-  async init() {
+  init() {
 
     const container = document.getElementById("visualisation-container");
     const w = container.offsetWidth;
     const h = container.offsetHeight;
-    globals.renderer = new THREE.WebGLRenderer({ antialias: true });
-    globals.renderer.setPixelRatio(window.devicePixelRatio);
-    globals.renderer.setSize(w, h);
-    container.appendChild(globals.renderer.domElement);
+    this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.renderer.setSize(w, h);
+    container.appendChild(this.renderer.domElement);
 
     window.addEventListener("resize", () => {
-      globals.renderer.setSize(container.offsetWidth, container.offsetHeight);
-      globals.camera.aspect = container.offsetWidth / container.offsetHeight;
-      globals.camera.updateProjectionMatrix();
+      this.renderer.setSize(container.offsetWidth, container.offsetHeight);
+      this.camera.aspect = container.offsetWidth / container.offsetHeight;
+      this.camera.updateProjectionMatrix();
     });
 
-    globals.scene = new THREE.Scene();
-    globals.scene.background = new THREE.Color("lightgreen");
-    globals.camera = new THREE.PerspectiveCamera(34, w / h, 1, 100);
-    globals.camera.position.set(3, 3, 12);
-    globals.camera.lookAt(new THREE.Vector3(0, 0, 0));
-    globals.scene.add(globals.camera);
+    this.scene.background = new THREE.Color("lightgreen");
+    this.camera = new THREE.PerspectiveCamera(34, w / h, 1, 100);
+    this.camera.position.set(3, 3, 12);
+    this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+    this.scene.add(this.camera);
 
     const LIGHT_COLOR = 0xffffff;
     const LIGHT_INTENSITY = 2;
@@ -135,69 +128,70 @@ export default class Simulator{
 
     const light1 = new THREE.DirectionalLight(LIGHT_COLOR, LIGHT_INTENSITY);
     light1.position.set(0, 0, LIGHT_DISTANCE);
-    globals.scene.add(light1);
+    this.scene.add(light1);
 
     const light2 = new THREE.DirectionalLight(LIGHT_COLOR, LIGHT_INTENSITY);
     light2.position.set(0, 0, -LIGHT_DISTANCE);
-    globals.scene.add(light2);
+    this.scene.add(light2);
 
     const light3 = new THREE.DirectionalLight(LIGHT_COLOR, LIGHT_INTENSITY);
     light3.position.set(0, LIGHT_DISTANCE, 0);
-    globals.scene.add(light3);
+    this.scene.add(light3);
 
     const light4 = new THREE.DirectionalLight(LIGHT_COLOR, LIGHT_INTENSITY);
     light4.position.set(0, -LIGHT_DISTANCE, 0);
-    globals.scene.add(light4);
+    this.scene.add(light4);
 
     const light5 = new THREE.DirectionalLight(LIGHT_COLOR, LIGHT_INTENSITY);
     light5.position.set(LIGHT_DISTANCE, 0, 0);
-    globals.scene.add(light5);
+    this.scene.add(light5);
 
     const light6 = new THREE.DirectionalLight(LIGHT_COLOR, LIGHT_INTENSITY);
     light6.position.set(-LIGHT_DISTANCE, 0, 0);
-    globals.scene.add(light6)
+    this.scene.add(light6)
 
-    globals.puzzleGroup = new THREE.Group();
-    globals.scene.add(globals.puzzleGroup);
+    
+    this.scene.add(this.puzzleGroup);
 
-    globals.animationGroup = new THREE.Group();
-    globals.scene.add(globals.animationGroup);
+    
+    this.scene.add(this.animationGroup);
 
-    globals.controls = new OrbitControls(globals.camera, globals.renderer.domElement);
-    globals.controls.minDistance = 5.0;
-    globals.controls.maxDistance = 40.0;
-    globals.controls.enableDamping = true;
-    globals.controls.dampingFactor = 0.9;
-    globals.controls.autoRotate = false;
-    globals.controls.autoRotateSpeed = 1.0;
+    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    this.controls.minDistance = 5.0;
+    this.controls.maxDistance = 40.0;
+    this.controls.enableDamping = true;
+    this.controls.dampingFactor = 0.9;
+    this.controls.autoRotate = false;
+    this.controls.autoRotateSpeed = 1.0;
 
-    globals.clock = new THREE.Clock();
-    globals.animationMixer = new THREE.AnimationMixer();
+    
+    
 
-    globals.cube = L.getSolvedCube(globals.cubeSize);
-    globals.pieceGeometry = await this.load3DModel("/cube-bevelled.glb");
+    this.cube = L.getSolvedCube(this.cubeSize);
+    
     this.createUiPieces();
 
     this.animate();
     this.scramble();
   }
 
-  load3DModel(url) {
-    return new Promise((resolve, reject) => {
-      const loader = new GLTFLoader()
-      loader.load(
-        url,
+  async load3DModel() {
+    let p =  new Promise((resolve, reject) => {
+      const loader = new GLTFLoader();
+      loader.load(this.modelName,
         gltf => {
-          const bufferGeometry = gltf.scene.children[0].geometry
-          resolve(bufferGeometry.toNonIndexed())
+          const bufferGeometry = gltf.scene.children[0].geometry;
+          resolve(bufferGeometry.toNonIndexed());
         },
         undefined,
         reject)
     });
+    let model = await p;
+    this.model = model;
   }
 
   setGeometryVertexColors(piece) {
-    const pieceGeoemtry = globals.pieceGeometry.clone();
+    const pieceGeoemtry = this.model.clone();
     const normalAttribute = pieceGeoemtry.getAttribute("normal");
 
     const colors = [];
@@ -233,37 +227,25 @@ export default class Simulator{
 
   animate() {
     window.requestAnimationFrame(this.animate.bind(this));
-    globals.controls.update();
-    const delta = globals.clock.getDelta() * globals.animationMixer.timeScale;
-    globals.animationMixer.update(delta);
-    globals.renderer.render(globals.scene, globals.camera);
+    this.controls.update();
+    const delta = this.clock.getDelta() * this.animationMixer.timeScale;
+    this.animationMixer.update(delta);
+    this.renderer.render(this.scene, this.camera);
   }
 
   scramble() {
 
-    if (globals.cubeSizeChanged) {
-      globals.cubeSizeChanged = false;
-      globals.puzzleGroup.clear();
-      globals.animationGroup.clear();
-      globals.controls.reset();
-      const cameraX = globals.cubeSize + 1;
-      const cameraY = globals.cubeSize + 1;
-      const cameraZ = globals.cubeSize * 4;
-      globals.camera.position.set(cameraX, cameraY, cameraZ);
-      globals.camera.lookAt(new THREE.Vector3(0, 0, 0));
-      this.recreateUiPieces();
-    }
 
-    // const randomMoves = U.range(NUM_RANDOM_MOVES).map(() => L.getRandomMove(globals.cubeSize));
+    // const randomMoves = U.range(NUM_RANDOM_MOVES).map(() => L.getRandomMove(this.cubeSize));
     // L.removeRedundantMoves(randomMoves);
     // console.log(`random moves: ${randomMoves.map(move => move.id).join(" ")}`);
-    // globals.cube = L.makeMoves(randomMoves, L.getSolvedCube(globals.cubeSize));
+    // globals.cube = L.makeMoves(randomMoves, L.getSolvedCube(this.cubeSize));
     // this.resetUiPieces(globals.cube);
     // setTimeout(showSolutionByCheating, BEFORE_DELAY, randomMoves);
-    const moves = M.getMoves(globals.cubeSize);
+    const moves = M.getMoves(this.cubeSize);
     console.log(`moves: ${moves.map(move => move.id).join(" ")}`);
-    globals.cube = L.makeMoves(M.reverseMoves(moves), L.getSolvedCube(globals.cubeSize));
-    this.resetUiPieces(globals.cube);
+    this.cube = L.makeMoves(M.reverseMoves(moves), L.getSolvedCube(this.cubeSize));
+    this.resetUiPieces(this.cube);
     setTimeout(this.showSolution.bind(this), BEFORE_DELAY, moves);
   }
 
@@ -275,7 +257,7 @@ export default class Simulator{
   }
 
   findUiPiece(piece) {
-    return globals.puzzleGroup.children.find(child => child.userData === piece.id);
+    return this.puzzleGroup.children.find(child => child.userData === piece.id);
   }
 
   showSolution(moves) {
@@ -285,24 +267,20 @@ export default class Simulator{
 
   animateMoves(moves, nextMoveIndex = 0) {
 
-    if (globals.cubeSizeChanged) {
-      return setTimeout(scramble, 0);
-    }
-
     const move = moves[nextMoveIndex];
 
     if (!move) {
       return setTimeout(this.scramble.bind(this), AFTER_DELAY);
     }
 
-    const pieces = L.getPieces(globals.cube, move.coordsList);
+    const pieces = L.getPieces(this.cube, move.coordsList);
     const uiPieces = pieces.map(this.findUiPiece.bind(this));
-    this.movePiecesBetweenGroups(uiPieces, globals.puzzleGroup, globals.animationGroup);
+    this.movePiecesBetweenGroups(uiPieces, this.puzzleGroup, this.animationGroup);
 
     const onFinished = () => {
-      globals.animationMixer.removeEventListener("finished", onFinished);
-      this.movePiecesBetweenGroups(uiPieces, globals.animationGroup, globals.puzzleGroup);
-      globals.cube = move.makeMove(globals.cube);
+      this.animationMixer.removeEventListener("finished", onFinished);
+      this.movePiecesBetweenGroups(uiPieces, this.animationGroup, this.puzzleGroup);
+      this.cube = move.makeMove(this.cube);
       const rotationMatrix3 = move.rotationMatrix3;
       const rotationMatrix4 = this.makeRotationMatrix4(rotationMatrix3);
       for (const uiPiece of uiPieces) {
@@ -311,12 +289,12 @@ export default class Simulator{
       this.animateMoves(moves, nextMoveIndex + 1);
     }
 
-    globals.animationMixer.addEventListener("finished", onFinished);
+    this.animationMixer.addEventListener("finished", onFinished);
 
     const animationClip = this.createAnimationClip(move);
-    const clipAction = globals.animationMixer.clipAction(
+    const clipAction = this.animationMixer.clipAction(
       animationClip,
-      globals.animationGroup);
+      this.animationGroup);
     clipAction.setLoop(THREE.LoopOnce);
     clipAction.play();
   }

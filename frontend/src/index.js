@@ -11,6 +11,7 @@ const main = async () => {
   document.querySelector("#change_tab").addEventListener("click", changeTab);
   document.addEventListener('keyup', (e) => keyboard_shortcuts(e, changeTab), false);
   const simulator = new Simulator();
+  await simulator.load3DModel();
   simulator.init();
 }
 

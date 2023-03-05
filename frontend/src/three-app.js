@@ -4,6 +4,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import * as L from "./logic"
 import * as M from "./logic/mymoves"
 import * as U from "./logic/utils"
+import { Cube } from "./logic"
 
 const COLOR_TABLE = {
   "U": new THREE.Color("blue"),
@@ -125,7 +126,7 @@ export default class Simulator{
     this.createScene();
     this.initCamera(w, h);
     this.initControls();
-    this.cube = L.getSolvedCube(this.cubeSize);
+    this.cube = new Cube(this.cubeSize);
     this.createUiPieces();
     this.animate();
     this.scramble();
@@ -200,7 +201,7 @@ export default class Simulator{
     // setTimeout(showSolutionByCheating, BEFORE_DELAY, randomMoves);
     const moves = M.getMoves(this.cubeSize);
     console.log(`moves: ${moves.map(move => move.id).join(" ")}`);
-    this.cube.pieces = L.makeMoves(M.reverseMoves(moves), L.getSolvedCube(this.cubeSize));
+    this.cube.makeMoves(M.reverseMoves(moves));
     this.resetUiPieces(this.cube);
     setTimeout(this.showSolution.bind(this), BEFORE_DELAY, moves);
   }
@@ -236,7 +237,7 @@ export default class Simulator{
   }
 
   recreateUiPieces() {
-    this.cube = L.getSolvedCube(this.cubeSize);
+    this.cube = new Cube(this.cubeSize);
     this.createUiPieces();
   }
 
@@ -279,7 +280,7 @@ export default class Simulator{
       return setTimeout(this.scramble.bind(this), AFTER_DELAY);
     }
 
-    const pieces = L.getPieces(this.cube, move.coordsList);
+    const pieces = this.cube.getPieces(move.coordsList);
     const uiPieces = pieces.map(this.findUiPiece.bind(this));
     this.movePiecesBetweenGroups(uiPieces, this.puzzleGroup, this.animationGroup);
 

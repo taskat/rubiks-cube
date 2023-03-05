@@ -1,6 +1,7 @@
-import * as logic from "./index"
+import {Cube, lookupMoveId} from "./index"
 
-const MOVES = logic.makePerCubeSizeDataEntry(3)[1].moves
+const CUBE = new Cube(3);
+const MOVES = CUBE.moves;
 
 export const getMoves = cubeSize => {
     let moves = []
@@ -231,11 +232,9 @@ const zPrime = () => {
     return MOVES[53]
 }
 
-
-
 export const reverseMoves = moves => {
     return moves
       .map(move => move.oppositeMoveId)
-      .map(id => logic.lookupMoveId(3, id))
+      .map(id => CUBE.lookupMoveId(id))
       .reverse()
 }

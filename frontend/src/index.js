@@ -1,4 +1,4 @@
-import threeApp from "./three-app"
+import Simulator from "./three-app"
 import Editor from "./editor/editor.js"
 
 import "./styles/styles.css"
@@ -10,9 +10,8 @@ const main = async () => {
   const changeTab = () => editor.change_tab();
   document.querySelector("#change_tab").addEventListener("click", changeTab);
   document.addEventListener('keyup', (e) => keyboard_shortcuts(e, changeTab), false);
-  const threeAppActions = threeApp()
-
-  threeAppActions.init()
+  const simulator = new Simulator();
+  simulator.init();
 }
 
 function keyboard_shortcuts(e, changeTab) {

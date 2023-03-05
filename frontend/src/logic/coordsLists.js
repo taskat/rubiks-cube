@@ -1,32 +1,42 @@
 import * as U from "./utils"
 
-export const getCubeDimensions = cubeSize => {
-  const isEvenSizedCube = cubeSize % 2 === 0
-  const HALF_CUBE_SIZE = Math.floor(cubeSize / 2)
-  const values = U.range(cubeSize)
-    .map(v => v - HALF_CUBE_SIZE)
-    .map(v => isEvenSizedCube && v >= 0 ? v + 1 : v)
-  const vmin = Math.min(...values)
-  const vmax = Math.max(...values)
-  return { values, vmin, vmax, isEvenSizedCube }
-}
+export default class CubeData {
+  constructor(cubeSize) {
+    this.cubeSize = cubeSize;
+    this.isEvenSizedCube = cubeSize % 2 === 0;
+    this.values = U.range(cubeSize)
+      .map(v => v - Math.floor(cubeSize / 2))
+      .map(v => this.isEvenSizedCube && v >= 0 ? v + 1 : v);
+    this.vmin = Math.min(...this.values);
+    this.vmax = Math.max(...this.values);
+  }
 
-function* allCoordsGenerator(cubeSize) {
-  const { values, vmin, vmax } = getCubeDimensions(cubeSize)
-  const isFace = v => v === vmin || v === vmax
-  for (const x of values) {
-    for (const y of values) {
-      for (const z of values) {
-        if (isFace(x) || isFace(y) || isFace(z)) {
-          yield [x, y, z]
+  * allCoordsGenerator() {
+    const isFace = v => v === this.vmin || v === this.vmax
+    for (const x of this.values) {
+      for (const y of this.values) {
+        for (const z of this.values) {
+          if (isFace(x) || isFace(y) || isFace(z)) {
+            yield [x, y, z];
+          }
         }
       }
     }
   }
+
+  makeAllCoordsList() {
+    return Array.from(this.allCoordsGenerator());
+  }
 }
 
-export const makeAllCoordsList = cubeSize => Array.from(allCoordsGenerator(cubeSize))
+export function xSliceCoordsList(allCoordsList, xSlice) {
+  return allCoordsList.filter(([x]) => x === xSlice);
+} 
 
-export const pitchSliceCoordsList = (allCoordsList, xSlice) => allCoordsList.filter(([x]) => x === xSlice)
-export const yawSliceCoordsList = (allCoordsList, ySlice) => allCoordsList.filter(([, y]) => y === ySlice)
-export const rollSliceCoordsList = (allCoordsList, zSlice) => allCoordsList.filter(([, , z]) => z === zSlice)
+export function ySliceCoordsList(allCoordsList, ySlice) {
+  return allCoordsList.filter(([, y]) => y === ySlice);
+}
+
+export function zSliceCoordsList(allCoordsList, zSlice) {
+  return allCoordsList.filter(([, , z]) => z === zSlice);
+}

@@ -200,13 +200,13 @@ export default class Simulator{
     // setTimeout(showSolutionByCheating, BEFORE_DELAY, randomMoves);
     const moves = M.getMoves(this.cubeSize);
     console.log(`moves: ${moves.map(move => move.id).join(" ")}`);
-    this.cube = L.makeMoves(M.reverseMoves(moves), L.getSolvedCube(this.cubeSize));
+    this.cube.pieces = L.makeMoves(M.reverseMoves(moves), L.getSolvedCube(this.cubeSize));
     this.resetUiPieces(this.cube);
     setTimeout(this.showSolution.bind(this), BEFORE_DELAY, moves);
   }
 
   resetUiPieces(cube) {
-    cube.forEach(piece => {
+    cube.pieces.forEach(piece => {
       const uiPiece = this.findUiPiece(piece);
       this.resetUiPiece(uiPiece, piece);
     });
@@ -241,7 +241,7 @@ export default class Simulator{
   }
 
   createUiPieces() {
-    this.cube.forEach(piece => {
+    this.cube.pieces.forEach(piece => {
       const uiPiece = this.createUiPiece(piece);
       this.puzzleGroup.add(uiPiece);
     })
@@ -286,7 +286,7 @@ export default class Simulator{
     const onFinished = () => {
       this.animationMixer.removeEventListener("finished", onFinished);
       this.movePiecesBetweenGroups(uiPieces, this.animationGroup, this.puzzleGroup);
-      this.cube = move.makeMove(this.cube);
+      this.cube.pieces = move.makeMove(this.cube.pieces);
       const rotationMatrix3 = move.rotationMatrix3;
       const rotationMatrix4 = this.makeRotationMatrix4(rotationMatrix3);
       for (const uiPiece of uiPieces) {

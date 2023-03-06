@@ -32,12 +32,6 @@ export default class Piece {
     }
   
     isInCoordsList(coordsList) {
-      return coordsList.findIndex(coords => this.hasCoords(coords)) >= 0;
-    }
-  
-    hasCoords(coords) {
-      return this.coord.x === coords[0] &&
-        this.coord.y === coords[1] &&
-        this.coord.z === coords[2];
+      return coordsList.coords.findIndex(coord => this.coord.equal(coord)) >= 0;
     }
   }

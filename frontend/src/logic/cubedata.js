@@ -1,4 +1,6 @@
-import * as U from "./utils"
+import * as U from "./utils";
+import CoordsList from "./coordslist";
+import Coord from "./coord";
 
 export default class CubeData {
   constructor(cubeSize) {
@@ -17,7 +19,7 @@ export default class CubeData {
       for (const y of this.values) {
         for (const z of this.values) {
           if (isFace(x) || isFace(y) || isFace(z)) {
-            yield [x, y, z];
+            yield new Coord(x, y, z);
           }
         }
       }
@@ -25,6 +27,6 @@ export default class CubeData {
   }
 
   makeAllCoordsList() {
-    return Array.from(this.allCoordsGenerator());
+    return new CoordsList(Array.from(this.allCoordsGenerator()));
   }
 }

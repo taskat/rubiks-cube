@@ -1,13 +1,13 @@
-import { rotateX, rotateY, rotateZ } from "./rotations"
-import CubeData from "./cubedata"
-import Piece from "./piece"
-import Coord from "./coord"
+import { rotateX, rotateY, rotateZ } from "./rotations";
+import CubeData from "./cubedata";
+import Piece from "./piece";
+import Coord from "./coord";
 
 export default class Cube {
   constructor(cubeSize) {
     this.cubeData = new CubeData(cubeSize);
     const allCoordsList = this.cubeData.makeAllCoordsList();
-    this.pieces = allCoordsList.map(([x, y, z], index) => new Piece(index, new Coord(x, y, z), this.cubeData));
+    this.pieces = allCoordsList.coords.map((coord, index) => new Piece(index, coord, this.cubeData));
     this.moveIdsToMoves = this.makeMoveIdsToMoves();
     this.moves = Array.from(this.moveIdsToMoves.values());
   }
@@ -27,15 +27,15 @@ export default class Cube {
     const zRotationMatrices3 = angles.map(rotateZ);
     const allCoordsList = this.cubeData.makeAllCoordsList();
     const slices = [
-      ...this.cubeData.values.map(xSlice => [xRotationMatrices3, xSliceCoordsList(allCoordsList, xSlice)]),
-      ...this.cubeData.values.map(ySlice => [yRotationMatrices3, ySliceCoordsList(allCoordsList, ySlice)]),
-      ...this.cubeData.values.map(zSlice => [zRotationMatrices3, zSliceCoordsList(allCoordsList, zSlice)]),
-      [xRotationMatrices3, xSliceCoordsList(allCoordsList, -1).concat(xSliceCoordsList(allCoordsList, 0))],
-      [xRotationMatrices3, xSliceCoordsList(allCoordsList, 0).concat(xSliceCoordsList(allCoordsList, 1))],
-      [yRotationMatrices3, ySliceCoordsList(allCoordsList, -1).concat(ySliceCoordsList(allCoordsList, 0))],
-      [yRotationMatrices3, ySliceCoordsList(allCoordsList, 0).concat(ySliceCoordsList(allCoordsList, 1))],
-      [zRotationMatrices3, zSliceCoordsList(allCoordsList, -1).concat(zSliceCoordsList(allCoordsList, 0))],
-      [zRotationMatrices3, zSliceCoordsList(allCoordsList, 0).concat(zSliceCoordsList(allCoordsList, 1))],
+      ...this.cubeData.values.map(xSlice => [xRotationMatrices3, allCoordsList.xSlice(xSlice)]),
+      ...this.cubeData.values.map(ySlice => [yRotationMatrices3, allCoordsList.ySlice(ySlice)]),
+      ...this.cubeData.values.map(zSlice => [zRotationMatrices3, allCoordsList.zSlice(zSlice)]),
+      [xRotationMatrices3, allCoordsList.xSlice(-1).concat(allCoordsList.xSlice(0))],
+      [xRotationMatrices3, allCoordsList.xSlice(0).concat(allCoordsList.xSlice(1))],
+      [yRotationMatrices3, allCoordsList.ySlice(-1).concat(allCoordsList.ySlice(0))],
+      [yRotationMatrices3, allCoordsList.ySlice(0).concat(allCoordsList.ySlice(1))],
+      [zRotationMatrices3, allCoordsList.zSlice(-1).concat(allCoordsList.zSlice(0))],
+      [zRotationMatrices3, allCoordsList.zSlice(0).concat(allCoordsList.zSlice(1))],
       [xRotationMatrices3, allCoordsList],
       [yRotationMatrices3, allCoordsList],
       [zRotationMatrices3, allCoordsList],
@@ -80,21 +80,9 @@ export default class Cube {
   }
 
   getPieces(coordsList) {
-    return coordsList.map(coords =>
-      this.pieces.find(piece => piece.hasCoords(coords)));
+    return coordsList.coords.map(coord =>
+      this.pieces.find(piece => piece.coord.equal(coord)));
   }
-}
-
-function xSliceCoordsList(allCoordsList, xSlice) {
-  return allCoordsList.filter(([x]) => x === xSlice);
-} 
-
-function ySliceCoordsList(allCoordsList, ySlice) {
-  return allCoordsList.filter(([, y]) => y === ySlice);
-}
-
-function zSliceCoordsList(allCoordsList, zSlice) {
-  return allCoordsList.filter(([, , z]) => z === zSlice);
 }
 
 function flatten(xss) {

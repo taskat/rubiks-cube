@@ -1,33 +1,33 @@
 import{ matrix, multiply } from "mathjs";
 import { Identity } from "./rotations";
+import Coord from "./coord";
 
 export default class Piece {
-    constructor(id, x, y, z, cubeData) {
+    constructor(id, coord, cubeData) {
       this.id = id;
-      this.x = x;
-      this.y = y;
-      this.z = z;
-      this.faces = this.getFaces(cubeData.vmin, cubeData.vmax, x, y, z);
+      this.coord = coord;
+      this.faces = this.getFaces(cubeData.vmin, cubeData.vmax);
       this.accTransform3 = Identity;
     }
   
-    getFaces(vmin, vmax, x, y, z) {
+    getFaces(vmin, vmax) {
       return {
-        up: y === vmax ? "U" : "-",
-        down: y === vmin ? "D" : "-",
-        left: x === vmin ? "L" : "-",
-        right: x === vmax ? "R" : "-",
-        front: z === vmax ? "F" : "-",
-        back: z === vmin ? "B" : "-"
+        up: this.coord.y === vmax ? "U" : "-",
+        down: this.coord.y === vmin ? "D" : "-",
+        left: this.coord.x === vmin ? "L" : "-",
+        right: this.coord.x === vmax ? "R" : "-",
+        front: this.coord.z === vmax ? "F" : "-",
+        back: this.coord.z === vmin ? "B" : "-"
       };
     }
   
     rotatePiece(rotationMatrix3) {
-      const vector3 = matrix([this.x, this.y, this.z]);
+      const vector3 = matrix([this.coord.x, this.coord.y, this.coord.z]);
       const rotatedVector3 = multiply(vector3, rotationMatrix3);
-      this.x = rotatedVector3.get([0]);
-      this.y = rotatedVector3.get([1]);
-      this.z = rotatedVector3.get([2]);
+      const x = rotatedVector3.get([0]);
+      const y = rotatedVector3.get([1]);
+      const z = rotatedVector3.get([2]);
+      this.coord = new Coord(x, y, z);
       this.accTransform3 = multiply(this.accTransform3, rotationMatrix3);
     }
   
@@ -36,8 +36,8 @@ export default class Piece {
     }
   
     hasCoords(coords) {
-      return this.x === coords[0] &&
-        this.y === coords[1] &&
-        this.z === coords[2];
+      return this.coord.x === coords[0] &&
+        this.coord.y === coords[1] &&
+        this.coord.z === coords[2];
     }
   }

@@ -220,9 +220,9 @@ export default class Simulator{
   resetUiPiece(uiPiece, piece) {
     const isEvenSizedCube = this.cubeSize % 2 === 0;
     const adjustValue = v => isEvenSizedCube ? v < 0 ? v + 0.5 : v - 0.5 : v;
-    uiPiece.position.x = adjustValue(piece.x);
-    uiPiece.position.y = adjustValue(piece.y);
-    uiPiece.position.z = adjustValue(piece.z);
+    uiPiece.position.x = adjustValue(piece.coord.x);
+    uiPiece.position.y = adjustValue(piece.coord.y);
+    uiPiece.position.z = adjustValue(piece.coord.z);
     uiPiece.setRotationFromMatrix(this.makeRotationMatrix4(piece.accTransform3));
   }
 

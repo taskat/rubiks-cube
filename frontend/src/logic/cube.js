@@ -1,12 +1,13 @@
 import { rotateX, rotateY, rotateZ } from "./rotations"
 import CubeData from "./cubedata"
 import Piece from "./piece"
+import Coord from "./coord"
 
 export default class Cube {
   constructor(cubeSize) {
     this.cubeData = new CubeData(cubeSize);
     const allCoordsList = this.cubeData.makeAllCoordsList();
-    this.pieces = allCoordsList.map(([x, y, z], index) => new Piece(index, x, y, z, this.cubeData));
+    this.pieces = allCoordsList.map(([x, y, z], index) => new Piece(index, new Coord(x, y, z), this.cubeData));
     this.moveIdsToMoves = this.makeMoveIdsToMoves();
     this.moves = Array.from(this.moveIdsToMoves.values());
   }

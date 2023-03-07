@@ -1,9 +1,8 @@
-import * as THREE from "three"
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
-import * as M from "./logic/mymoves"
-import * as U from "./logic/utils"
-import Cube from "./logic/cube"
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import * as M from "./logic/mymoves";
+import Cube from "./logic/cube";
 
 const COLOR_TABLE = {
   "U": new THREE.Color("blue"),
@@ -172,13 +171,17 @@ export default class Simulator{
   }
 
   lookupColorForFaceNormal(piece, normalX, normalY, normalZ) {
-    if (U.closeTo(normalY, 1)) return COLOR_TABLE[piece.faces.up];
-    if (U.closeTo(normalY, -1)) return COLOR_TABLE[piece.faces.down];
-    if (U.closeTo(normalX, -1)) return COLOR_TABLE[piece.faces.left];
-    if (U.closeTo(normalX, 1)) return COLOR_TABLE[piece.faces.right];
-    if (U.closeTo(normalZ, 1)) return COLOR_TABLE[piece.faces.front];
-    if (U.closeTo(normalZ, -1)) return COLOR_TABLE[piece.faces.back];
+    if (this.closeTo(normalY, 1)) return COLOR_TABLE[piece.faces.up];
+    if (this.closeTo(normalY, -1)) return COLOR_TABLE[piece.faces.down];
+    if (this.closeTo(normalX, -1)) return COLOR_TABLE[piece.faces.left];
+    if (this.closeTo(normalX, 1)) return COLOR_TABLE[piece.faces.right];
+    if (this.closeTo(normalZ, 1)) return COLOR_TABLE[piece.faces.front];
+    if (this.closeTo(normalZ, -1)) return COLOR_TABLE[piece.faces.back];
     return COLOR_TABLE["-"];
+  }
+
+  closeTo(a, b) {
+    return Math.abs(a - b) <= 1e-12
   }
 
   animate() {

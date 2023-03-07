@@ -1,4 +1,3 @@
-import * as U from "./utils";
 import CoordsList from "./coordslist";
 import Coord from "./coord";
 
@@ -6,7 +5,7 @@ export default class CubeData {
   constructor(cubeSize) {
     this.cubeSize = cubeSize;
     this.isEvenSizedCube = cubeSize % 2 === 0;
-    this.values = U.range(cubeSize)
+    this.values = range(cubeSize)
       .map(v => v - Math.floor(cubeSize / 2))
       .map(v => this.isEvenSizedCube && v >= 0 ? v + 1 : v);
     this.vmin = Math.min(...this.values);
@@ -29,4 +28,8 @@ export default class CubeData {
   makeAllCoordsList() {
     return new CoordsList(Array.from(this.allCoordsGenerator()));
   }
+}
+
+function range(n) {
+  return Array.from(Array(n).keys())
 }

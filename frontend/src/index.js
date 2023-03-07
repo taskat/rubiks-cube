@@ -1,7 +1,7 @@
-import Simulator from "./three-app"
-import Editor from "./editor/editor.js"
+import Simulator from "./three-app";
+import Editor from "./editor/editor.js";
 
-import "./styles/styles.css"
+import "./styles/styles.css";
 
 const main = async () => {
   document.querySelector("#check").addEventListener("click", check);

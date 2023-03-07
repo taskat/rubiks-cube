@@ -1,4 +1,4 @@
-import Cube from "./cube"
+import Cube from "./cube";
 
 const CUBE = new Cube(3);
 const MOVES = CUBE.moves;

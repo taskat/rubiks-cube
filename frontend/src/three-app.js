@@ -3,6 +3,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import * as M from "./cube/mymoves";
 import Cube from "./cube/cube";
+import Colors from "./cube/color";
 
 const COLOR_TABLE = {
   "U": new THREE.Color("blue"),
@@ -157,7 +158,8 @@ export default class Simulator{
       const normalY = normalAttribute.array[arrayIndex++];
       const normalZ = normalAttribute.array[arrayIndex++];
 
-      const color = this.lookupColorForFaceNormal(piece, normalX, normalY, normalZ);
+      // const color = this.lookupColorSolved(piece, normalX, normalY, normalZ);
+      const color = this.lookupColorChecker(piece, normalX, normalY, normalZ);
 
       colors.push(color.r, color.g, color.b);
       colors.push(color.r, color.g, color.b);
@@ -169,13 +171,35 @@ export default class Simulator{
     return pieceGeoemtry;
   }
 
-  lookupColorForFaceNormal(piece, normalX, normalY, normalZ) {
+  lookupColorSolved(piece, normalX, normalY, normalZ) {
     if (this.closeTo(normalY, 1)) return COLOR_TABLE[piece.faces.up];
     if (this.closeTo(normalY, -1)) return COLOR_TABLE[piece.faces.down];
     if (this.closeTo(normalX, -1)) return COLOR_TABLE[piece.faces.left];
     if (this.closeTo(normalX, 1)) return COLOR_TABLE[piece.faces.right];
     if (this.closeTo(normalZ, 1)) return COLOR_TABLE[piece.faces.front];
     if (this.closeTo(normalZ, -1)) return COLOR_TABLE[piece.faces.back];
+    return COLOR_TABLE["-"];
+  }
+
+  lookupColorChecker(piece, normalX, normalY, normalZ) {
+    let side = "";
+    if (this.closeTo(normalY, -1)) {
+      side = "D";
+    } else if (this.closeTo(normalY, 1)) {
+      side = "U";
+    } else if (this.closeTo(normalX, -1)) {
+      side = "L";
+    } else if (this.closeTo(normalX, 1)) {
+      side = "R";
+    } else if (this.closeTo(normalZ, 1)) {
+      side = "F";
+    } else if (this.closeTo(normalZ, -1)) {
+      side = "B";
+    }
+    const sideCoord = piece.getSideCoord(side);
+    if (sideCoord) {
+      return Colors.get(side)[sideCoord.i][sideCoord.j];
+    } 
     return COLOR_TABLE["-"];
   }
 
@@ -193,7 +217,7 @@ export default class Simulator{
 
   scramble() {
     const moves = M.getMoves(this.cubeSize);
-    this.cube.makeMoves(M.reverseMoves(moves));
+    // this.cube.makeMoves(M.reverseMoves(moves));
     this.resetUiPieces(this.cube);
     setTimeout(this.animateMoves.bind(this), BEFORE_DELAY, moves);
   }

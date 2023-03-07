@@ -4,16 +4,7 @@ const CUBE = new Cube(3);
 const MOVES = CUBE.moves;
 
 export const getMoves = cubeSize => {
-    let moves = []
-    for (let i = 0; i < 3; i++) {
-        for (let j = 0; j < 4; j++) {
-            moves.push(middlePrime())
-            moves.push(upPrime())
-        }
-        moves.push(xPrime())
-        moves.push(zPrime())
-    }
-    return moves;
+    return [middle2(), equator2(), side2()];
 }
 
 const left = () => {

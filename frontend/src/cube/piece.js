@@ -1,6 +1,7 @@
 import{ matrix, multiply } from "mathjs";
 import { Identity } from "./rotations";
 import Coord from "./coord";
+import SideCoord from "./sidecoord";
 
 export default class Piece {
     constructor(id, coord, cubeData) {
@@ -8,6 +9,7 @@ export default class Piece {
       this.coord = coord;
       this.faces = this.getFaces(cubeData.vmin, cubeData.vmax);
       this.accTransform3 = Identity;
+      this.sideCoords = createSideCoords(cubeData, coord);
     }
   
     getFaces(vmin, vmax) {
@@ -34,4 +36,34 @@ export default class Piece {
     isInCoordsList(coordsList) {
       return coordsList.coords.findIndex(coord => this.coord.equal(coord)) >= 0;
     }
+
+    getSideCoord(side) {
+      return this.sideCoords.find(sideCoord => sideCoord.side === side);
+    }
+  }
+
+  function createSideCoords(cubeData, coord) {
+    const sideCoords = [];
+    const vmin = cubeData.vmin;
+    const vmax = cubeData.vmax;
+    const maxCoord = cubeData.cubeSize - 1;
+    if (coord.y === vmin) {
+      sideCoords.push(new SideCoord("D", coord.x - vmin, coord.z - vmin));
+    }
+    if (coord.y === vmax) {
+      sideCoords.push(new SideCoord("U", coord.x - vmin, coord.z - vmin));
+    }
+    if (coord.x === vmin) {
+      sideCoords.push(new SideCoord("L", coord.y - vmin, coord.z - vmin));
+    }
+    if (coord.x === vmax) {
+      sideCoords.push(new SideCoord("R", coord.y - vmin, coord.z - vmin));
+    }
+    if (coord.z === vmin) {
+      sideCoords.push(new SideCoord("B", coord.x - vmin, coord.y - vmin));
+    }
+    if (coord.z === vmax) {
+      sideCoords.push(new SideCoord("F", coord.x - vmin, coord.y - vmin));
+    }
+    return sideCoords;
   }

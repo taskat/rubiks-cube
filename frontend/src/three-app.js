@@ -216,8 +216,8 @@ export default class Simulator{
   }
 
   scramble() {
+    this.recreateUiPieces();
     const moves = M.getMoves(this.cubeSize);
-    // this.cube.makeMoves(M.reverseMoves(moves));
     this.resetUiPieces(this.cube);
     setTimeout(this.animateMoves.bind(this), BEFORE_DELAY, moves);
   }
@@ -254,6 +254,7 @@ export default class Simulator{
 
   recreateUiPieces() {
     this.cube = new Cube(this.cubeSize);
+    this.puzzleGroup.clear();
     this.createUiPieces();
   }
 

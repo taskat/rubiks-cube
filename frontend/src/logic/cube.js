@@ -1,6 +1,7 @@
 import { rotateX, rotateY, rotateZ } from "./rotations";
 import CubeData from "./cubedata";
 import Piece from "./piece";
+import Move from "./move";
 
 export default class Cube {
   constructor(cubeSize) {
@@ -56,26 +57,9 @@ export default class Cube {
 
   makeKvp(id, oppositeMoveId, rotationMatrix3, coordsList, numTurns) {
     const key = id;
-    const value = {
-      id,
-      oppositeMoveId,
-      makeMove: this.rotatePieces(coordsList, rotationMatrix3),
-      rotationMatrix3,
-      coordsList,
-      numTurns
-    };
+    const value = new Move(id, oppositeMoveId,
+      rotationMatrix3, coordsList, numTurns);
     return [key, value];
-  }
-
-  rotatePieces(coordsList, rotationMatrix3) {
-    return pieces => {
-      pieces.forEach(piece => {
-        if(piece.isInCoordsList(coordsList)) {
-          piece.rotatePiece(rotationMatrix3)
-        }
-      });
-      return pieces;
-    };
   }
 
   getPieces(coordsList) {

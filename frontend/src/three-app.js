@@ -30,8 +30,8 @@ export default class Simulator{
     this.animationSpeed = 750;
     this.model = null;
     this.modelName = "/cube-bevelled.glb";
-    this.cube = null;
     this.cubeSize = 3;
+    this.cube = new Cube(this.cubeSize);
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.camera = new THREE.PerspectiveCamera(34, 1, 1, 100);
     this.scene = new THREE.Scene();
@@ -124,7 +124,6 @@ export default class Simulator{
     this.createScene();
     this.initCamera(w, h);
     this.initControls();
-    this.cube = new Cube(this.cubeSize);
     this.createUiPieces();
     this.animate();
     this.scramble();
@@ -193,19 +192,10 @@ export default class Simulator{
   }
 
   scramble() {
-
-
-    // const randomMoves = U.range(NUM_RANDOM_MOVES).map(() => L.getRandomMove(this.cubeSize));
-    // L.removeRedundantMoves(randomMoves);
-    // console.log(`random moves: ${randomMoves.map(move => move.id).join(" ")}`);
-    // globals.cube = L.makeMoves(randomMoves, L.getSolvedCube(this.cubeSize));
-    // this.resetUiPieces(globals.cube);
-    // setTimeout(showSolutionByCheating, BEFORE_DELAY, randomMoves);
     const moves = M.getMoves(this.cubeSize);
-    console.log(`moves: ${moves.map(move => move.id).join(" ")}`);
     this.cube.makeMoves(M.reverseMoves(moves));
     this.resetUiPieces(this.cube);
-    setTimeout(this.showSolution.bind(this), BEFORE_DELAY, moves);
+    setTimeout(this.animateMoves.bind(this), BEFORE_DELAY, moves);
   }
 
   resetUiPieces(cube) {
@@ -268,12 +258,6 @@ export default class Simulator{
     return new THREE.AnimationClip(move.id, duration, tracks);
   }
 
-
-  showSolution(moves) {
-    console.log(`solution moves: ${moves.map(move => move.id).join(" ")}`);
-    this.animateMoves(moves);
-  }
-
   animateMoves(moves, nextMoveIndex = 0) {
 
     const move = moves[nextMoveIndex];
@@ -314,5 +298,4 @@ export default class Simulator{
       toGroup.add(...uiPieces);
     }
   }
-
 }

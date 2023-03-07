@@ -1,7 +1,6 @@
 import { rotateX, rotateY, rotateZ } from "./rotations";
 import CubeData from "./cubedata";
 import Piece from "./piece";
-import Coord from "./coord";
 
 export default class Cube {
   constructor(cubeSize) {

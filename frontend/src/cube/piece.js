@@ -48,22 +48,22 @@ export default class Piece {
     const vmax = cubeData.vmax;
     const maxCoord = cubeData.cubeSize - 1;
     if (coord.y === vmin) {
-      sideCoords.push(new SideCoord("D", coord.x - vmin, coord.z - vmin));
+      sideCoords.push(new SideCoord("D", -coord.z + vmax, coord.x - vmin));
     }
     if (coord.y === vmax) {
-      sideCoords.push(new SideCoord("U", coord.x - vmin, coord.z - vmin));
+      sideCoords.push(new SideCoord("U", coord.z - vmin, coord.x - vmin));
     }
     if (coord.x === vmin) {
-      sideCoords.push(new SideCoord("L", coord.y - vmin, coord.z - vmin));
+      sideCoords.push(new SideCoord("L", -coord.y + vmax, coord.z - vmin));
     }
     if (coord.x === vmax) {
-      sideCoords.push(new SideCoord("R", coord.y - vmin, coord.z - vmin));
+      sideCoords.push(new SideCoord("R", -coord.y + vmax, -coord.z + vmax));
     }
     if (coord.z === vmin) {
-      sideCoords.push(new SideCoord("B", coord.x - vmin, coord.y - vmin));
+      sideCoords.push(new SideCoord("B", coord.y - vmin, coord.x - vmin));
     }
     if (coord.z === vmax) {
-      sideCoords.push(new SideCoord("F", coord.x - vmin, coord.y - vmin));
+      sideCoords.push(new SideCoord("F", -coord.y + vmax, coord.x - vmin));
     }
     return sideCoords;
   }

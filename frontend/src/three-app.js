@@ -217,8 +217,7 @@ export default class Simulator{
 
   scramble() {
     this.recreateUiPieces();
-    // const moves = M.getMoves(this.cubeSize);
-    const moves = [];
+    const moves = M.getMoves(this.cubeSize);
     this.resetUiPieces(this.cube);
     setTimeout(this.animateMoves.bind(this), BEFORE_DELAY, moves);
   }

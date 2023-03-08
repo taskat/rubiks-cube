@@ -1,0 +1,15 @@
+{
+  "short_name": "rubiks-cube",
+  "name": "Rubik's Cube",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": "index.html",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#000000"
+}

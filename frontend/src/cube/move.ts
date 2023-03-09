@@ -6,7 +6,7 @@ export default class Move {
     id: number;
     oppositeMoveId: number;
     rotationMatrix3: math.Matrix;
-    makeMove: (pieces: any) => any;
+    makeMove: (pieces: Piece[]) => Piece[];
     coordsList: CoordsList;
     numTurns: number;
     constructor(id: number, oppositeId: number, rotationMatrix3: math.Matrix, coordsList: CoordsList, numTurns: number) {
@@ -19,7 +19,7 @@ export default class Move {
     }
 }
 
-function rotatePieces(coordsList: CoordsList, rotationMatrix3: math.Matrix): (pieces: any) => any {
+function rotatePieces(coordsList: CoordsList, rotationMatrix3: math.Matrix): (pieces: Piece[]) => Piece[] {
     return pieces => {
         pieces.forEach((piece: Piece) => {
             if (piece.isInCoordsList(coordsList)) {

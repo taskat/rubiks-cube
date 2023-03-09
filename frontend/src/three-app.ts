@@ -4,6 +4,9 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import * as M from "./cube/mymoves";
 import Cube from "./cube/cube";
 import Colors from "./cube/color";
+import Piece from "./cube/piece";
+import { Side } from "./cube/side";
+import Move from "./cube/move";
 
 const COLOR_TABLE = {
   "U": new THREE.Color("blue"),
@@ -27,22 +30,22 @@ const BEFORE_DELAY = 2000;
 const AFTER_DELAY = 2000;
 
 export default class Simulator{
-  constructor() {
-    this.animationSpeed = 750;
-    this.model = null;
-    this.modelName = "/cube-bevelled.glb";
-    this.cubeSize = 3;
-    this.cube = new Cube(this.cubeSize);
-    this.renderer = new THREE.WebGLRenderer({ antialias: true });
-    this.camera = new THREE.PerspectiveCamera(34, 1, 1, 100);
-    this.scene = new THREE.Scene();
-    this.puzzleGroup = new THREE.Group();
-    this.animationGroup = new THREE.Group();
-    this.clock = new THREE.Clock();
-    this.animationMixer = new THREE.AnimationMixer();
-  }
+  animationSpeed: number = 750;
+  model: THREE.BufferGeometry = new THREE.BufferGeometry();
+  modelName: string = "/cube-bevelled.glb";
+  cubeSize: number = 3;
+  cube: Cube = new Cube(this.cubeSize);
+  renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer({ antialias: true });
+  camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera(34, 1, 1, 100);
+  controls: OrbitControls = new OrbitControls(this.camera, this.renderer.domElement);
+  scene: THREE.Scene = new THREE.Scene();
+  puzzleGroup: THREE.Group = new THREE.Group();
+  animationGroup: THREE.Group = new THREE.Group();
+  clock: THREE.Clock = new THREE.Clock();
+  animationMixer: THREE.AnimationMixer = new THREE.AnimationMixer(this.animationGroup);
+  constructor() {}
 
-  makeRotationMatrix4(rotationMatrix3) {
+  makeRotationMatrix4(rotationMatrix3: math.Matrix): THREE.Matrix4 {
     let values = new Array(16).fill(0);
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
@@ -53,13 +56,13 @@ export default class Simulator{
     return new THREE.Matrix4().fromArray(values);
   }
 
-  initRenderer(container) {
+  initRenderer(container: HTMLElement) {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(container.offsetWidth, container.offsetHeight);
     container.appendChild(this.renderer.domElement);
   }
 
-  addResizeListener(w, h) {
+  addResizeListener(w: number, h: number) {
     window.addEventListener("resize", () => {
       this.renderer.setSize(w, h);
       this.camera.aspect = w / h;
@@ -75,15 +78,15 @@ export default class Simulator{
     this.scene.add(this.animationGroup);
   }
 
-  initCamera(w, h) {
+  initCamera(w: number, h: number) {
     this.camera.aspect = w / h;
     this.camera.position.set(3, 3, 12);
     this.camera.lookAt(new THREE.Vector3(0, 0, 0));
     this.camera.updateProjectionMatrix();
   }
 
-  createLights() {
-    let lights = [];
+  createLights(): THREE.DirectionalLight[] {
+    let lights: THREE.DirectionalLight[] = [];
     const LIGHT_COLOR = 0xffffff;
     const LIGHT_INTENSITY = 2;
     const LIGHT_DISTANCE = 4;
@@ -106,7 +109,6 @@ export default class Simulator{
   }
 
   initControls() {
-    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.minDistance = 5.0;
     this.controls.maxDistance = 40.0;
     this.controls.enableDamping = true;
@@ -117,7 +119,7 @@ export default class Simulator{
 
   async init() {
     await this.load3DModel();
-    const container = document.getElementById("visualisation-container");
+    const container = document.getElementById("visualisation-container") as HTMLElement;
     const w = container.offsetWidth;
     const h = container.offsetHeight;
     this.initRenderer(container);
@@ -131,23 +133,23 @@ export default class Simulator{
   }
 
   async load3DModel() {
-    let p =  new Promise((resolve, reject) => {
+    let p = new Promise((resolve, reject) => {
       const loader = new GLTFLoader();
       loader.load(this.modelName,
         gltf => {
-          const bufferGeometry = gltf.scene.children[0].geometry;
+          const bufferGeometry = (gltf.scene.children[0] as THREE.Mesh).geometry;
           resolve(bufferGeometry.toNonIndexed());
         },
         undefined,
         reject)
     });
-    let model = await p;
+    let model = await p as THREE.BufferGeometry;
     this.model = model;
   }
 
-  setGeometryVertexColors(piece) {
+  setGeometryVertexColors(piece: Piece): THREE.BufferGeometry {
     const pieceGeoemtry = this.model.clone();
-    const normalAttribute = pieceGeoemtry.getAttribute("normal");
+    const normalAttribute = pieceGeoemtry.getAttribute("normal") as THREE.BufferAttribute;
 
     const colors = [];
 
@@ -171,39 +173,29 @@ export default class Simulator{
     return pieceGeoemtry;
   }
 
-  lookupColorSolved(piece, normalX, normalY, normalZ) {
-    if (this.closeTo(normalY, 1)) return COLOR_TABLE[piece.faces.up];
-    if (this.closeTo(normalY, -1)) return COLOR_TABLE[piece.faces.down];
-    if (this.closeTo(normalX, -1)) return COLOR_TABLE[piece.faces.left];
-    if (this.closeTo(normalX, 1)) return COLOR_TABLE[piece.faces.right];
-    if (this.closeTo(normalZ, 1)) return COLOR_TABLE[piece.faces.front];
-    if (this.closeTo(normalZ, -1)) return COLOR_TABLE[piece.faces.back];
-    return COLOR_TABLE["-"];
-  }
-
-  lookupColorChecker(piece, normalX, normalY, normalZ) {
-    let side = "";
+  lookupColorChecker(piece: Piece, normalX: number, normalY: number, normalZ: number): THREE.Color {
+    let side: Side = Side.None;
     if (this.closeTo(normalY, -1)) {
-      side = "D";
+      side = Side.Down;
     } else if (this.closeTo(normalY, 1)) {
-      side = "U";
+      side = Side.Up;
     } else if (this.closeTo(normalX, -1)) {
-      side = "L";
+      side = Side.Left;
     } else if (this.closeTo(normalX, 1)) {
-      side = "R";
+      side = Side.Right;
     } else if (this.closeTo(normalZ, 1)) {
-      side = "F";
+      side = Side.Front;
     } else if (this.closeTo(normalZ, -1)) {
-      side = "B";
+      side = Side.Back;
     }
     const sideCoord = piece.getSideCoord(side);
     if (sideCoord) {
-      return Colors.get(side)[sideCoord.i][sideCoord.j];
+      return (Colors.get(side) as THREE.Color[][])[sideCoord.i][sideCoord.j];
     } 
     return COLOR_TABLE["-"];
   }
 
-  closeTo(a, b) {
+  closeTo(a: number, b: number) {
     return Math.abs(a - b) <= 1e-12
   }
 
@@ -222,32 +214,32 @@ export default class Simulator{
     setTimeout(this.animateMoves.bind(this), BEFORE_DELAY, moves);
   }
 
-  resetUiPieces(cube) {
+  resetUiPieces(cube: Cube) {
     cube.pieces.forEach(piece => {
       const uiPiece = this.findUiPiece(piece);
       this.resetUiPiece(uiPiece, piece);
     });
   }
 
-  findUiPiece(piece) {
-    return this.puzzleGroup.children.find(child => child.userData === piece.id);
+  findUiPiece(piece: Piece): THREE.Object3D {
+    return this.puzzleGroup.children.find(child => child.userData.id === piece.id) as THREE.Object3D;
   }
 
   
-  resetUiPiece(uiPiece, piece) {
+  resetUiPiece(uiPiece: THREE.Object3D, piece: Piece) {
     const isEvenSizedCube = this.cubeSize % 2 === 0;
-    const adjustValue = v => isEvenSizedCube ? v < 0 ? v + 0.5 : v - 0.5 : v;
+    const adjustValue = (v: number) => isEvenSizedCube ? v < 0 ? v + 0.5 : v - 0.5 : v;
     uiPiece.position.x = adjustValue(piece.coord.x);
     uiPiece.position.y = adjustValue(piece.coord.y);
     uiPiece.position.z = adjustValue(piece.coord.z);
     uiPiece.setRotationFromMatrix(this.makeRotationMatrix4(piece.accTransform3));
   }
 
-  createUiPiece(piece) {
+  createUiPiece(piece: Piece): THREE.Object3D {
     const pieceGeometryWithColors = this.setGeometryVertexColors(piece);
     const uiPiece = new THREE.Mesh(pieceGeometryWithColors, PIECE_MATERIAL);
     uiPiece.scale.set(0.5, 0.5, 0.5);
-    uiPiece.userData = piece.id;
+    uiPiece.userData.id = piece.id;
     this.resetUiPiece(uiPiece, piece);
     return uiPiece;
   }
@@ -262,15 +254,15 @@ export default class Simulator{
     this.cube.pieces.forEach(piece => {
       const uiPiece = this.createUiPiece(piece);
       this.puzzleGroup.add(uiPiece);
-    })
+    });
   }
 
-  createAnimationClip(move) {
+  createAnimationClip(move: Move): THREE.AnimationClip {
     const numTurns = move.numTurns;
     const t0 = 0;
     const t1 = numTurns * (this.animationSpeed / 1000);
     const times = [t0, t1];
-    const values = [];
+    const values: number[] = [];
     const startQuaternion = new THREE.Quaternion();
     const endQuaternion = new THREE.Quaternion();
     const rotationMatrix3 = move.rotationMatrix3;
@@ -280,21 +272,17 @@ export default class Simulator{
     endQuaternion.toArray(values, values.length);
     const duration = -1;
     const tracks = [new THREE.QuaternionKeyframeTrack(".quaternion", times, values)];
-    return new THREE.AnimationClip(move.id, duration, tracks);
+    return new THREE.AnimationClip(move.id.toString(), duration, tracks);
   }
 
-  animateMoves(moves, nextMoveIndex = 0) {
-
+  animateMoves(moves: Move[], nextMoveIndex: number = 0) {
     const move = moves[nextMoveIndex];
-
     if (!move) {
       return setTimeout(this.scramble.bind(this), AFTER_DELAY);
     }
-
     const pieces = this.cube.getPieces(move.coordsList);
     const uiPieces = pieces.map(this.findUiPiece.bind(this));
     this.movePiecesBetweenGroups(uiPieces, this.puzzleGroup, this.animationGroup);
-
     const onFinished = () => {
       this.animationMixer.removeEventListener("finished", onFinished);
       this.movePiecesBetweenGroups(uiPieces, this.animationGroup, this.puzzleGroup);
@@ -313,11 +301,11 @@ export default class Simulator{
     const clipAction = this.animationMixer.clipAction(
       animationClip,
       this.animationGroup);
-    clipAction.setLoop(THREE.LoopOnce);
+    clipAction.setLoop(THREE.LoopOnce, 1);
     clipAction.play();
   }
 
-  movePiecesBetweenGroups(uiPieces, fromGroup, toGroup) {
+  movePiecesBetweenGroups(uiPieces: THREE.Object3D[], fromGroup: THREE.Group, toGroup: THREE.Group) {
     if (uiPieces.length) {
       fromGroup.remove(...uiPieces);
       toGroup.add(...uiPieces);

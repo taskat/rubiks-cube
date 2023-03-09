@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { Side } from "./side";
 
 const COLORS: Map<String, THREE.Color> = new Map([
     ["b", new THREE.Color("blue")],
@@ -9,46 +10,46 @@ const COLORS: Map<String, THREE.Color> = new Map([
     ["w", new THREE.Color("ghostwhite")]
 ]);
 
-function colors() {
-    let map = new Map<String, THREE.Color[][]>();
+function colors(): Map<Side, THREE.Color[][]> {
+    let map = new Map<Side, THREE.Color[][]>();
     const front = [
         ["y", "w", "y"],
         ["w", "y", "w"],
         ["y", "w", "y"]
     ];
-    map.set("F", front.map(row => row.map(color => COLORS.get(color) as THREE.Color)));
+    map.set(Side.Front, front.map(row => row.map(color => COLORS.get(color) as THREE.Color)));
     const back = [
         ["w", "y", "w"],
         ["y", "w", "y"],
         ["w", "y", "w"]
     ];
-    map.set("B", back.map(row => row.map(color => COLORS.get(color) as THREE.Color)));
+    map.set(Side.Back, back.map(row => row.map(color => COLORS.get(color) as THREE.Color)));
     const up = [
         ["b", "g", "b"],
         ["g", "b", "g"],
         ["b", "g", "b"]
     ];
-    map.set("U", up.map(row => row.map(color => COLORS.get(color) as THREE.Color)));
+    map.set(Side.Up, up.map(row => row.map(color => COLORS.get(color) as THREE.Color)));
     const down = [
         ["g", "b", "g"],
         ["b", "g", "b"],
         ["g", "b", "g"]
     ];
-    map.set("D", down.map(row => row.map(color => COLORS.get(color) as THREE.Color)));
+    map.set(Side.Down, down.map(row => row.map(color => COLORS.get(color) as THREE.Color)));
     const left = [
         ["r", "o", "r"],
         ["o", "r", "o"],
         ["r", "o", "r"]
     ];
-    map.set("L", left.map(row => row.map(color => COLORS.get(color) as THREE.Color)));
+    map.set(Side.Left, left.map(row => row.map(color => COLORS.get(color) as THREE.Color)));
     const right = [
         ["o", "r", "o"],
         ["r", "o", "r"],
         ["o", "r", "o"]
     ];
-    map.set("R", right.map(row => row.map(color => COLORS.get(color) as THREE.Color)));
+    map.set(Side.Right, right.map(row => row.map(color => COLORS.get(color) as THREE.Color)));
     return map;
 }
 
-const Colors: Map<String, THREE.Color[][]> = colors();
+const Colors: Map<Side, THREE.Color[][]> = colors();
 export default Colors;

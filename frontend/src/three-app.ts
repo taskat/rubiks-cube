@@ -209,7 +209,7 @@ export default class Simulator{
 
   scramble() {
     this.recreateUiPieces();
-    const moves = M.getMoves(this.cubeSize);
+    const moves = M.getMoves();
     this.resetUiPieces(this.cube);
     setTimeout(this.animateMoves.bind(this), BEFORE_DELAY, moves);
   }
@@ -278,7 +278,7 @@ export default class Simulator{
   animateMoves(moves: Move[], nextMoveIndex: number = 0) {
     const move = moves[nextMoveIndex];
     if (!move) {
-      return setTimeout(this.scramble.bind(this), AFTER_DELAY);
+      setTimeout(this.scramble.bind(this), AFTER_DELAY);
     }
     const pieces = this.cube.getPieces(move.coordsList);
     const uiPieces = pieces.map(this.findUiPiece.bind(this));

@@ -4,7 +4,7 @@ import Move from "./move";
 const CUBE = new Cube(3);
 const MOVES = CUBE.moves;
 
-export const getMoves = (cubeSize: number) => {
+export function getMoves(): Move[] {
     return [middle2(), equator2(), side2()];
 }
 

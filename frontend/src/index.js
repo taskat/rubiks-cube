@@ -1,5 +1,5 @@
 import Simulator from "./three-app";
-import Editor from "./editor/editor.js";
+import Editor from "./editor/editor";
 
 import "./styles/styles.css";
 

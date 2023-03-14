@@ -272,13 +272,14 @@ export default class Simulator{
     endQuaternion.toArray(values, values.length);
     const duration = -1;
     const tracks = [new THREE.QuaternionKeyframeTrack(".quaternion", times, values)];
-    return new THREE.AnimationClip(move.id.toString(), duration, tracks);
+    return new THREE.AnimationClip(move.toString(), duration, tracks);
   }
 
   animateMoves(moves: Move[], nextMoveIndex: number = 0) {
     const move = moves[nextMoveIndex];
     if (!move) {
       setTimeout(this.scramble.bind(this), AFTER_DELAY);
+      return;
     }
     const pieces = this.cube.getPieces(move.coordsList);
     const uiPieces = pieces.map(this.findUiPiece.bind(this));

@@ -223,10 +223,3 @@ const z2 = () => {
 const zPrime = () => {
     return MOVES[53]
 }
-
-export const reverseMoves = (moves: Move[]) => {
-    return moves
-      .map(move => move.oppositeMoveId)
-      .map(id => CUBE.lookupMoveId(id))
-      .reverse()
-}

@@ -1,9 +1,10 @@
 import Cube from "./cube";
+import Move from "./move";
 
 const CUBE = new Cube(3);
 const MOVES = CUBE.moves;
 
-export const getMoves = cubeSize => {
+export function getMoves(): Move[] {
     return [middle2(), equator2(), side2()];
 }
 
@@ -223,7 +224,7 @@ const zPrime = () => {
     return MOVES[53]
 }
 
-export const reverseMoves = moves => {
+export const reverseMoves = (moves: Move[]) => {
     return moves
       .map(move => move.oppositeMoveId)
       .map(id => CUBE.lookupMoveId(id))

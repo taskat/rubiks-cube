@@ -1,25 +1,25 @@
 import Simulator from "./three-app";
-import Editor from "./editor/editor.js";
+import Editor from "./editor/editor";
 
 import "./styles/styles.css";
 
 const main = async () => {
-  document.querySelector("#check").addEventListener("click", check);
-  document.querySelector("#solve").addEventListener("click", solve);
+  document.querySelector("#check")?.addEventListener("click", check);
+  document.querySelector("#solve")?.addEventListener("click", solve);
   let editor = new Editor();
   const changeTab = () => editor.change_tab();
-  document.querySelector("#change_tab").addEventListener("click", changeTab);
+  document.querySelector("#change_tab")?.addEventListener("click", changeTab);
   document.addEventListener('keyup', (e) => keyboard_shortcuts(e, changeTab), false);
   const simulator = new Simulator();
   simulator.init();
 }
 
-function keyboard_shortcuts(e, changeTab) {
-  if (e.ctrlKey && e.keyCode === 13) {
+function keyboard_shortcuts(e: KeyboardEvent, changeTab: () => void) {
+  if (e.ctrlKey && e.key === "Enter") {
     solve();
-  } else if (e.shiftKey && e.keyCode === 13) {
+  } else if (e.shiftKey && e.key === "Enter") {
     check();
-  } else if (e.shiftKey && e.keyCode === 9) {
+  } else if (e.shiftKey && e.key === "Tab") {
     changeTab();
   }
 }

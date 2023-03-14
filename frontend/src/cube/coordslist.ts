@@ -1,21 +1,24 @@
+import Coord from "./coord";
+
 export default class CoordsList {
-    constructor(coords) {
+    coords: Coord[];
+    constructor(coords: Coord[]) {
         this.coords = coords;
     }
 
-    concat(other) {
+    concat(other: CoordsList): CoordsList {
         return new CoordsList(this.coords.concat(other.coords));
     }
 
-    xSlice(xSlice) {
+    xSlice(xSlice: number): CoordsList {
         return new CoordsList(this.coords.filter((coord) => coord.x === xSlice));
     }
 
-    ySlice(ySlice) {
+    ySlice(ySlice: number): CoordsList {
         return new CoordsList(this.coords.filter((coord) => coord.y === ySlice));
     }
 
-    zSlice(zSlice) {
+    zSlice(zSlice: number): CoordsList {
         return new CoordsList(this.coords.filter((coord) => coord.z === zSlice));
     }
 }

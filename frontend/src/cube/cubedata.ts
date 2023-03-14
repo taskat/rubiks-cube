@@ -2,7 +2,12 @@ import CoordsList from "./coordslist";
 import Coord from "./coord";
 
 export default class CubeData {
-  constructor(cubeSize) {
+  cubeSize: number;
+  isEvenSizedCube: boolean;
+  values: number[];
+  vmin: number;
+  vmax: number;
+  constructor(cubeSize: number) {
     this.cubeSize = cubeSize;
     this.isEvenSizedCube = cubeSize % 2 === 0;
     this.values = range(cubeSize)
@@ -13,7 +18,7 @@ export default class CubeData {
   }
 
   * allCoordsGenerator() {
-    const isFace = v => v === this.vmin || v === this.vmax
+    const isFace = (v: number) => v === this.vmin || v === this.vmax
     for (const x of this.values) {
       for (const y of this.values) {
         for (const z of this.values) {
@@ -25,11 +30,11 @@ export default class CubeData {
     }
   }
 
-  makeAllCoordsList() {
+  makeAllCoordsList(): CoordsList {
     return new CoordsList(Array.from(this.allCoordsGenerator()));
   }
 }
 
-function range(n) {
+function range(n: number): number[] {
   return Array.from(Array(n).keys())
 }

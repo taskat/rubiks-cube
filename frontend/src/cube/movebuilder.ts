@@ -1,7 +1,7 @@
 import CoordsList from "./coordslist";
 import Move from "./move";
 
-export default class RotCoord {
+export default class MoveBuilder {
     rotationMatrix3: math.Matrix[];
     coordsList: CoordsList;
     name: string;
@@ -15,7 +15,7 @@ export default class RotCoord {
       return new Move(this.rotationMatrix3[index], this.coordsList, numTurns, this.name + suffix);
     }
   
-    getMoves(): Move[] {
+    build(): Move[] {
       const move90 = this.getMove(0, 1, "");
       const move180 = this.getMove(1, 2, "2");
       const move270 = this.getMove(2, 1, "'");

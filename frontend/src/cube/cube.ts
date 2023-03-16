@@ -31,7 +31,7 @@ export default class Cube {
     const xNames = ["L", "M", "R"];
     const yNames = ["D", "E", "U"];
     const zNames = ["B", "S", "F"];
-    const slices: MoveBuilder[] = [
+    const builders: MoveBuilder[] = [
       ...this.cubeData.values.map((xSlice, index) => new MoveBuilder(xRotationMatrices3, allCoordsList.xSlice(xSlice), xNames[index])),
       ...this.cubeData.values.map((ySlice, index) => new MoveBuilder(yRotationMatrices3, allCoordsList.ySlice(ySlice), yNames[index])),
       ...this.cubeData.values.map((zSlice, index) => new MoveBuilder(zRotationMatrices3, allCoordsList.zSlice(zSlice), zNames[index])),
@@ -45,7 +45,13 @@ export default class Cube {
       new MoveBuilder(yRotationMatrices3, allCoordsList, "y"),
       new MoveBuilder(zRotationMatrices3, allCoordsList, "z"),
     ];
-    const nestedMoves = slices.map((rotCoord: MoveBuilder) => rotCoord.build());
+    const toReverse = ["U", "R", "B", "Uw", "Rw", "Bw", "x", "y"];
+    builders.forEach(builder => { 
+      if (toReverse.includes(builder.name)) {
+        builder.reverse();
+      }
+    });
+    const nestedMoves = builders.map((moveBuilder: MoveBuilder) => moveBuilder.build());
     return flatten(nestedMoves);
   }
 

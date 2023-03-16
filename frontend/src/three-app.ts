@@ -1,9 +1,8 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import * as M from "./cube/mymoves";
 import Cube from "./cube/cube";
-import Colors from "./cube/color";
+import { ColorsChecker, ColorsSolved } from "./cube/color";
 import Piece from "./cube/piece";
 import { Side } from "./cube/side";
 import Move from "./cube/move";
@@ -160,8 +159,7 @@ export default class Simulator{
       const normalY = normalAttribute.array[arrayIndex++];
       const normalZ = normalAttribute.array[arrayIndex++];
 
-      // const color = this.lookupColorSolved(piece, normalX, normalY, normalZ);
-      const color = this.lookupColorChecker(piece, normalX, normalY, normalZ);
+      const color = this.lookupColor(piece, normalX, normalY, normalZ);
 
       colors.push(color.r, color.g, color.b);
       colors.push(color.r, color.g, color.b);
@@ -173,7 +171,7 @@ export default class Simulator{
     return pieceGeoemtry;
   }
 
-  lookupColorChecker(piece: Piece, normalX: number, normalY: number, normalZ: number): THREE.Color {
+  lookupColor(piece: Piece, normalX: number, normalY: number, normalZ: number): THREE.Color {
     let side: Side = Side.None;
     if (this.closeTo(normalY, -1)) {
       side = Side.Down;
@@ -190,7 +188,8 @@ export default class Simulator{
     }
     const sideCoord = piece.getSideCoord(side);
     if (sideCoord) {
-      return (Colors.get(side) as THREE.Color[][])[sideCoord.i][sideCoord.j];
+      // return (ColorsChecker.get(side) as THREE.Color[][])[sideCoord.i][sideCoord.j];
+      return (ColorsSolved.get(side) as THREE.Color[][])[sideCoord.i][sideCoord.j];
     } 
     return COLOR_TABLE["-"];
   }
@@ -209,7 +208,8 @@ export default class Simulator{
 
   scramble() {
     this.recreateUiPieces();
-    const moves = M.getMoves();
+    // const moves = M.getMoves();
+    const moves = [this.cube.allMoves.get("x")];
     this.resetUiPieces(this.cube);
     setTimeout(this.animateMoves.bind(this), BEFORE_DELAY, moves);
   }

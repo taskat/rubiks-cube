@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import Cube from "./cube/cube";
-import { ColorsChecker, ColorsSolved } from "./cube/color";
+import { ColorsSolved } from "./cube/color";
 import Piece from "./cube/piece";
 import { Side } from "./cube/side";
 import Move from "./cube/move";
@@ -188,7 +188,6 @@ export default class Simulator{
     }
     const sideCoord = piece.getSideCoord(side);
     if (sideCoord) {
-      // return (ColorsChecker.get(side) as THREE.Color[][])[sideCoord.i][sideCoord.j];
       return (ColorsSolved.get(side) as THREE.Color[][])[sideCoord.i][sideCoord.j];
     } 
     return COLOR_TABLE["-"];
@@ -208,8 +207,7 @@ export default class Simulator{
 
   scramble() {
     this.recreateUiPieces();
-    // const moves = M.getMoves();
-    const moves = [this.cube.allMoves.get("S")];
+    const moves = [this.cube.moves.get("S")];
     this.resetUiPieces(this.cube);
     setTimeout(this.animateMoves.bind(this), BEFORE_DELAY, moves);
   }

@@ -8,14 +8,12 @@ import MoveBuilder from "./movebuilder";
 export default class Cube {
   cubeData: CubeData;
   pieces: Piece[];
-  moves: Move[];
-  allMoves: Map<string, Move>;
+  moves: Map<string, Move>;
   constructor(cubeSize: number) {
     this.cubeData = new CubeData(cubeSize);
     const allCoordsList = this.cubeData.makeAllCoordsList();
     this.pieces = allCoordsList.coords.map((coord, index) => new Piece(index, coord, this.cubeData));
-    this.moves = this.generateMoves();
-    this.allMoves = new Map(this.moves.map(move => [move.name, move]));
+    this.moves = new Map(this.generateMoves().map(move => [move.name, move]));
   }
 
   makeMoves(moves: Move[]) {

@@ -1,0 +1,7 @@
+PUZZLE=1
+CUBE=2
+COLON=3
+WS=4
+'puzzle'=1
+'cube'=2
+':'=3

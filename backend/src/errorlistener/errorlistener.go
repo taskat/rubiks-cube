@@ -17,6 +17,6 @@ func NewErrorCollector(file string) *ErrorCollector {
 func (ec *ErrorCollector) SyntaxError(recognizer antlr.Recognizer,
 	offendingSymbol interface{}, line int, column int,
 	msg string, e antlr.RecognitionException) {
-	ctx := newContext(line, column)
+	ctx := errorhandler.NewContext(line, column)
 	errorhandler.AddError(errorhandler.NewError(ctx, msg, ec.file))
 }

@@ -21,6 +21,8 @@ LCURLY: '{';
 RCURLY: '}';
 LBRACKET: '[';
 RBRACKET: ']';
+LPAREN: '(';
+RPAREN: ')';
 
 // Punctuation
 COLON: ':';
@@ -29,8 +31,11 @@ COLON: ':';
 NUMBER: [1-9][0-9]*;
 
 // Strings
-LETTER: [a-zA-Z];
+fragment LETTER: [a-zA-Z];
 STRING: LETTER+;
+
+// Comments
+LINE_COMMENT: '//' ~[\r\n]* -> skip;
 
 // Whitespaces
 WS: [ \t\r\n] -> skip;

@@ -2,11 +2,11 @@ parser grammar ConfigParser;
 
 options { tokenVocab=ConfigLexer; }
 
-configFile : configLine* EOF;
-configLine: puzzleTypedef | sizeDef | stateDescriptionDef | stateDef;
+configFile: configLine* EOF;
+configLine: puzzleTypeDef | sizeDef | stateDescriptionDef | stateDef;
 
 // Configlines
-puzzleTypedef: PUZZLE COLON puzzleType;
+puzzleTypeDef: PUZZLE COLON puzzleType;
 puzzleType: CUBE;
 
 sizeDef: SIZE COLON NUMBER;
@@ -21,7 +21,7 @@ beginnerState: LCURLY side+ RCURLY;
 side: sideDef COLON sideState;
 sideDef: FRONT | BACK | LEFT | RIGHT | UP | DOWN;
 sideState: LBRACKET sideStateRow+ RBRACKET;
-sideStateRow: LBRACKET color+ RBRACKET;
+sideStateRow: LPAREN color+ RPAREN;
 color: STRING;
 
-advancedState: LCURLY RCURLY;
+advancedState: LCURLY ADVANCED RCURLY;

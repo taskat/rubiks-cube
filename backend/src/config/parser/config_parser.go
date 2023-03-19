@@ -34,22 +34,22 @@ func configparserParserInit() {
 	staticData.literalNames = []string{
 		"", "'advanced'", "'back'", "'beginner'", "'cube'", "'down'", "'front'",
 		"'left'", "'puzzle'", "'random'", "'right'", "'size'", "'state'", "'state description'",
-		"'up'", "'{'", "'}'", "'['", "']'", "':'",
+		"'up'", "'{'", "'}'", "'['", "']'", "'('", "')'", "':'",
 	}
 	staticData.symbolicNames = []string{
 		"", "ADVANCED", "BACK", "BEGINNER", "CUBE", "DOWN", "FRONT", "LEFT",
 		"PUZZLE", "RANDOM", "RIGHT", "SIZE", "STATE", "STATE_DESCRIPTION", "UP",
-		"LCURLY", "RCURLY", "LBRACKET", "RBRACKET", "COLON", "NUMBER", "LETTER",
-		"STRING", "WS",
+		"LCURLY", "RCURLY", "LBRACKET", "RBRACKET", "LPAREN", "RPAREN", "COLON",
+		"NUMBER", "STRING", "LINE_COMMENT", "WS",
 	}
 	staticData.ruleNames = []string{
-		"configFile", "configLine", "puzzleTypedef", "puzzleType", "sizeDef",
+		"configFile", "configLine", "puzzleTypeDef", "puzzleType", "sizeDef",
 		"stateDescriptionDef", "stateDescription", "stateDef", "state", "beginnerState",
 		"side", "sideDef", "sideState", "sideStateRow", "color", "advancedState",
 	}
 	staticData.predictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 23, 107, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 1, 25, 108, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
 		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 2, 10, 7,
 		10, 2, 11, 7, 11, 2, 12, 7, 12, 2, 13, 7, 13, 2, 14, 7, 14, 2, 15, 7, 15,
 		1, 0, 5, 0, 34, 8, 0, 10, 0, 12, 0, 37, 9, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1,
@@ -59,37 +59,37 @@ func configparserParserInit() {
 		9, 75, 1, 9, 1, 9, 1, 10, 1, 10, 1, 10, 1, 10, 1, 11, 1, 11, 1, 12, 1,
 		12, 4, 12, 88, 8, 12, 11, 12, 12, 12, 89, 1, 12, 1, 12, 1, 13, 1, 13, 4,
 		13, 96, 8, 13, 11, 13, 12, 13, 97, 1, 13, 1, 13, 1, 14, 1, 14, 1, 15, 1,
-		15, 1, 15, 1, 15, 0, 0, 16, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22,
-		24, 26, 28, 30, 0, 2, 2, 0, 1, 1, 3, 3, 4, 0, 2, 2, 5, 7, 10, 10, 14, 14,
-		99, 0, 35, 1, 0, 0, 0, 2, 44, 1, 0, 0, 0, 4, 46, 1, 0, 0, 0, 6, 50, 1,
-		0, 0, 0, 8, 52, 1, 0, 0, 0, 10, 56, 1, 0, 0, 0, 12, 60, 1, 0, 0, 0, 14,
-		62, 1, 0, 0, 0, 16, 69, 1, 0, 0, 0, 18, 71, 1, 0, 0, 0, 20, 79, 1, 0, 0,
-		0, 22, 83, 1, 0, 0, 0, 24, 85, 1, 0, 0, 0, 26, 93, 1, 0, 0, 0, 28, 101,
-		1, 0, 0, 0, 30, 103, 1, 0, 0, 0, 32, 34, 3, 2, 1, 0, 33, 32, 1, 0, 0, 0,
-		34, 37, 1, 0, 0, 0, 35, 33, 1, 0, 0, 0, 35, 36, 1, 0, 0, 0, 36, 38, 1,
-		0, 0, 0, 37, 35, 1, 0, 0, 0, 38, 39, 5, 0, 0, 1, 39, 1, 1, 0, 0, 0, 40,
-		45, 3, 4, 2, 0, 41, 45, 3, 8, 4, 0, 42, 45, 3, 10, 5, 0, 43, 45, 3, 14,
-		7, 0, 44, 40, 1, 0, 0, 0, 44, 41, 1, 0, 0, 0, 44, 42, 1, 0, 0, 0, 44, 43,
-		1, 0, 0, 0, 45, 3, 1, 0, 0, 0, 46, 47, 5, 8, 0, 0, 47, 48, 5, 19, 0, 0,
-		48, 49, 3, 6, 3, 0, 49, 5, 1, 0, 0, 0, 50, 51, 5, 4, 0, 0, 51, 7, 1, 0,
-		0, 0, 52, 53, 5, 11, 0, 0, 53, 54, 5, 19, 0, 0, 54, 55, 5, 20, 0, 0, 55,
-		9, 1, 0, 0, 0, 56, 57, 5, 13, 0, 0, 57, 58, 5, 19, 0, 0, 58, 59, 3, 12,
-		6, 0, 59, 11, 1, 0, 0, 0, 60, 61, 7, 0, 0, 0, 61, 13, 1, 0, 0, 0, 62, 63,
-		5, 12, 0, 0, 63, 64, 5, 19, 0, 0, 64, 65, 3, 16, 8, 0, 65, 15, 1, 0, 0,
-		0, 66, 70, 5, 9, 0, 0, 67, 70, 3, 18, 9, 0, 68, 70, 3, 30, 15, 0, 69, 66,
-		1, 0, 0, 0, 69, 67, 1, 0, 0, 0, 69, 68, 1, 0, 0, 0, 70, 17, 1, 0, 0, 0,
-		71, 73, 5, 15, 0, 0, 72, 74, 3, 20, 10, 0, 73, 72, 1, 0, 0, 0, 74, 75,
+		15, 1, 15, 1, 15, 1, 15, 0, 0, 16, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20,
+		22, 24, 26, 28, 30, 0, 2, 2, 0, 1, 1, 3, 3, 4, 0, 2, 2, 5, 7, 10, 10, 14,
+		14, 100, 0, 35, 1, 0, 0, 0, 2, 44, 1, 0, 0, 0, 4, 46, 1, 0, 0, 0, 6, 50,
+		1, 0, 0, 0, 8, 52, 1, 0, 0, 0, 10, 56, 1, 0, 0, 0, 12, 60, 1, 0, 0, 0,
+		14, 62, 1, 0, 0, 0, 16, 69, 1, 0, 0, 0, 18, 71, 1, 0, 0, 0, 20, 79, 1,
+		0, 0, 0, 22, 83, 1, 0, 0, 0, 24, 85, 1, 0, 0, 0, 26, 93, 1, 0, 0, 0, 28,
+		101, 1, 0, 0, 0, 30, 103, 1, 0, 0, 0, 32, 34, 3, 2, 1, 0, 33, 32, 1, 0,
+		0, 0, 34, 37, 1, 0, 0, 0, 35, 33, 1, 0, 0, 0, 35, 36, 1, 0, 0, 0, 36, 38,
+		1, 0, 0, 0, 37, 35, 1, 0, 0, 0, 38, 39, 5, 0, 0, 1, 39, 1, 1, 0, 0, 0,
+		40, 45, 3, 4, 2, 0, 41, 45, 3, 8, 4, 0, 42, 45, 3, 10, 5, 0, 43, 45, 3,
+		14, 7, 0, 44, 40, 1, 0, 0, 0, 44, 41, 1, 0, 0, 0, 44, 42, 1, 0, 0, 0, 44,
+		43, 1, 0, 0, 0, 45, 3, 1, 0, 0, 0, 46, 47, 5, 8, 0, 0, 47, 48, 5, 21, 0,
+		0, 48, 49, 3, 6, 3, 0, 49, 5, 1, 0, 0, 0, 50, 51, 5, 4, 0, 0, 51, 7, 1,
+		0, 0, 0, 52, 53, 5, 11, 0, 0, 53, 54, 5, 21, 0, 0, 54, 55, 5, 22, 0, 0,
+		55, 9, 1, 0, 0, 0, 56, 57, 5, 13, 0, 0, 57, 58, 5, 21, 0, 0, 58, 59, 3,
+		12, 6, 0, 59, 11, 1, 0, 0, 0, 60, 61, 7, 0, 0, 0, 61, 13, 1, 0, 0, 0, 62,
+		63, 5, 12, 0, 0, 63, 64, 5, 21, 0, 0, 64, 65, 3, 16, 8, 0, 65, 15, 1, 0,
+		0, 0, 66, 70, 5, 9, 0, 0, 67, 70, 3, 18, 9, 0, 68, 70, 3, 30, 15, 0, 69,
+		66, 1, 0, 0, 0, 69, 67, 1, 0, 0, 0, 69, 68, 1, 0, 0, 0, 70, 17, 1, 0, 0,
+		0, 71, 73, 5, 15, 0, 0, 72, 74, 3, 20, 10, 0, 73, 72, 1, 0, 0, 0, 74, 75,
 		1, 0, 0, 0, 75, 73, 1, 0, 0, 0, 75, 76, 1, 0, 0, 0, 76, 77, 1, 0, 0, 0,
 		77, 78, 5, 16, 0, 0, 78, 19, 1, 0, 0, 0, 79, 80, 3, 22, 11, 0, 80, 81,
-		5, 19, 0, 0, 81, 82, 3, 24, 12, 0, 82, 21, 1, 0, 0, 0, 83, 84, 7, 1, 0,
+		5, 21, 0, 0, 81, 82, 3, 24, 12, 0, 82, 21, 1, 0, 0, 0, 83, 84, 7, 1, 0,
 		0, 84, 23, 1, 0, 0, 0, 85, 87, 5, 17, 0, 0, 86, 88, 3, 26, 13, 0, 87, 86,
 		1, 0, 0, 0, 88, 89, 1, 0, 0, 0, 89, 87, 1, 0, 0, 0, 89, 90, 1, 0, 0, 0,
 		90, 91, 1, 0, 0, 0, 91, 92, 5, 18, 0, 0, 92, 25, 1, 0, 0, 0, 93, 95, 5,
-		17, 0, 0, 94, 96, 3, 28, 14, 0, 95, 94, 1, 0, 0, 0, 96, 97, 1, 0, 0, 0,
+		19, 0, 0, 94, 96, 3, 28, 14, 0, 95, 94, 1, 0, 0, 0, 96, 97, 1, 0, 0, 0,
 		97, 95, 1, 0, 0, 0, 97, 98, 1, 0, 0, 0, 98, 99, 1, 0, 0, 0, 99, 100, 5,
-		18, 0, 0, 100, 27, 1, 0, 0, 0, 101, 102, 5, 22, 0, 0, 102, 29, 1, 0, 0,
-		0, 103, 104, 5, 15, 0, 0, 104, 105, 5, 16, 0, 0, 105, 31, 1, 0, 0, 0, 6,
-		35, 44, 69, 75, 89, 97,
+		20, 0, 0, 100, 27, 1, 0, 0, 0, 101, 102, 5, 23, 0, 0, 102, 29, 1, 0, 0,
+		0, 103, 104, 5, 15, 0, 0, 104, 105, 5, 1, 0, 0, 105, 106, 5, 16, 0, 0,
+		106, 31, 1, 0, 0, 0, 6, 35, 44, 69, 75, 89, 97,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -146,18 +146,20 @@ const (
 	ConfigParserRCURLY            = 16
 	ConfigParserLBRACKET          = 17
 	ConfigParserRBRACKET          = 18
-	ConfigParserCOLON             = 19
-	ConfigParserNUMBER            = 20
-	ConfigParserLETTER            = 21
-	ConfigParserSTRING            = 22
-	ConfigParserWS                = 23
+	ConfigParserLPAREN            = 19
+	ConfigParserRPAREN            = 20
+	ConfigParserCOLON             = 21
+	ConfigParserNUMBER            = 22
+	ConfigParserSTRING            = 23
+	ConfigParserLINE_COMMENT      = 24
+	ConfigParserWS                = 25
 )
 
 // ConfigParser rules.
 const (
 	ConfigParserRULE_configFile          = 0
 	ConfigParserRULE_configLine          = 1
-	ConfigParserRULE_puzzleTypedef       = 2
+	ConfigParserRULE_puzzleTypeDef       = 2
 	ConfigParserRULE_puzzleType          = 3
 	ConfigParserRULE_sizeDef             = 4
 	ConfigParserRULE_stateDescriptionDef = 5
@@ -349,10 +351,10 @@ func NewConfigLineContext(parser antlr.Parser, parent antlr.ParserRuleContext, i
 
 func (s *ConfigLineContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *ConfigLineContext) PuzzleTypedef() IPuzzleTypedefContext {
+func (s *ConfigLineContext) PuzzleTypeDef() IPuzzleTypeDefContext {
 	var t antlr.RuleContext
 	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(IPuzzleTypedefContext); ok {
+		if _, ok := ctx.(IPuzzleTypeDefContext); ok {
 			t = ctx.(antlr.RuleContext)
 			break
 		}
@@ -362,7 +364,7 @@ func (s *ConfigLineContext) PuzzleTypedef() IPuzzleTypedefContext {
 		return nil
 	}
 
-	return t.(IPuzzleTypedefContext)
+	return t.(IPuzzleTypeDefContext)
 }
 
 func (s *ConfigLineContext) SizeDef() ISizeDefContext {
@@ -452,7 +454,7 @@ func (p *ConfigParser) ConfigLine() (localctx IConfigLineContext) {
 		p.EnterOuterAlt(localctx, 1)
 		{
 			p.SetState(40)
-			p.PuzzleTypedef()
+			p.PuzzleTypeDef()
 		}
 
 	case ConfigParserSIZE:
@@ -483,53 +485,53 @@ func (p *ConfigParser) ConfigLine() (localctx IConfigLineContext) {
 	return localctx
 }
 
-// IPuzzleTypedefContext is an interface to support dynamic dispatch.
-type IPuzzleTypedefContext interface {
+// IPuzzleTypeDefContext is an interface to support dynamic dispatch.
+type IPuzzleTypeDefContext interface {
 	antlr.ParserRuleContext
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
-	// IsPuzzleTypedefContext differentiates from other interfaces.
-	IsPuzzleTypedefContext()
+	// IsPuzzleTypeDefContext differentiates from other interfaces.
+	IsPuzzleTypeDefContext()
 }
 
-type PuzzleTypedefContext struct {
+type PuzzleTypeDefContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
-func NewEmptyPuzzleTypedefContext() *PuzzleTypedefContext {
-	var p = new(PuzzleTypedefContext)
+func NewEmptyPuzzleTypeDefContext() *PuzzleTypeDefContext {
+	var p = new(PuzzleTypeDefContext)
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = ConfigParserRULE_puzzleTypedef
+	p.RuleIndex = ConfigParserRULE_puzzleTypeDef
 	return p
 }
 
-func (*PuzzleTypedefContext) IsPuzzleTypedefContext() {}
+func (*PuzzleTypeDefContext) IsPuzzleTypeDefContext() {}
 
-func NewPuzzleTypedefContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *PuzzleTypedefContext {
-	var p = new(PuzzleTypedefContext)
+func NewPuzzleTypeDefContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *PuzzleTypeDefContext {
+	var p = new(PuzzleTypeDefContext)
 
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = ConfigParserRULE_puzzleTypedef
+	p.RuleIndex = ConfigParserRULE_puzzleTypeDef
 
 	return p
 }
 
-func (s *PuzzleTypedefContext) GetParser() antlr.Parser { return s.parser }
+func (s *PuzzleTypeDefContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *PuzzleTypedefContext) PUZZLE() antlr.TerminalNode {
+func (s *PuzzleTypeDefContext) PUZZLE() antlr.TerminalNode {
 	return s.GetToken(ConfigParserPUZZLE, 0)
 }
 
-func (s *PuzzleTypedefContext) COLON() antlr.TerminalNode {
+func (s *PuzzleTypeDefContext) COLON() antlr.TerminalNode {
 	return s.GetToken(ConfigParserCOLON, 0)
 }
 
-func (s *PuzzleTypedefContext) PuzzleType() IPuzzleTypeContext {
+func (s *PuzzleTypeDefContext) PuzzleType() IPuzzleTypeContext {
 	var t antlr.RuleContext
 	for _, ctx := range s.GetChildren() {
 		if _, ok := ctx.(IPuzzleTypeContext); ok {
@@ -545,20 +547,20 @@ func (s *PuzzleTypedefContext) PuzzleType() IPuzzleTypeContext {
 	return t.(IPuzzleTypeContext)
 }
 
-func (s *PuzzleTypedefContext) GetRuleContext() antlr.RuleContext {
+func (s *PuzzleTypeDefContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
 
-func (s *PuzzleTypedefContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+func (s *PuzzleTypeDefContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-func (p *ConfigParser) PuzzleTypedef() (localctx IPuzzleTypedefContext) {
+func (p *ConfigParser) PuzzleTypeDef() (localctx IPuzzleTypeDefContext) {
 	this := p
 	_ = this
 
-	localctx = NewPuzzleTypedefContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 4, ConfigParserRULE_puzzleTypedef)
+	localctx = NewPuzzleTypeDefContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 4, ConfigParserRULE_puzzleTypeDef)
 
 	defer func() {
 		p.ExitRule()
@@ -1727,7 +1729,7 @@ func (p *ConfigParser) SideState() (localctx ISideStateContext) {
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	for ok := true; ok; ok = _la == ConfigParserLBRACKET {
+	for ok := true; ok; ok = _la == ConfigParserLPAREN {
 		{
 			p.SetState(86)
 			p.SideStateRow()
@@ -1783,12 +1785,12 @@ func NewSideStateRowContext(parser antlr.Parser, parent antlr.ParserRuleContext,
 
 func (s *SideStateRowContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *SideStateRowContext) LBRACKET() antlr.TerminalNode {
-	return s.GetToken(ConfigParserLBRACKET, 0)
+func (s *SideStateRowContext) LPAREN() antlr.TerminalNode {
+	return s.GetToken(ConfigParserLPAREN, 0)
 }
 
-func (s *SideStateRowContext) RBRACKET() antlr.TerminalNode {
-	return s.GetToken(ConfigParserRBRACKET, 0)
+func (s *SideStateRowContext) RPAREN() antlr.TerminalNode {
+	return s.GetToken(ConfigParserRPAREN, 0)
 }
 
 func (s *SideStateRowContext) AllColor() []IColorContext {
@@ -1867,7 +1869,7 @@ func (p *ConfigParser) SideStateRow() (localctx ISideStateRowContext) {
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(93)
-		p.Match(ConfigParserLBRACKET)
+		p.Match(ConfigParserLPAREN)
 	}
 	p.SetState(95)
 	p.GetErrorHandler().Sync(p)
@@ -1885,7 +1887,7 @@ func (p *ConfigParser) SideStateRow() (localctx ISideStateRowContext) {
 	}
 	{
 		p.SetState(99)
-		p.Match(ConfigParserRBRACKET)
+		p.Match(ConfigParserRPAREN)
 	}
 
 	return localctx
@@ -2015,6 +2017,10 @@ func (s *AdvancedStateContext) LCURLY() antlr.TerminalNode {
 	return s.GetToken(ConfigParserLCURLY, 0)
 }
 
+func (s *AdvancedStateContext) ADVANCED() antlr.TerminalNode {
+	return s.GetToken(ConfigParserADVANCED, 0)
+}
+
 func (s *AdvancedStateContext) RCURLY() antlr.TerminalNode {
 	return s.GetToken(ConfigParserRCURLY, 0)
 }
@@ -2057,6 +2063,10 @@ func (p *ConfigParser) AdvancedState() (localctx IAdvancedStateContext) {
 	}
 	{
 		p.SetState(104)
+		p.Match(ConfigParserADVANCED)
+	}
+	{
+		p.SetState(105)
 		p.Match(ConfigParserRCURLY)
 	}
 

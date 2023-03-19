@@ -160,28 +160,6 @@ func (s *ConfigFileContext) ToStringTree(ruleNames []string, recog antlr.Recogni
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-func (s *ConfigFileContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ConfigParserListener); ok {
-		listenerT.EnterConfigFile(s)
-	}
-}
-
-func (s *ConfigFileContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ConfigParserListener); ok {
-		listenerT.ExitConfigFile(s)
-	}
-}
-
-func (s *ConfigFileContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case ConfigParserVisitor:
-		return t.VisitConfigFile(s)
-
-	default:
-		return t.VisitChildren(s)
-	}
-}
-
 func (p *ConfigParser) ConfigFile() (localctx IConfigFileContext) {
 	this := p
 	_ = this
@@ -284,28 +262,6 @@ func (s *PuzzleTypeDefContext) ToStringTree(ruleNames []string, recog antlr.Reco
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-func (s *PuzzleTypeDefContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ConfigParserListener); ok {
-		listenerT.EnterPuzzleTypeDef(s)
-	}
-}
-
-func (s *PuzzleTypeDefContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ConfigParserListener); ok {
-		listenerT.ExitPuzzleTypeDef(s)
-	}
-}
-
-func (s *PuzzleTypeDefContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case ConfigParserVisitor:
-		return t.VisitPuzzleTypeDef(s)
-
-	default:
-		return t.VisitChildren(s)
-	}
-}
-
 func (p *ConfigParser) PuzzleTypeDef() (localctx IPuzzleTypeDefContext) {
 	this := p
 	_ = this
@@ -394,28 +350,6 @@ func (s *PuzzleTypeContext) GetRuleContext() antlr.RuleContext {
 
 func (s *PuzzleTypeContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
 	return antlr.TreesStringTree(s, ruleNames, recog)
-}
-
-func (s *PuzzleTypeContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ConfigParserListener); ok {
-		listenerT.EnterPuzzleType(s)
-	}
-}
-
-func (s *PuzzleTypeContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(ConfigParserListener); ok {
-		listenerT.ExitPuzzleType(s)
-	}
-}
-
-func (s *PuzzleTypeContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
-	switch t := visitor.(type) {
-	case ConfigParserVisitor:
-		return t.VisitPuzzleType(s)
-
-	default:
-		return t.VisitChildren(s)
-	}
 }
 
 func (p *ConfigParser) PuzzleType() (localctx IPuzzleTypeContext) {

@@ -8,17 +8,29 @@ import (
 
 	"github.com/taskat/rubiks-cube/src/config/lexer"
 	"github.com/taskat/rubiks-cube/src/config/parser"
+	"github.com/taskat/rubiks-cube/src/errorhandler"
+	"github.com/taskat/rubiks-cube/src/errorlistener"
 )
 
 func main() {
-	input, err := antlr.NewFileStream(os.Args[1])
+	fileName := os.Args[1]
+	input, err := antlr.NewFileStream(fileName)
 	if err != nil {
 		panic(err)
 	}
 	lexer := configlexer.NewConfigLexer(input)
+	lexer.RemoveErrorListeners()
+	lexer.AddErrorListener(errorlistener.NewErrorCollector(fileName))
 	stream := antlr.NewCommonTokenStream(lexer, 0)
 	parser := configparser.NewConfigParser(stream)
+	parser.RemoveErrorListeners()
+	parser.AddErrorListener(errorlistener.NewErrorCollector(fileName))
 	parser.BuildParseTrees = true
 	tree := parser.ConfigFile()
 	fmt.Println(tree.GetText())
+	fmt.Println("======")
+	errors := errorhandler.GetErrors()
+	for _, err := range errors {
+		fmt.Println(err.String())
+	}
 }

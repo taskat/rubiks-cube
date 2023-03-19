@@ -1,0 +1,22 @@
+package errorlistener
+
+import (
+	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/taskat/rubiks-cube/src/errorhandler"
+)
+
+type ErrorCollector struct {
+	antlr.ErrorListener
+	file string
+}
+
+func NewErrorCollector(file string) *ErrorCollector {
+	return &ErrorCollector{file: file}
+}
+
+func (ec *ErrorCollector) SyntaxError(recognizer antlr.Recognizer,
+	offendingSymbol interface{}, line int, column int,
+	msg string, e antlr.RecognitionException) {
+	ctx := newContext(line, column)
+	errorhandler.AddError(errorhandler.NewError(ctx, msg, ec.file))
+}

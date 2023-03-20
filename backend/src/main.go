@@ -31,7 +31,7 @@ func main() {
 	visitor := errorvisitor.NewVisitor(fileName)
 	visitor.Visit(tree)
 	fmt.Println("======")
-	errors := errorhandler.GetErrors()
+	errors := errorhandler.GetMessages()
 	if len(errors) == 0 {
 		fmt.Println("No errors found")
 	} else {

@@ -18,5 +18,5 @@ func (ec *ErrorCollector) SyntaxError(recognizer antlr.Recognizer,
 	offendingSymbol interface{}, line int, column int,
 	msg string, e antlr.RecognitionException) {
 	ctx := errorhandler.NewContext(line, column)
-	errorhandler.AddError(errorhandler.NewError(ctx, msg, ec.file))
+	errorhandler.AddError(ctx, msg, ec.file)
 }

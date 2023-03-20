@@ -9,7 +9,7 @@ import (
 	"github.com/taskat/rubiks-cube/src/config/errorvisitor"
 	"github.com/taskat/rubiks-cube/src/config/lexer"
 	"github.com/taskat/rubiks-cube/src/config/parser"
-	"github.com/taskat/rubiks-cube/src/errorhandler"
+	eh "github.com/taskat/rubiks-cube/src/errorhandler"
 	"github.com/taskat/rubiks-cube/src/errorlistener"
 )
 
@@ -30,13 +30,34 @@ func main() {
 	tree := parser.ConfigFile()
 	visitor := errorvisitor.NewVisitor(fileName)
 	visitor.Visit(tree)
+
 	fmt.Println("======")
-	errors := errorhandler.GetMessages()
+	errors := eh.GetErrors()
 	if len(errors) == 0 {
-		fmt.Println("No errors found")
+		fmt.Println("There were no errors")
 	} else {
+		fmt.Println("Errors:")
 		for _, err := range errors {
-			fmt.Println(err.String())
+			fmt.Println("  " + err.String())
 		}
 	}
+	warnings := eh.GetWarnings()
+	if len(warnings) == 0 {
+		fmt.Println("There were no warnings")
+	} else {
+		fmt.Println("Warnings:")
+		for _, warning := range warnings {
+			fmt.Println("  " + warning.String())
+		}
+	}
+	infos := eh.GetInfos()
+	if len(infos) == 0 {
+		fmt.Println("There were no infos")
+	} else {
+		fmt.Println("Infos:")
+		for _, info := range infos {
+			fmt.Println("  " + info.String())
+		}
+	}
+
 }

@@ -8,15 +8,15 @@ type IMessage interface {
 }
 
 type errorhandler struct {
-	messages []IMessage
+	messages map[string][]IMessage
 }
 
 func newHandler() errorhandler {
-	return errorhandler{messages: make([]IMessage, 0)}
+	return errorhandler{messages: make(map[string][]IMessage, 0)}
 }
 
 func (e *errorhandler) addMessage(err Message) {
-	e.messages = append(e.messages, err)
+	e.messages[err.GetLevel()] = append(e.messages[err.GetLevel()], err)
 }
 
 var handler = newHandler()
@@ -40,6 +40,18 @@ func AddMessage(m Message) {
 	handler.addMessage(m)
 }
 
-func GetMessages() []IMessage {
-	return handler.messages
+func GetAllMessages() []IMessage {
+	return nil
+}
+
+func GetErrors() []IMessage {
+	return handler.messages["ERROR"]
+}
+
+func GetInfos() []IMessage {
+	return handler.messages["INFO"]
+}
+
+func GetWarnings() []IMessage {
+	return handler.messages["WARNING"]
 }

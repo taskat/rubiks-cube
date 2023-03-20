@@ -18,7 +18,7 @@ type Message struct {
 }
 
 func NewMessage(ctx IContext, text, file, level string) Message {
-	return Message{text: text, file: file, pos: getPosition(ctx)}
+	return Message{text: text, file: file, pos: getPosition(ctx), level: level}
 }
 
 func (m Message) GetLevel() string {

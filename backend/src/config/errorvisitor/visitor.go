@@ -26,7 +26,9 @@ func (v *Visitor) Visit(tree antlr.Tree) {
 	v.visitConfigFile(ctx)
 }
 
-func (v *Visitor) visitAdvancedState(ctx *cp.AdvancedStateContext) {}
+func (v *Visitor) visitAdvancedState(ctx *cp.AdvancedStateContext) {
+	eh.AddError(ctx, "advanced stated description not implemented yet", v.fileName)
+}
 
 func (v *Visitor) visitBeginnerState(ctx *cp.BeginnerStateContext) {}
 
@@ -74,7 +76,7 @@ func (v *Visitor) visitState(ctx *cp.StateContext) {
 		}
 	}
 	if ctx.BeginnerState() != nil {
-		if v.stateDescription != v.stateDescription {
+		if v.stateDescription != "beginner" {
 			eh.AddError(ctx.BeginnerState(), "state is not consistent with state description type", v.fileName)
 			if v.stateDescriptionCtx != nil {
 				eh.AddError(v.stateDescriptionCtx, "state is not consistent with state description type", v.fileName)
@@ -84,7 +86,7 @@ func (v *Visitor) visitState(ctx *cp.StateContext) {
 		}
 	}
 	if ctx.AdvancedState() != nil {
-		if v.stateDescription != v.stateDescription {
+		if v.stateDescription != "advanced" {
 			eh.AddError(ctx.AdvancedState(), "state is not consistent with state description type", v.fileName)
 			if v.stateDescriptionCtx != nil {
 				eh.AddError(v.stateDescriptionCtx, "state is not consistent with state description type", v.fileName)
@@ -97,7 +99,7 @@ func (v *Visitor) visitState(ctx *cp.StateContext) {
 
 func (v *Visitor) visitStateDescriptionDef(ctx *cp.StateDescriptionDefContext) {
 	v.stateDescription = ctx.StateDescription().GetText()
-	v.stateDescriptionCtx = ctx
+	v.stateDescriptionCtx = ctx.StateDescription()
 }
 
 func (v *Visitor) visitStateDef(ctx *cp.StateDefContext) {
@@ -115,7 +117,7 @@ func checkOnlyOneDef[def antlr.ParserRuleContext](defs []def, defType string, fi
 		eh.AddError(ctx, "No "+defType+" found", fileName)
 		return nil
 	}
-	if necessary {
+	if necessary || len(defs) == 1 {
 		return &defs[0]
 	}
 	return nil

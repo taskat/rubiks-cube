@@ -1,6 +1,4 @@
 puzzle: cube
 size: 3
 state description: beginner
-state: {
-    front: [(a b c)]
-}
+state: { front: [(a b c)] }

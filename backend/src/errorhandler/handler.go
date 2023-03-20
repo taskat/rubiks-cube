@@ -15,8 +15,8 @@ func newHandler() errorhandler {
 	return errorhandler{messages: make(map[string][]IMessage, 0)}
 }
 
-func (e *errorhandler) addMessage(err Message) {
-	e.messages[err.GetLevel()] = append(e.messages[err.GetLevel()], err)
+func (e *errorhandler) addMessage(m Message) {
+	e.messages[m.GetLevel()] = append(e.messages[m.GetLevel()], m)
 }
 
 var handler = newHandler()
@@ -32,7 +32,7 @@ func AddInfo(ctx IContext, text, file string) {
 }
 
 func AddWarning(ctx IContext, text, file string) {
-	warning := NewMessage(ctx, text, file, "Warning")
+	warning := NewMessage(ctx, text, file, "WARNING")
 	handler.addMessage(warning)
 }
 
@@ -41,7 +41,10 @@ func AddMessage(m Message) {
 }
 
 func GetAllMessages() []IMessage {
-	return nil
+	errors := GetErrors()
+	infos := GetInfos()
+	warnings := GetWarnings()
+	return append(errors, append(infos, warnings...)...)
 }
 
 func GetErrors() []IMessage {

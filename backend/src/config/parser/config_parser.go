@@ -40,7 +40,7 @@ func configparserParserInit() {
 		"", "ADVANCED", "BACK", "BEGINNER", "CUBE", "DOWN", "FRONT", "LEFT",
 		"PUZZLE", "RANDOM", "RIGHT", "SIZE", "STATE", "STATE_DESCRIPTION", "UP",
 		"LCURLY", "RCURLY", "LBRACKET", "RBRACKET", "LPAREN", "RPAREN", "COLON",
-		"NUMBER", "STRING", "LINE_COMMENT", "WS",
+		"NUMBER", "WORD", "LINE_COMMENT", "WS",
 	}
 	staticData.ruleNames = []string{
 		"configFile", "configLine", "puzzleTypeDef", "puzzleType", "sizeDef",
@@ -150,7 +150,7 @@ const (
 	ConfigParserRPAREN            = 20
 	ConfigParserCOLON             = 21
 	ConfigParserNUMBER            = 22
-	ConfigParserSTRING            = 23
+	ConfigParserWORD              = 23
 	ConfigParserLINE_COMMENT      = 24
 	ConfigParserWS                = 25
 )
@@ -1875,7 +1875,7 @@ func (p *ConfigParser) SideStateRow() (localctx ISideStateRowContext) {
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	for ok := true; ok; ok = _la == ConfigParserSTRING {
+	for ok := true; ok; ok = _la == ConfigParserWORD {
 		{
 			p.SetState(94)
 			p.Color()
@@ -1931,8 +1931,8 @@ func NewColorContext(parser antlr.Parser, parent antlr.ParserRuleContext, invoki
 
 func (s *ColorContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *ColorContext) STRING() antlr.TerminalNode {
-	return s.GetToken(ConfigParserSTRING, 0)
+func (s *ColorContext) WORD() antlr.TerminalNode {
+	return s.GetToken(ConfigParserWORD, 0)
 }
 
 func (s *ColorContext) GetRuleContext() antlr.RuleContext {
@@ -1969,7 +1969,7 @@ func (p *ConfigParser) Color() (localctx IColorContext) {
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(101)
-		p.Match(ConfigParserSTRING)
+		p.Match(ConfigParserWORD)
 	}
 
 	return localctx

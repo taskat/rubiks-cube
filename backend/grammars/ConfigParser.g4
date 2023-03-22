@@ -22,6 +22,6 @@ side: sideDef COLON sideState;
 sideDef: FRONT | BACK | LEFT | RIGHT | UP | DOWN;
 sideState: LBRACKET sideStateRow+ RBRACKET;
 sideStateRow: LPAREN color+ RPAREN;
-color: STRING;
+color: WORD;
 
 advancedState: LCURLY ADVANCED RCURLY;

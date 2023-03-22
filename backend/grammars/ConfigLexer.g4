@@ -31,8 +31,9 @@ COLON: ':';
 NUMBER: [1-9][0-9]*;
 
 // Strings
-STRING: LETTER+;
-LETTER: [a-zA-Z];
+WORD: LETTER+;
+fragment LETTER: [a-zA-Z];
+
 
 // Comments
 LINE_COMMENT: '//' ~[\r\n]* -> skip;

@@ -30,8 +30,6 @@ func (v *Visitor) visitAdvancedState(ctx *cp.AdvancedStateContext) {
 	eh.AddError(ctx, "advanced stated description not implemented yet", v.fileName)
 }
 
-func (v *Visitor) visitBeginnerState(ctx *cp.BeginnerStateContext) {}
-
 func (v *Visitor) visitConfigFile(ctx *cp.ConfigFileContext) {
 	puzzleDefs := getLines[*cp.PuzzleTypeDefContext](ctx.AllConfigLine())
 	puzzleDef := checkOnlyOneDef(puzzleDefs, "puzzle definition", v.fileName, true)
@@ -75,21 +73,23 @@ func (v *Visitor) visitState(ctx *cp.StateContext) {
 			eh.AddInfo(v.stateDescriptionCtx, "state description can be omitted", v.fileName)
 		}
 	}
+	errorMsg := "state is not consistent with state description type"
 	if ctx.BeginnerState() != nil {
 		if v.stateDescription != "beginner" {
-			eh.AddError(ctx.BeginnerState(), "state is not consistent with state description type", v.fileName)
+			eh.AddError(ctx.BeginnerState(), errorMsg, v.fileName)
 			if v.stateDescriptionCtx != nil {
-				eh.AddError(v.stateDescriptionCtx, "state is not consistent with state description type", v.fileName)
+				eh.AddError(v.stateDescriptionCtx, errorMsg, v.fileName)
 			}
 		} else {
-			v.visitBeginnerState(ctx.BeginnerState().(*cp.BeginnerStateContext))
+			visitor := newBeginnerStateVisitor(v.fileName)
+			visitor.visitBeginnerState(ctx.BeginnerState().(*cp.BeginnerStateContext))
 		}
 	}
 	if ctx.AdvancedState() != nil {
 		if v.stateDescription != "advanced" {
-			eh.AddError(ctx.AdvancedState(), "state is not consistent with state description type", v.fileName)
+			eh.AddError(ctx.AdvancedState(), errorMsg, v.fileName)
 			if v.stateDescriptionCtx != nil {
-				eh.AddError(v.stateDescriptionCtx, "state is not consistent with state description type", v.fileName)
+				eh.AddError(v.stateDescriptionCtx, errorMsg, v.fileName)
 			}
 		} else {
 			v.visitAdvancedState(ctx.AdvancedState().(*cp.AdvancedStateContext))

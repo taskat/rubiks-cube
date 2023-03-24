@@ -1,9 +1,29 @@
 puzzle: cube
 size: 3
 state description: beginner
-state: { front: [(a b c)
-                 (d e f)
-                 (b g r)]
-         up   : [(a b c)
-                 (d e f)
-                 (b g r)] }
+state: {
+    front: [
+        (b b b)
+        (b b b)
+        (b b b)]
+    up: [
+        (r r r)
+        (r r r)
+        (r r r)]
+    right: [
+        (w w w)
+        (w w w)
+        (w w w)]
+    left: [
+        (y y y)
+        (y y y)
+        (y y y)]
+    back: [
+        (g g g)
+        (g g g)
+        (g g g)]
+    down: [
+        (o o o)
+        (o o o)
+        (o o o)]
+}

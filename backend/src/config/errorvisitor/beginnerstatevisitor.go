@@ -35,14 +35,13 @@ func (v *beginnerStateVisitor) checkSideNames(sides []cp.ISideContext) {
 }
 
 func (v *beginnerStateVisitor) checkColors(ctx *cp.BeginnerStateContext) {
-	fmt.Println("checkColors")
 	if !v.valid {
 		return
 	}
 	colors := make(map[string][]*cp.ColorContext)
 	for _, side := range ctx.AllSide() {
-		for _, row := range side.(*cp.SideContext).SideState().(*cp.SideStateContext).AllSideStateRow() {
-			for _, cell := range row.(*cp.SideStateRowContext).AllColor() {
+		for _, row := range side.(*cp.SideContext).AllRow() {
+			for _, cell := range row.(*cp.RowContext).AllColor() {
 				colors[cell.GetText()] = append(colors[cell.GetText()], cell.(*cp.ColorContext))
 			}
 		}
@@ -72,11 +71,7 @@ func (v *beginnerStateVisitor) visitBeginnerState(ctx *cp.BeginnerStateContext) 
 }
 
 func (v *beginnerStateVisitor) visitSide(ctx *cp.SideContext) {
-	v.visitSideState(ctx.SideState().(*cp.SideStateContext))
-}
-
-func (v *beginnerStateVisitor) visitSideState(ctx *cp.SideStateContext) {
-	rows := ctx.AllSideStateRow()
+	rows := ctx.AllRow()
 	if len(rows) < 3 {
 		errorMsg := fmt.Sprintf("side state should have 3 rows, have %d", len(rows))
 		eh.AddWarning(ctx, errorMsg, v.fileName)
@@ -87,11 +82,11 @@ func (v *beginnerStateVisitor) visitSideState(ctx *cp.SideStateContext) {
 		v.valid = false
 	}
 	for _, row := range rows {
-		v.visitSideStateRow(row.(*cp.SideStateRowContext))
+		v.visitRow(row.(*cp.RowContext))
 	}
 }
 
-func (v *beginnerStateVisitor) visitSideStateRow(ctx *cp.SideStateRowContext) {
+func (v *beginnerStateVisitor) visitRow(ctx *cp.RowContext) {
 	cells := ctx.AllColor()
 	if len(cells) < 3 {
 		errorMsg := fmt.Sprintf("side state row should have 3 cells, have %d", len(cells))

@@ -18,10 +18,9 @@ stateDef: STATE COLON state;
 state: RANDOM | beginnerState | advancedState;
 
 beginnerState: LCURLY side+ RCURLY;
-side: sideDef COLON sideState;
+side: sideDef COLON row+;
 sideDef: FRONT | BACK | LEFT | RIGHT | UP | DOWN;
-sideState: LBRACKET sideStateRow+ RBRACKET;
-sideStateRow: LPAREN color+ RPAREN;
+row: LPAREN color+ RPAREN;
 color: WORD;
 
 advancedState: LCURLY ADVANCED RCURLY;

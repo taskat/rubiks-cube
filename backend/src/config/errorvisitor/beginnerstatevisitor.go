@@ -50,7 +50,7 @@ func (v *beginnerStateVisitor) checkColors(ctx *cp.BeginnerStateContext) {
 		if len(colorCtxs) > 9 || (v.finished && len(colorCtxs) < 9) {
 			errorMsg := fmt.Sprintf("color %s is defined %d times, should be 9 times", color, len(colorCtxs))
 			for _, colorCtx := range colorCtxs {
-				eh.AddError(colorCtx, errorMsg, v.fileName)
+				eh.AddWarning(colorCtx, errorMsg, v.fileName)
 			}
 		}
 	}
@@ -58,10 +58,14 @@ func (v *beginnerStateVisitor) checkColors(ctx *cp.BeginnerStateContext) {
 
 func (v *beginnerStateVisitor) visitBeginnerState(ctx *cp.BeginnerStateContext) {
 	sides := ctx.AllSide()
-	if len(sides) != 6 {
+	if len(sides) < 6 {
 		errorMsg := fmt.Sprintf("state should have 6 sides, have %d", len(sides))
 		eh.AddWarning(ctx, errorMsg, v.fileName)
 		v.finished = false
+	} else if len(sides) > 6 {
+		errorMsg := fmt.Sprintf("state should have 6 sides, have %d", len(sides))
+		eh.AddError(ctx, errorMsg, v.fileName)
+		v.valid = false
 	}
 	v.checkSideNames(sides)
 	for _, side := range sides {

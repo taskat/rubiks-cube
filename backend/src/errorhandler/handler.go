@@ -3,16 +3,16 @@ package errorhandler
 import "fmt"
 
 type IMessage interface {
-	GetLevel() string
+	GetLevel() Level
 	fmt.Stringer
 }
 
 type errorhandler struct {
-	messages map[string][]IMessage
+	messages map[Level][]IMessage
 }
 
 func newHandler() errorhandler {
-	return errorhandler{messages: make(map[string][]IMessage, 0)}
+	return errorhandler{messages: make(map[Level][]IMessage, 0)}
 }
 
 func (e *errorhandler) addMessage(m Message) {
@@ -22,17 +22,17 @@ func (e *errorhandler) addMessage(m Message) {
 var handler = newHandler()
 
 func AddError(ctx IContext, text, file string) {
-	error := NewMessage(ctx, text, file, "ERROR")
+	error := NewMessage(ctx, text, file, ERROR)
 	handler.addMessage(error)
 }
 
 func AddInfo(ctx IContext, text, file string) {
-	info := NewMessage(ctx, text, file, "INFO")
+	info := NewMessage(ctx, text, file, INFO)
 	handler.addMessage(info)
 }
 
 func AddWarning(ctx IContext, text, file string) {
-	warning := NewMessage(ctx, text, file, "WARNING")
+	warning := NewMessage(ctx, text, file, WARNING)
 	handler.addMessage(warning)
 }
 

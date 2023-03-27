@@ -14,14 +14,22 @@ type Message struct {
 	text  string
 	file  string
 	pos   position
-	level string
+	level Level
 }
 
-func NewMessage(ctx IContext, text, file, level string) Message {
+type Level string
+
+const (
+	INFO    Level = "INFO"
+	WARNING Level = "WARNING"
+	ERROR   Level = "ERROR"
+)
+
+func NewMessage(ctx IContext, text, file string, level Level) Message {
 	return Message{text: text, file: file, pos: getPosition(ctx), level: level}
 }
 
-func (m Message) GetLevel() string {
+func (m Message) GetLevel() Level {
 	return m.level
 }
 

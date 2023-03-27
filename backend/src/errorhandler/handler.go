@@ -12,7 +12,11 @@ type errorhandler struct {
 }
 
 func newHandler() errorhandler {
-	return errorhandler{messages: make(map[Level][]IMessage, 0)}
+	m := make(map[Level][]IMessage, 0)
+	m["ERROR"] = make([]IMessage, 0)
+	m["WARNING"] = make([]IMessage, 0)
+	m["INFO"] = make([]IMessage, 0)
+	return errorhandler{messages: m}
 }
 
 func (e *errorhandler) addMessage(m Message) {
@@ -40,11 +44,8 @@ func AddMessage(m Message) {
 	handler.addMessage(m)
 }
 
-func GetAllMessages() []IMessage {
-	errors := GetErrors()
-	infos := GetInfos()
-	warnings := GetWarnings()
-	return append(errors, append(infos, warnings...)...)
+func GetAllMessages() map[Level][]IMessage {
+	return handler.messages
 }
 
 func GetErrors() []IMessage {

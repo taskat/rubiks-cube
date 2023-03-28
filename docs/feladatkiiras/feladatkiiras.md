@@ -1,0 +1,10 @@
+A Rubik kocka az utóbbi években egyre nagyobb népszerűségnek örvend, annak ellenére, hogy már majdnem 50 év eltel a feltalálása óta. Bár szinte mindenki látott már ilyet, viszonylag kevesen tudják az összekevert kockát kirakni. A kocka kirakására sokféle algoritmus létezeik, vannak egyszerűbbek, kezdők számára, vannak bonyolultabbak haladók számára, és vannak kifejezetten számítógépek számára kifejlesztett algoritmusok is. Ezen algoritmusok leírására létezik egy általánosan elfogadott jelölésrendszer, noha ez a jelölérsrendszer nem alkalmas teljes algoritmusok leírására, hanem csak rövid mozgáskombinációkat szokás megadni ezzel. A megadott mozgáskombináció előfeltétele, valamint eredménye nem írható le ezzel a jelölésrendszerrel, hanem azt természetes nyelvvel (pl angol) szokás megadni.
+Valamint az ehhez felmerülő másik kérdés, hogy a kocka állapotát milyen módon lehet leírni. Sajnos általános megoldás nem terjedt el erre, talán a legközelebbi megoldás, amit hivatalos versenyeken alkalmaznak. Ott a kocka állapotát egy mozgáskombinációval adják meg, ahol a kiindulási állapot egy kirakott kocka. Ez a módszer viszont nem alkalmazható abban az esetben, ha az ember nem tudja, hogy hogyan jutott el az adott állapothoz.
+A diplomaterv célja olyan domain specifikus nyelvek megtervezése, amelyekkel egy Rubik kocka állapotát lehet leírni, valamint egy teljes algoritmus leírását lehet megadni.
+
+A hallgató feladatainak a következőkre kell kiterjednie:
+- Ismerje meg és mutassa be az ANLTR4 generátort
+- Dolgozzon ki egy domain specifikus nyelvet, amelyben leírható egy Rubik kocka állapota
+- Dolgozzon ki egy domain specifikus nyelvet, amelyben leírható egy algoritmus
+- Készítsen/használjon egy szimulátort, mellyel lehet vizualizálni a kocka állapotát, valamint az algoritmusokat
+- Bővítse ki a megoldását, hogy ne csak 3x3x3-as kockákat kezeljen, hanem a kocka mérete paraméterezhető legyen

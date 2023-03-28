@@ -12,24 +12,25 @@ import (
 )
 
 type Handler struct {
-	fileName string
-	content  string
-	tree     antlr.ParseTree
+	fileName     string
+	content      string
+	tree         antlr.ParseTree
+	errorHandler eh.Errorhandler
 }
 
-func NewHandler(fileName, content string) *Handler {
-	return &Handler{fileName: fileName, content: content}
+func NewHandler(fileName, content string, errorHandler eh.Errorhandler) *Handler {
+	return &Handler{fileName: fileName, content: content, errorHandler: errorHandler}
 }
 
 func (h *Handler) buildTree(stream *antlr.CommonTokenStream) antlr.ParseTree {
 	parser := cp.NewConfigParser(stream)
-	el.AddCustomErrorListener(parser, h.fileName)
+	el.AddCustomErrorListener(parser, h.fileName, h.errorHandler)
 	parser.BuildParseTrees = true
 	return parser.ConfigFile()
 }
 
 func (h *Handler) checkTree() {
-	visitor := ev.NewVisitor(h.fileName)
+	visitor := ev.NewVisitor(h.fileName, h.errorHandler)
 	visitor.Visit(h.tree)
 }
 
@@ -40,14 +41,14 @@ func (h Handler) createCube() models.Puzzle {
 
 func (h *Handler) getTokens(input *antlr.InputStream) *antlr.CommonTokenStream {
 	lexer := cl.NewConfigLexer(input)
-	el.AddCustomErrorListener(lexer, h.fileName)
+	el.AddCustomErrorListener(lexer, h.fileName, h.errorHandler)
 	return antlr.NewCommonTokenStream(lexer, 0)
 }
 
-func Handle(fileName, content string) models.Puzzle {
-	handler := NewHandler(fileName, content)
+func Handle(fileName, content string, errorHandler eh.Errorhandler) models.Puzzle {
+	handler := NewHandler(fileName, content, errorHandler)
 	handler.readConfig()
-	if eh.HasErrors() {
+	if handler.errorHandler.HasErrors() {
 		return nil
 	}
 	return handler.createCube()

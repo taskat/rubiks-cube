@@ -7,59 +7,67 @@ type IMessage interface {
 	fmt.Stringer
 }
 
-type errorhandler struct {
+type Errorhandler struct {
 	messages map[Level][]IMessage
 }
 
-func newHandler() errorhandler {
+func NewHandler() Errorhandler {
 	m := make(map[Level][]IMessage, 0)
 	m["ERROR"] = make([]IMessage, 0)
 	m["WARNING"] = make([]IMessage, 0)
 	m["INFO"] = make([]IMessage, 0)
-	return errorhandler{messages: m}
+	return Errorhandler{messages: m}
 }
 
-func (e *errorhandler) addMessage(m Message) {
+func (e *Errorhandler) AddMessage(m Message) {
 	e.messages[m.GetLevel()] = append(e.messages[m.GetLevel()], m)
 }
 
-var handler = newHandler()
-
-func AddError(ctx IContext, text, file string) {
+func (e *Errorhandler) AddError(ctx IContext, text, file string) {
 	error := NewMessage(ctx, text, file, ERROR)
-	handler.addMessage(error)
+	e.AddMessage(error)
 }
 
-func AddInfo(ctx IContext, text, file string) {
+func (e *Errorhandler) AddInfo(ctx IContext, text, file string) {
 	info := NewMessage(ctx, text, file, INFO)
-	handler.addMessage(info)
+	e.AddMessage(info)
 }
 
-func AddWarning(ctx IContext, text, file string) {
+func (e *Errorhandler) AddWarning(ctx IContext, text, file string) {
 	warning := NewMessage(ctx, text, file, WARNING)
-	handler.addMessage(warning)
+	e.AddMessage(warning)
 }
 
-func AddMessage(m Message) {
-	handler.addMessage(m)
+func (e *Errorhandler) GetAllMessages() map[Level][]IMessage {
+	return e.messages
 }
 
-func GetAllMessages() map[Level][]IMessage {
-	return handler.messages
+func (e *Errorhandler) GetErrors() []IMessage {
+	return e.messages["ERROR"]
 }
 
-func GetErrors() []IMessage {
-	return handler.messages["ERROR"]
+func (e *Errorhandler) GetInfos() []IMessage {
+	return e.messages["INFO"]
 }
 
-func GetInfos() []IMessage {
-	return handler.messages["INFO"]
+func (e *Errorhandler) GetWarnings() []IMessage {
+	return e.messages["WARNING"]
 }
 
-func GetWarnings() []IMessage {
-	return handler.messages["WARNING"]
+func (e *Errorhandler) HasErrors() bool {
+	return len(e.messages["ERROR"]) > 0
 }
 
-func HasErrors() bool {
-	return len(handler.messages["ERROR"]) > 0
+func (e *Errorhandler) PrintAll() {
+	fmt.Println("======")
+	for level, msgs := range e.messages {
+		if len(msgs) == 0 {
+			fmt.Println("There were no " + level + "s")
+		} else {
+			fmt.Println(level + "s:")
+			for _, msg := range msgs {
+				fmt.Println("  " + msg.String())
+			}
+		}
+	}
 }

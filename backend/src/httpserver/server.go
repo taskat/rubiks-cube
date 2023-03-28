@@ -41,28 +41,15 @@ func (s Server) configHandler(response http.ResponseWriter, request *http.Reques
 	if err != nil {
 		panic(err)
 	}
-	cube := confighandler.Handle("config.rubiks", string(content))
+	errorHandler := eh.NewHandler()
+	cube := confighandler.Handle("config.rubiks", string(content), errorHandler)
 	if cube == nil {
 		response.Write([]byte("ERROR"))
-		printErrors()
+		errorHandler.PrintAll()
 	} else {
+		fmt.Println("Successful parse")
 		data := cube.ToJSON()
 		response.Write(data)
-	}
-}
-
-func printErrors() {
-	allMessages := eh.GetAllMessages()
-	fmt.Println("======")
-	for level, msgs := range allMessages {
-		if len(msgs) == 0 {
-			fmt.Println("There were no " + level + "s")
-		} else {
-			fmt.Println(level + "s:")
-			for _, msg := range msgs {
-				fmt.Println("  " + msg.String())
-			}
-		}
 	}
 }
 

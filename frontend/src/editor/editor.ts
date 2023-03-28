@@ -17,7 +17,7 @@ export default class Editor {
         });
     }
 
-    change_tab() {
+    changeTab() {
         let button = document.getElementById("change_tab") as HTMLButtonElement;
         let currentState: State = this.editor.saveViewState();
         let nextTab = null;
@@ -33,5 +33,9 @@ export default class Editor {
         this.editor.setModel(nextTab.get_model());
         this.editor.restoreViewState(nextTab.get_state());
         this.editor.focus();
+    }
+
+    getText(tab: string): string {
+        return this.tabs.get(tab)?.model?.getValue() as string;
     }
 }

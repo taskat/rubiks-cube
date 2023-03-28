@@ -2,34 +2,53 @@ import Simulator from "./three-app";
 import Editor from "./editor/editor";
 
 import "./styles/styles.css";
+import Client from "./httpclient/client";
 
-const main = async () => {
-  document.querySelector("#check")?.addEventListener("click", check);
-  document.querySelector("#solve")?.addEventListener("click", solve);
-  let editor = new Editor();
-  const changeTab = () => editor.change_tab();
-  document.querySelector("#change_tab")?.addEventListener("click", changeTab);
-  document.addEventListener('keyup', (e) => keyboard_shortcuts(e, changeTab), false);
-  const simulator = new Simulator();
-  simulator.init();
-}
-
-function keyboard_shortcuts(e: KeyboardEvent, changeTab: () => void) {
-  if (e.ctrlKey && e.key === "Enter") {
-    solve();
-  } else if (e.shiftKey && e.key === "Enter") {
-    check();
-  } else if (e.shiftKey && e.key === "Tab") {
-    changeTab();
+class App {
+  editor: Editor;
+  simulator: Simulator;
+  changeTab: () => void;
+  httpClient: Client;
+  constructor() {
+    this.editor = new Editor();
+    this.simulator = new Simulator();
+    this.changeTab = this.editor.changeTab.bind(this.editor);
+    this.httpClient = new Client();
+  }
+  async start() {
+    document.querySelector("#check")?.addEventListener("click", this.check.bind(this));
+    document.querySelector("#solve")?.addEventListener("click", this.solve.bind(this));
+    document.querySelector("#change_tab")?.addEventListener("click", this.changeTab);
+    document.addEventListener('keyup', (e) => this.keyboardShortcuts(e), false);
+    this.simulator.init();
+  }
+  
+  keyboardShortcuts(e: KeyboardEvent) {
+    if (e.ctrlKey && e.key === "Enter") {
+      this.solve();
+    } else if (e.shiftKey && e.key === "Enter") {
+      this.check();
+    } else if (e.shiftKey && e.key === "Tab") {
+      this.changeTab();
+    }
+  }
+  
+  check() {
+    let content = this.editor.getText("config");
+    this.httpClient.postConfig(content).then((data) => {
+      console.log(data);
+    });
+  }
+  
+  solve() {
+    console.log("solve");
   }
 }
 
-function check() {
-  console.log("check");
+
+function main() {
+  const app = new App();
+  app.start();
 }
 
-function solve() {
-  console.log("solve");
-}
-
-main()
+main();

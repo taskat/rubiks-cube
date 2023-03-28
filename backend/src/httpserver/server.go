@@ -9,10 +9,27 @@ import (
 	eh "github.com/taskat/rubiks-cube/src/errorhandler"
 )
 
-type Server struct{}
+type Server struct {
+	mux *http.ServeMux
+}
 
 func NewServer() *Server {
-	return &Server{}
+	mux := http.NewServeMux()
+	s := &Server{mux: mux}
+	s.mux.HandleFunc("/config", s.configHandler)
+	return s
+}
+
+func (s Server) addCORSHeaders(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+	w.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+	if r.Method == "OPTIONS" {
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
+		w.Header().Set("Access-Control-Max-Age", "86400")
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+	s.mux.ServeHTTP(w, r)
 }
 
 func (s Server) getHello(w http.ResponseWriter, r *http.Request) {
@@ -50,7 +67,6 @@ func printErrors() {
 }
 
 func (s Server) Start() {
-	http.HandleFunc("/config", s.configHandler)
-	err := http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":8080", http.HandlerFunc(s.addCORSHeaders))
 	fmt.Println(err)
 }

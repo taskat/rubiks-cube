@@ -59,3 +59,7 @@ func GetInfos() []IMessage {
 func GetWarnings() []IMessage {
 	return handler.messages["WARNING"]
 }
+
+func HasErrors() bool {
+	return len(handler.messages["ERROR"]) > 0
+}

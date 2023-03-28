@@ -6,9 +6,9 @@ import (
 	"github.com/taskat/rubiks-cube/src/color"
 )
 
-type side [][]color.Color
+type Side [][]color.Color
 
-func (s side) String() string {
+func (s Side) String() string {
 	lines := make([]string, len(s))
 	for i, row := range s {
 		cells := make([]string, len(row))

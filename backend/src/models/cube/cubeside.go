@@ -1,33 +1,16 @@
 package cube
 
-type CubeSide int
+type CubeSide string
 
 const (
-	Front CubeSide = iota
-	Back
-	Left
-	Right
-	Up
-	Down
+	Front CubeSide = "Front"
+	Back  CubeSide = "Back"
+	Left  CubeSide = "Left"
+	Right CubeSide = "Right"
+	Up    CubeSide = "Up"
+	Down  CubeSide = "Down"
 )
 
 func (c CubeSide) String() string {
-	s := ""
-	switch c {
-	case Front:
-		s = "Front"
-	case Back:
-		s = "Back"
-	case Left:
-		s = "Left"
-	case Right:
-		s = "Right"
-	case Up:
-		s = "Up"
-	case Down:
-		s = "Down"
-	default:
-		panic("Invalid CubeSide")
-	}
-	return s
+	return string(c)
 }

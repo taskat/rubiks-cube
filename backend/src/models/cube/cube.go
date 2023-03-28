@@ -37,3 +37,8 @@ func (c *Cube) String() string {
 	}
 	return s
 }
+
+func (c *Cube) ToJSON() []byte {
+	cubeJson := NewCubeJSON(c)
+	return cubeJson.String()
+}

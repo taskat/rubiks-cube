@@ -3,6 +3,6 @@ package models
 import "fmt"
 
 type Puzzle interface {
-	// Empty for now
+	ToJSON() []byte
 	fmt.Stringer
 }

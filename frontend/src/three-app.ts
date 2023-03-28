@@ -2,20 +2,11 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import Cube from "./cube/cube";
-import { ColorsSolved } from "./cube/color";
 import Piece from "./cube/piece";
-import { Side } from "./cube/side";
 import Move from "./cube/move";
+import { Side } from "./cube/side";
+import { ColorsChecker } from "./cube/color";
 
-const COLOR_TABLE = {
-  "U": new THREE.Color("blue"),
-  "D": new THREE.Color("green"),
-  "L": new THREE.Color("red"),
-  "R": new THREE.Color("darkorange"),
-  "F": new THREE.Color("yellow"),
-  "B": new THREE.Color("ghostwhite"),
-  "-": new THREE.Color(0x282828)
-}
 
 const PIECE_MATERIAL = new THREE.MeshPhysicalMaterial({
   vertexColors: true,
@@ -33,7 +24,6 @@ export default class Simulator{
   model: THREE.BufferGeometry = new THREE.BufferGeometry();
   modelName: string = "/cube-bevelled.glb";
   cubeSize: number = 3;
-  cube: Cube = new Cube(this.cubeSize);
   renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer({ antialias: true });
   camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera(34, 1, 1, 100);
   controls: OrbitControls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -42,6 +32,8 @@ export default class Simulator{
   animationGroup: THREE.Group = new THREE.Group();
   clock: THREE.Clock = new THREE.Clock();
   animationMixer: THREE.AnimationMixer = new THREE.AnimationMixer(this.animationGroup);
+  colorPalette: Map<Side, string[][]> = ColorsChecker;
+  cube: Cube = new Cube(this.cubeSize, this.colorPalette);
   constructor() {}
 
   makeRotationMatrix4(rotationMatrix3: math.Matrix): THREE.Matrix4 {
@@ -159,7 +151,7 @@ export default class Simulator{
       const normalY = normalAttribute.array[arrayIndex++];
       const normalZ = normalAttribute.array[arrayIndex++];
 
-      const color = this.lookupColor(piece, normalX, normalY, normalZ);
+      const color = this.cube.getColor(piece, normalX, normalY, normalZ);
 
       colors.push(color.r, color.g, color.b);
       colors.push(color.r, color.g, color.b);
@@ -169,32 +161,6 @@ export default class Simulator{
     pieceGeoemtry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
 
     return pieceGeoemtry;
-  }
-
-  lookupColor(piece: Piece, normalX: number, normalY: number, normalZ: number): THREE.Color {
-    let side: Side = Side.None;
-    if (this.closeTo(normalY, -1)) {
-      side = Side.Down;
-    } else if (this.closeTo(normalY, 1)) {
-      side = Side.Up;
-    } else if (this.closeTo(normalX, -1)) {
-      side = Side.Left;
-    } else if (this.closeTo(normalX, 1)) {
-      side = Side.Right;
-    } else if (this.closeTo(normalZ, 1)) {
-      side = Side.Front;
-    } else if (this.closeTo(normalZ, -1)) {
-      side = Side.Back;
-    }
-    const sideCoord = piece.getSideCoord(side);
-    if (sideCoord) {
-      return (ColorsSolved.get(side) as THREE.Color[][])[sideCoord.i][sideCoord.j];
-    } 
-    return COLOR_TABLE["-"];
-  }
-
-  closeTo(a: number, b: number) {
-    return Math.abs(a - b) <= 1e-12
   }
 
   animate() {
@@ -207,7 +173,8 @@ export default class Simulator{
 
   scramble() {
     this.recreateUiPieces();
-    const moves = [this.cube.moves.get("S")];
+    // const moves = [this.cube.moves.get("S")];
+    const moves: Move[] = [];
     this.resetUiPieces(this.cube);
     setTimeout(this.animateMoves.bind(this), BEFORE_DELAY, moves);
   }
@@ -243,7 +210,7 @@ export default class Simulator{
   }
 
   recreateUiPieces() {
-    this.cube = new Cube(this.cubeSize);
+    this.cube = new Cube(this.cubeSize, this.colorPalette);
     this.puzzleGroup.clear();
     this.createUiPieces();
   }

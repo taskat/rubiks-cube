@@ -4,16 +4,34 @@ import Piece from "./piece";
 import Move from "./move";
 import CoordsList from "./coordslist";
 import MoveBuilder from "./movebuilder";
+import * as THREE from "three";
+import { Side } from "./side";
+
+const COLORS: Map<String, THREE.Color> = new Map([
+  ["b", new THREE.Color("blue")],
+  ["g", new THREE.Color("green")],
+  ["r", new THREE.Color("red")],
+  ["o", new THREE.Color("darkorange")],
+  ["y", new THREE.Color("yellow")],
+  ["w", new THREE.Color("ghostwhite")],
+  ["-", new THREE.Color(0x282828)]
+]);
 
 export default class Cube {
   cubeData: CubeData;
   pieces: Piece[];
   moves: Map<string, Move>;
-  constructor(cubeSize: number) {
+  colorPalette: Map<Side, string[][]>
+  constructor(cubeSize: number, colorPalette: Map<Side, string[][]>) {
     this.cubeData = new CubeData(cubeSize);
     const allCoordsList = this.cubeData.makeAllCoordsList();
     this.pieces = allCoordsList.coords.map((coord, index) => new Piece(index, coord, this.cubeData));
     this.moves = new Map(this.generateMoves().map(move => [move.name, move]));
+    this.colorPalette = colorPalette;
+  }
+
+  closeTo(a: number, b: number) {
+    return Math.abs(a - b) <= 1e-12
   }
 
   makeMoves(moves: Move[]) {
@@ -53,9 +71,36 @@ export default class Cube {
     return flatten(nestedMoves);
   }
 
+  getColor(piece: Piece, normalX: number, normalY: number, normalZ: number): THREE.Color {
+    let side: Side = Side.None;
+    if (this.closeTo(normalY, -1)) {
+      side = Side.Down;
+    } else if (this.closeTo(normalY, 1)) {
+      side = Side.Up;
+    } else if (this.closeTo(normalX, -1)) {
+      side = Side.Left;
+    } else if (this.closeTo(normalX, 1)) {
+      side = Side.Right;
+    } else if (this.closeTo(normalZ, 1)) {
+      side = Side.Front;
+    } else if (this.closeTo(normalZ, -1)) {
+      side = Side.Back;
+    }
+    const sideCoord = piece.getSideCoord(side);
+    if (sideCoord) {
+      let color = (this.colorPalette.get(side) as string[][])[sideCoord.i][sideCoord.j]
+      return COLORS.get(color) as THREE.Color;
+    } 
+    return COLORS.get("-") as THREE.Color;
+  }
+
   getPieces(coordsList: CoordsList): Piece[] {
     return coordsList.coords.map(coord =>
       this.pieces.find(piece => piece.coord.equal(coord))).filter(piece => piece !== undefined) as Piece[];
+  }
+
+  setColorPalette(colorPalette: Map<Side, string[][]>) {
+    this.colorPalette = colorPalette;
   }
 }
 

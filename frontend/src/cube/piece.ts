@@ -54,7 +54,7 @@ export default class Piece {
       sideCoords.push(new SideCoord(Side.Right, -coord.y + vmax, -coord.z + vmax));
     }
     if (coord.z === vmin) {
-      sideCoords.push(new SideCoord(Side.Back, coord.y - vmin, coord.x - vmin));
+      sideCoords.push(new SideCoord(Side.Back, -coord.y + vmax, -coord.x + vmax));
     }
     if (coord.z === vmax) {
       sideCoords.push(new SideCoord(Side.Front, -coord.y + vmax, coord.x - vmin));

@@ -13,17 +13,9 @@ type IContext interface {
 type Message struct {
 	text  string
 	file  string
-	pos   position
+	pos   Position
 	level Level
 }
-
-type Level string
-
-const (
-	INFO    Level = "INFO"
-	WARNING Level = "WARNING"
-	ERROR   Level = "ERROR"
-)
 
 func NewMessage(ctx IContext, text, file string, level Level) Message {
 	return Message{text: text, file: file, pos: getPosition(ctx), level: level}
@@ -33,13 +25,17 @@ func (m Message) GetLevel() Level {
 	return m.level
 }
 
-func (m Message) String() string {
-	return fmt.Sprintf("%s in %s at line %d, column %d", m.text, m.file,
-		m.pos.line, m.pos.column+1)
+func (m Message) MarshalJSON() ([]byte, error) {
+	return NewMessageJson(&m).marshal()
 }
 
-func getPosition(ctx IContext) position {
+func (m Message) String() string {
+	return fmt.Sprintf("%s in %s at line %d, column %d", m.text, m.file,
+		m.pos.Line, m.pos.Column+1)
+}
+
+func getPosition(ctx IContext) Position {
 	line := ctx.GetStart().GetLine()
 	column := ctx.GetStart().GetColumn()
-	return position{line: line, column: column}
+	return Position{Line: line, Column: column}
 }

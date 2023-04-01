@@ -1,6 +1,7 @@
 package httpserver
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -20,40 +21,54 @@ func NewServer() *Server {
 	return s
 }
 
-func (s Server) addCORSHeaders(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
-	w.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-	if r.Method == "OPTIONS" {
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
-		w.Header().Set("Access-Control-Max-Age", "86400")
-		w.WriteHeader(http.StatusOK)
+func (s Server) addHeaders(response http.ResponseWriter, request *http.Request) {
+	response.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+	response.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+	response.Header().Set("Content-Type", "application/json")
+	if request.Method == "OPTIONS" {
+		response.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
+		response.Header().Set("Access-Control-Max-Age", "86400")
+		response.WriteHeader(http.StatusOK)
 		return
 	}
-	s.mux.ServeHTTP(w, r)
-}
-
-func (s Server) getHello(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Hello, world!")
+	s.mux.ServeHTTP(response, request)
 }
 
 func (s Server) configHandler(response http.ResponseWriter, request *http.Request) {
-	content, err := ioutil.ReadAll(request.Body)
+	if request.Method != "POST" {
+		response.Header().Set("Allow", "POST")
+		response.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+	body, err := ioutil.ReadAll(request.Body)
 	if err != nil {
-		panic(err)
+		s.writeError(response, http.StatusBadRequest, err)
+		return
+	}
+	var content Request
+	err = json.Unmarshal(body, &content)
+	if err != nil {
+		s.writeError(response, http.StatusBadRequest, err)
+		return
 	}
 	errorHandler := eh.NewHandler()
-	cube := confighandler.Handle("config.rubiks", string(content), errorHandler)
-	if cube == nil {
-		response.Write([]byte("ERROR"))
-		errorHandler.PrintAll()
-	} else {
-		fmt.Println("Successful parse")
-		data := cube.ToJSON()
-		response.Write(data)
+	cube := confighandler.Handle("config.rubiks", string(content.Config), errorHandler)
+	messages := errorHandler.GetMessages()
+	result := NewResult(cube, messages)
+	data, err := json.Marshal(result)
+	if err != nil {
+		s.writeError(response, http.StatusInternalServerError, err)
+		return
 	}
+	response.Write(data)
 }
 
 func (s Server) Start() {
-	err := http.ListenAndServe(":8080", http.HandlerFunc(s.addCORSHeaders))
+	err := http.ListenAndServe(":8080", http.HandlerFunc(s.addHeaders))
 	fmt.Println(err)
+}
+
+func (s Server) writeError(response http.ResponseWriter, code int, err error) {
+	response.WriteHeader(http.StatusInternalServerError)
+	response.Write([]byte(err.Error()))
 }

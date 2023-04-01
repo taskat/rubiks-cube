@@ -38,7 +38,6 @@ func (c *Cube) String() string {
 	return s
 }
 
-func (c *Cube) ToJSON() []byte {
-	cubeJson := NewCubeJSON(c)
-	return cubeJson.String()
+func (c *Cube) MarshalJSON() ([]byte, error) {
+	return NewCubeJSON(c).marshal()
 }

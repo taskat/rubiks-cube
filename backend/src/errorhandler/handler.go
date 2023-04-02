@@ -2,20 +2,15 @@ package errorhandler
 
 import "fmt"
 
-type IMessage interface {
-	GetLevel() Level
-	fmt.Stringer
-}
-
 type Errorhandler struct {
-	messages map[Level][]IMessage
+	messages map[Level][]Message
 }
 
 func NewHandler() Errorhandler {
-	m := make(map[Level][]IMessage, 0)
-	m["ERROR"] = make([]IMessage, 0)
-	m["WARNING"] = make([]IMessage, 0)
-	m["INFO"] = make([]IMessage, 0)
+	m := make(map[Level][]Message, 0)
+	m["ERROR"] = make([]Message, 0)
+	m["WARNING"] = make([]Message, 0)
+	m["INFO"] = make([]Message, 0)
 	return Errorhandler{messages: m}
 }
 
@@ -38,19 +33,27 @@ func (e *Errorhandler) AddWarning(ctx IContext, text, file string) {
 	e.AddMessage(warning)
 }
 
-func (e *Errorhandler) GetAllMessages() map[Level][]IMessage {
+func (e *Errorhandler) GetMessages() []Message {
+	var msgs []Message
+	for _, m := range e.messages {
+		msgs = append(msgs, m...)
+	}
+	return msgs
+}
+
+func (e *Errorhandler) GetMessagesByLevel() map[Level][]Message {
 	return e.messages
 }
 
-func (e *Errorhandler) GetErrors() []IMessage {
+func (e *Errorhandler) GetErrors() []Message {
 	return e.messages["ERROR"]
 }
 
-func (e *Errorhandler) GetInfos() []IMessage {
+func (e *Errorhandler) GetInfos() []Message {
 	return e.messages["INFO"]
 }
 
-func (e *Errorhandler) GetWarnings() []IMessage {
+func (e *Errorhandler) GetWarnings() []Message {
 	return e.messages["WARNING"]
 }
 

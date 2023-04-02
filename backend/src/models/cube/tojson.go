@@ -14,10 +14,6 @@ func NewCubeJSON(cube *Cube) CubeJSON {
 	}
 }
 
-func (c *CubeJSON) String() []byte {
-	data, err := json.Marshal(c)
-	if err != nil {
-		panic("json marshal failed: " + err.Error())
-	}
-	return data
+func (c CubeJSON) marshal() ([]byte, error) {
+	return json.Marshal(c)
 }

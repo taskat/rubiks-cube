@@ -1,8 +1,11 @@
 package models
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 type Puzzle interface {
-	ToJSON() []byte
+	json.Marshaler
 	fmt.Stringer
 }

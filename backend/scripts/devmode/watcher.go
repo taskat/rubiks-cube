@@ -7,19 +7,17 @@ import (
 )
 
 type watcher struct {
-	lastEdited    map[string]time.Time
-	folder        string
-	callback      func(int) int
-	callbackParam int
+	lastEdited map[string]time.Time
+	folder     string
+	callback   func()
 }
 
-func newWatcher(folder string, callback func(int) int, callbackParam int) *watcher {
+func newWatcher(folder string, callback func()) *watcher {
 	w := &watcher{folder: folder}
 	w.lastEdited = make(map[string]time.Time)
 	w.updateFiles(w.folder)
 	w.updateLastEdited()
 	w.callback = callback
-	w.callbackParam = callbackParam
 	return w
 }
 
@@ -69,7 +67,7 @@ func (w *watcher) watch() {
 		time.Sleep(500 * time.Millisecond)
 		w.updateFiles(w.folder)
 		if w.updateLastEdited() {
-			w.callbackParam = w.callback(w.callbackParam)
+			w.callback()
 		}
 	}
 }

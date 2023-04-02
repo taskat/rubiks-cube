@@ -7,7 +7,7 @@ cd ${SCRIPTS}/..
 # Compile the source codes
 go build -o dev_mode.exe ./scripts/devmode/devmode.go
 # Run it
-./dev_mode.exe $@
+./dev_mode.exe $@ "^.*(\.go|go\.sum|go\.mod)$"
 # Remove executable
 rm dev_mode.exe
 # Unset stopping on error

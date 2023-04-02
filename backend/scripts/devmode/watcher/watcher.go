@@ -3,18 +3,20 @@ package watcher
 import (
 	"fmt"
 	"os"
+	"regexp"
 	"time"
 )
 
 type Watcher struct {
-	lastEdited map[string]time.Time
-	folder     string
-	callback   func()
-	startup    bool
+	lastEdited   map[string]time.Time
+	folder       string
+	callback     func()
+	startup      bool
+	includeFiles *regexp.Regexp
 }
 
-func NewWatcher(folder string, callback func()) *Watcher {
-	w := &Watcher{folder: folder, callback: callback, startup: true}
+func NewWatcher(folder string, callback func(), includeFiles *regexp.Regexp) *Watcher {
+	w := &Watcher{folder: folder, callback: callback, startup: true, includeFiles: includeFiles}
 	w.lastEdited = make(map[string]time.Time)
 	w.updateFiles(w.folder)
 	w.updateLastEdited()
@@ -38,7 +40,7 @@ func (w *Watcher) updateFiles(currentFolder string) {
 			w.updateFiles(currentFolder + "/" + entry.Name())
 		} else {
 			fileName := currentFolder + "/" + entry.Name()
-			if fileName[len(fileName)-4:] == ".exe" {
+			if !w.includeFiles.MatchString(fileName) {
 				continue
 			}
 			if _, ok := w.lastEdited[fileName]; !ok {

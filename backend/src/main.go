@@ -13,7 +13,7 @@ func main() {
 		for {
 			_, err := http.Get("http://localhost:8080/check")
 			if err == nil {
-				fmt.Println("Rubik's Server is running")
+				fmt.Println("Rubik's Server is running!")
 				return
 			}
 			time.Sleep(10 * time.Millisecond)

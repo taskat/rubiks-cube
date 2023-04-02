@@ -55,6 +55,7 @@ func (r *Restarter) removeServerExe() {
 }
 
 func (r *Restarter) RestartServer() {
+	fmt.Println("Restarting server...")
 	if r.started {
 		r.killServer()
 		r.waitForKill()

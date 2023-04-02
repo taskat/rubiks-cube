@@ -10,15 +10,22 @@ type Watcher struct {
 	lastEdited map[string]time.Time
 	folder     string
 	callback   func()
+	startup    bool
 }
 
 func NewWatcher(folder string, callback func()) *Watcher {
-	w := &Watcher{folder: folder}
+	w := &Watcher{folder: folder, callback: callback, startup: true}
 	w.lastEdited = make(map[string]time.Time)
 	w.updateFiles(w.folder)
 	w.updateLastEdited()
-	w.callback = callback
+	w.startup = false
 	return w
+}
+
+func (w *Watcher) log(msg string) {
+	if !w.startup {
+		fmt.Println(msg)
+	}
 }
 
 func (w *Watcher) updateFiles(currentFolder string) {
@@ -35,7 +42,7 @@ func (w *Watcher) updateFiles(currentFolder string) {
 				continue
 			}
 			if _, ok := w.lastEdited[fileName]; !ok {
-				fmt.Println("Added file: " + fileName)
+				w.log("Added file: " + fileName)
 				w.lastEdited[fileName] = time.Time{}
 			}
 		}
@@ -47,14 +54,14 @@ func (w *Watcher) updateLastEdited() bool {
 	for file, modTime := range w.lastEdited {
 		fileInfo, err := os.Lstat(file)
 		if err != nil {
-			fmt.Println("Deleted file: " + file)
+			w.log("Deleted file: " + file)
 			delete(w.lastEdited, file)
 			updated = true
 			continue
 		}
 		lastMod := fileInfo.ModTime()
 		if lastMod != modTime {
-			fmt.Println("Updated file: " + file)
+			w.log("Updated file: " + file)
 			w.lastEdited[file] = lastMod
 			updated = true
 		}

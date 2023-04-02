@@ -17,6 +17,7 @@ type Server struct {
 func NewServer() *Server {
 	mux := http.NewServeMux()
 	s := &Server{mux: mux}
+	s.mux.HandleFunc("/", s.check)
 	s.mux.HandleFunc("/config", s.configHandler)
 	return s
 }
@@ -32,6 +33,10 @@ func (s Server) addHeaders(response http.ResponseWriter, request *http.Request) 
 		return
 	}
 	s.mux.ServeHTTP(response, request)
+}
+
+func (s Server) check(response http.ResponseWriter, request *http.Request) {
+	response.Write([]byte("Rubik's Cube server is running!"))
 }
 
 func (s Server) configHandler(response http.ResponseWriter, request *http.Request) {

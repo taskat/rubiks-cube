@@ -10,7 +10,6 @@ go build -o rubik_server.exe src/main.go
 ./rubik_server.exe &
 # Get pid
 PID=$!
-echo "Server started with PID: $PID"
 # Save pid to file
 echo $PID > rubik_server.pid
 # Unset stopping on error

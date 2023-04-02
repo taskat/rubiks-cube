@@ -1,13 +1,15 @@
 package main
 
 import (
+	"devmode/restarter"
+	"devmode/watcher"
 	"os"
 )
 
 func main() {
-	restarter := newRestarter()
-	restarter.startServer()
+	r := restarter.NewRestarter()
+	r.StartServer()
 	folder := os.Args[1]
-	watcher := newWatcher(folder, restarter.restartServer)
-	watcher.watch()
+	w := watcher.NewWatcher(folder, r.RestartServer)
+	w.Watch()
 }

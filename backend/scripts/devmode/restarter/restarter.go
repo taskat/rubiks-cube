@@ -1,4 +1,4 @@
-package main
+package restarter
 
 import (
 	"fmt"
@@ -8,16 +8,16 @@ import (
 	"time"
 )
 
-type restarter struct {
+type Restarter struct {
 	started bool
 	pid     int
 }
 
-func newRestarter() *restarter {
-	return &restarter{}
+func NewRestarter() *Restarter {
+	return &Restarter{}
 }
 
-func (r *restarter) getPid() {
+func (r *Restarter) getPid() {
 	fileName := "./rubik_server.pid"
 	data, err := os.ReadFile(fileName)
 	if err != nil {
@@ -34,7 +34,7 @@ func (r *restarter) getPid() {
 	}
 }
 
-func (r *restarter) killServer() {
+func (r *Restarter) killServer() {
 	cmd := exec.Command("bash", "-c", "kill "+strconv.Itoa(r.pid))
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
@@ -44,7 +44,7 @@ func (r *restarter) killServer() {
 	}
 }
 
-func (r *restarter) removeServerExe() {
+func (r *Restarter) removeServerExe() {
 	err := os.Remove("./rubik_server.exe")
 	if err != nil {
 		_, isPathError := err.(*os.PathError)
@@ -54,16 +54,16 @@ func (r *restarter) removeServerExe() {
 	}
 }
 
-func (r *restarter) restartServer() {
+func (r *Restarter) RestartServer() {
 	if r.started {
 		r.killServer()
 		r.waitForKill()
 		r.removeServerExe()
 	}
-	r.startServer()
+	r.StartServer()
 }
 
-func (r *restarter) startServer() {
+func (r *Restarter) StartServer() {
 	cmd := exec.Command("bash", "-c", "./scripts/run_server_background.sh")
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
@@ -77,7 +77,7 @@ func (r *restarter) startServer() {
 	}
 }
 
-func (r *restarter) waitForKill() {
+func (r *Restarter) waitForKill() {
 	for {
 		cmd := exec.Command("bash", "-c", "ps -p "+strconv.Itoa(r.pid))
 		err := cmd.Run()

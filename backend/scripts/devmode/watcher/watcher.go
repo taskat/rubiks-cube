@@ -1,4 +1,4 @@
-package main
+package watcher
 
 import (
 	"fmt"
@@ -6,14 +6,14 @@ import (
 	"time"
 )
 
-type watcher struct {
+type Watcher struct {
 	lastEdited map[string]time.Time
 	folder     string
 	callback   func()
 }
 
-func newWatcher(folder string, callback func()) *watcher {
-	w := &watcher{folder: folder}
+func NewWatcher(folder string, callback func()) *Watcher {
+	w := &Watcher{folder: folder}
 	w.lastEdited = make(map[string]time.Time)
 	w.updateFiles(w.folder)
 	w.updateLastEdited()
@@ -21,7 +21,7 @@ func newWatcher(folder string, callback func()) *watcher {
 	return w
 }
 
-func (w *watcher) updateFiles(currentFolder string) {
+func (w *Watcher) updateFiles(currentFolder string) {
 	entries, err := os.ReadDir(currentFolder)
 	if err != nil {
 		panic(err)
@@ -42,7 +42,7 @@ func (w *watcher) updateFiles(currentFolder string) {
 	}
 }
 
-func (w *watcher) updateLastEdited() bool {
+func (w *Watcher) updateLastEdited() bool {
 	updated := false
 	for file, modTime := range w.lastEdited {
 		fileInfo, err := os.Lstat(file)
@@ -62,7 +62,7 @@ func (w *watcher) updateLastEdited() bool {
 	return updated
 }
 
-func (w *watcher) watch() {
+func (w *Watcher) Watch() {
 	for {
 		time.Sleep(500 * time.Millisecond)
 		w.updateFiles(w.folder)

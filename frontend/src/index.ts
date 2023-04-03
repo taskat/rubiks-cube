@@ -3,6 +3,7 @@ import Editor from "./editor/editor";
 
 import "./styles/styles.css";
 import Client from "./httpclient/client";
+import { Error } from "./error/error";
 
 class App {
   editor: Editor;
@@ -22,7 +23,19 @@ class App {
     document.addEventListener('keyup', (e) => this.keyboardShortcuts(e), false);
     this.simulator.init();
   }
-  
+
+  addError(error: Error) {
+    const errorList = document.getElementById("errorlist");
+    const errorItem = document.createElement("tr");
+    errorItem.innerHTML = `
+    <td>${error.level}</td>
+    <td>${error.text}</td>
+    <td>Line ${error.pos.line}, Column ${error.pos.column}</td>
+    <td>${error.file}</td>
+    `;
+    errorList?.appendChild(errorItem);
+  }
+
   keyboardShortcuts(e: KeyboardEvent) {
     if (e.ctrlKey && e.key === "Enter") {
       this.solve();
@@ -32,18 +45,55 @@ class App {
       this.changeTab();
     }
   }
-  
+
   check() {
     let content = this.editor.getText("config");
     this.httpClient.postConfig(content).then((response) => {
       this.simulator.colorPalette = response.colorPalette;
-      console.log(response.errors);
+      this.updateErrors(response.errors);
       this.simulator.recreateUiPieces();
     });
   }
-  
+
+  showErrorTable() {
+    const errortable = document.getElementById("errortable");
+    if (errortable) {
+      errortable.hidden = false;
+    }
+    const noerror = document.getElementById("noerror");
+    if (noerror) {
+      noerror.hidden = true;
+    }
+  }
+
+  showNoError() {
+    const errortable = document.getElementById("errortable");
+    if (errortable) {
+      errortable.hidden = true;
+    }
+    const noerror = document.getElementById("noerror");
+    if (noerror) {
+      noerror.hidden = false;
+    }
+  }
+
   solve() {
     console.log("solve");
+    const error = new Error({ text: "test", level: "error", pos: { line: 1, column: 1 }, file: "test" });
+    this.addError(error);
+  }
+
+  updateErrors(errors: Error[]) {
+    if (errors.length === 0) {
+      this.showNoError();
+    } else {
+      this.showErrorTable();
+    }
+    const errorList = document.getElementById("errorlist");
+    if (errorList) {
+      errorList.innerHTML = "";
+    }
+    errors.forEach((error: Error) => this.addError(error));
   }
 }
 

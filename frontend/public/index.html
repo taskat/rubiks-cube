@@ -24,12 +24,26 @@
       <div id="editor"></div>
     </div>
     <div class="right">
-      <div class="simulator up">
+      <div class="simulator">
         <div id="visualisation-container"></div>
       </div>
-      <div class="output down">
-        <h1 class="placeholder">Output</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <div class="output">
+        <div class="moves left">Moves</div>
+        <div class="errorlist right">
+          <table id="errortable" hidden>
+            <thead>
+              <tr>
+                <th>Level</th>
+                <th>Text</th>
+                <th>Position</th>
+                <th>File</th>
+              </tr>
+            </thead>
+            <tbody id="errorlist">
+            </tbody>
+          </table>
+          <div display="none" id="noerror">There is no errors or warnings!</div>
+        </div>
       </div>
     </div>
   </div>

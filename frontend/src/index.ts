@@ -3,7 +3,6 @@ import Editor from "./editor/editor";
 
 import "./styles/styles.css";
 import Client from "./httpclient/client";
-import { Side } from "./cube/side";
 
 class App {
   editor: Editor;
@@ -36,14 +35,9 @@ class App {
   
   check() {
     let content = this.editor.getText("config");
-    this.httpClient.postConfig(content).then((data) => {
-      const stringToColors: Map<string, string[][]> = new Map(Object.entries(data.sides));
-      let sideToColors: Map<Side, string[][]> = new Map();
-      stringToColors.forEach((colors, key) => {
-        const side = Side[key as unknown as keyof typeof Side];
-        sideToColors.set(side, colors);
-      });
-      this.simulator.colorPalette = sideToColors;
+    this.httpClient.postConfig(content).then((response) => {
+      this.simulator.colorPalette = response.colorPalette;
+      console.log(response.errors);
       this.simulator.recreateUiPieces();
     });
   }

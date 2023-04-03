@@ -7,16 +7,21 @@ import (
 	"time"
 )
 
+type restarter interface {
+	RestartServer()
+	ShutDownServer()
+}
+
 type Watcher struct {
 	lastEdited   map[string]time.Time
 	folder       string
-	callback     func()
+	r            restarter
 	startup      bool
 	includeFiles *regexp.Regexp
 }
 
-func NewWatcher(folder string, callback func(), includeFiles *regexp.Regexp) *Watcher {
-	w := &Watcher{folder: folder, callback: callback, startup: true, includeFiles: includeFiles}
+func NewWatcher(folder string, r restarter, includeFiles *regexp.Regexp) *Watcher {
+	w := &Watcher{folder: folder, r: r, startup: true, includeFiles: includeFiles}
 	w.lastEdited = make(map[string]time.Time)
 	w.updateFiles(w.folder)
 	w.updateLastEdited()
@@ -71,12 +76,19 @@ func (w *Watcher) updateLastEdited() bool {
 	return updated
 }
 
-func (w *Watcher) Watch() {
+func (w *Watcher) Watch(tickChannel chan bool, inputChannel chan string) {
 	for {
-		time.Sleep(500 * time.Millisecond)
-		w.updateFiles(w.folder)
-		if w.updateLastEdited() {
-			w.callback()
+		select {
+		case <-tickChannel:
+			w.updateFiles(w.folder)
+			if w.updateLastEdited() {
+				w.r.RestartServer()
+			}
+		case input := <-inputChannel:
+			if input == "exit" || input == "quit" || input == "q" {
+				w.r.ShutDownServer()
+				return
+			}
 		}
 	}
 }

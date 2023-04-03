@@ -79,8 +79,6 @@ class App {
 
   solve() {
     console.log("solve");
-    const error = new Error({ text: "test", level: "error", pos: { line: 1, column: 1 }, file: "test" });
-    this.addError(error);
   }
 
   updateErrors(errors: Error[]) {

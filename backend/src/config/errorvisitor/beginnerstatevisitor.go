@@ -39,20 +39,20 @@ func (v *beginnerStateVisitor) checkColors(ctx *cp.BeginnerStateContext) {
 	if !v.valid {
 		return
 	}
-	colors := make(map[string][]*cp.ColorContext)
+	colors := make(map[string]int)
 	for _, side := range ctx.AllSide() {
 		for _, row := range side.(*cp.SideContext).AllRow() {
 			for _, cell := range row.(*cp.RowContext).AllColor() {
-				colors[cell.GetText()] = append(colors[cell.GetText()], cell.(*cp.ColorContext))
+				colors[cell.GetText()] += 1
 			}
 		}
 	}
-	for color, colorCtxs := range colors {
-		if len(colorCtxs) > 9 || (v.finished && len(colorCtxs) < 9) {
-			errorMsg := fmt.Sprintf("color %s is defined %d times, should be 9 times", color, len(colorCtxs))
-			for _, colorCtx := range colorCtxs {
-				v.eh.AddWarning(colorCtx, errorMsg, v.fileName)
-			}
+	stateCtx := ctx.GetParent().(*cp.StateContext)
+	stateDefCtx := stateCtx.GetParent().(*cp.StateDefContext)
+	for color, amount := range colors {
+		if amount > 9 || (v.finished && amount < 9) {
+			errorMsg := fmt.Sprintf("color %s is defined %d times, should be 9 times", color, amount)
+			v.eh.AddWarning(stateDefCtx, errorMsg, v.fileName)
 		}
 	}
 }

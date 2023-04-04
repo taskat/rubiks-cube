@@ -10,48 +10,48 @@ const COLORS: Map<String, THREE.Color> = new Map([
     ["w", new THREE.Color("ghostwhite")]
 ]);
 
-function colorsChecker(): Map<Side, THREE.Color[][]> {
-    let map = new Map<Side, THREE.Color[][]>();
+function colorsChecker(): Map<Side, string[][]> {
+    let map = new Map<Side, string[][]>();
     const front = [
         ["y", "w", "y"],
         ["w", "y", "w"],
         ["y", "w", "y"]
     ];
-    map.set(Side.Front, front.map(row => row.map(color => COLORS.get(color) as THREE.Color)));
+    map.set(Side.Front, front);
     const back = [
         ["w", "y", "w"],
         ["y", "w", "y"],
         ["w", "y", "w"]
     ];
-    map.set(Side.Back, back.map(row => row.map(color => COLORS.get(color) as THREE.Color)));
+    map.set(Side.Back, back);
     const up = [
         ["b", "g", "b"],
         ["g", "b", "g"],
         ["b", "g", "b"]
     ];
-    map.set(Side.Up, up.map(row => row.map(color => COLORS.get(color) as THREE.Color)));
+    map.set(Side.Up, up);
     const down = [
         ["g", "b", "g"],
         ["b", "g", "b"],
         ["g", "b", "g"]
     ];
-    map.set(Side.Down, down.map(row => row.map(color => COLORS.get(color) as THREE.Color)));
+    map.set(Side.Down, down);
     const left = [
         ["r", "o", "r"],
         ["o", "r", "o"],
         ["r", "o", "r"]
     ];
-    map.set(Side.Left, left.map(row => row.map(color => COLORS.get(color) as THREE.Color)));
+    map.set(Side.Left, left);
     const right = [
         ["o", "r", "o"],
         ["r", "o", "r"],
         ["o", "r", "o"]
     ];
-    map.set(Side.Right, right.map(row => row.map(color => COLORS.get(color) as THREE.Color)));
+    map.set(Side.Right, right);
     return map;
 }
 
-export const ColorsChecker: Map<Side, THREE.Color[][]> = colorsChecker();
+export const ColorsChecker: Map<Side, string[][]> = colorsChecker();
 
 function colorsSolved(): Map<Side, THREE.Color[][]> {
     let map = new Map<Side, THREE.Color[][]>();

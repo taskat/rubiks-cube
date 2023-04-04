@@ -2,64 +2,75 @@ package errorhandler
 
 import "fmt"
 
-type IMessage interface {
-	GetLevel() Level
-	fmt.Stringer
+type Errorhandler struct {
+	messages map[Level][]Message
 }
 
-type errorhandler struct {
-	messages map[Level][]IMessage
+func NewHandler() Errorhandler {
+	m := make(map[Level][]Message, 0)
+	m["ERROR"] = make([]Message, 0)
+	m["WARNING"] = make([]Message, 0)
+	m["INFO"] = make([]Message, 0)
+	return Errorhandler{messages: m}
 }
 
-func newHandler() errorhandler {
-	m := make(map[Level][]IMessage, 0)
-	m["ERROR"] = make([]IMessage, 0)
-	m["WARNING"] = make([]IMessage, 0)
-	m["INFO"] = make([]IMessage, 0)
-	return errorhandler{messages: m}
-}
-
-func (e *errorhandler) addMessage(m Message) {
+func (e *Errorhandler) AddMessage(m Message) {
 	e.messages[m.GetLevel()] = append(e.messages[m.GetLevel()], m)
 }
 
-var handler = newHandler()
-
-func AddError(ctx IContext, text, file string) {
+func (e *Errorhandler) AddError(ctx IContext, text, file string) {
 	error := NewMessage(ctx, text, file, ERROR)
-	handler.addMessage(error)
+	e.AddMessage(error)
 }
 
-func AddInfo(ctx IContext, text, file string) {
+func (e *Errorhandler) AddInfo(ctx IContext, text, file string) {
 	info := NewMessage(ctx, text, file, INFO)
-	handler.addMessage(info)
+	e.AddMessage(info)
 }
 
-func AddWarning(ctx IContext, text, file string) {
+func (e *Errorhandler) AddWarning(ctx IContext, text, file string) {
 	warning := NewMessage(ctx, text, file, WARNING)
-	handler.addMessage(warning)
+	e.AddMessage(warning)
 }
 
-func AddMessage(m Message) {
-	handler.addMessage(m)
+func (e *Errorhandler) GetMessages() []Message {
+	var msgs []Message
+	for _, m := range e.messages {
+		msgs = append(msgs, m...)
+	}
+	return msgs
 }
 
-func GetAllMessages() map[Level][]IMessage {
-	return handler.messages
+func (e *Errorhandler) GetMessagesByLevel() map[Level][]Message {
+	return e.messages
 }
 
-func GetErrors() []IMessage {
-	return handler.messages["ERROR"]
+func (e *Errorhandler) GetErrors() []Message {
+	return e.messages["ERROR"]
 }
 
-func GetInfos() []IMessage {
-	return handler.messages["INFO"]
+func (e *Errorhandler) GetInfos() []Message {
+	return e.messages["INFO"]
 }
 
-func GetWarnings() []IMessage {
-	return handler.messages["WARNING"]
+func (e *Errorhandler) GetWarnings() []Message {
+	return e.messages["WARNING"]
 }
 
-func HasErrors() bool {
-	return len(handler.messages["ERROR"]) > 0
+func (e *Errorhandler) HasErrors() bool {
+	return len(e.messages["ERROR"]) > 0
+}
+
+func (e *Errorhandler) PrintAll() {
+	fmt.Println("======")
+	for level, msgs := range e.messages {
+		if len(msgs) == 0 {
+			fmt.Println("There were no " + level + "s")
+		} else {
+			fmt.Println(level + "s:")
+			for _, msg := range msgs {
+				fmt.Println("  " + msg.String())
+			}
+		}
+	}
 }

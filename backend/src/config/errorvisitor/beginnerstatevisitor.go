@@ -37,10 +37,8 @@ func (v *beginnerStateVisitor) checkColors(ctx *cp.BeginnerStateContext) {
 		return
 	}
 	for _, side := range ctx.AllSide() {
-		for _, row := range side.(*cp.SideContext).AllRow() {
-			for _, cell := range row.(*cp.RowContext).AllColor() {
-				v.colors[cell.GetText()]++
-			}
+		for _, cell := range side.(*cp.SideContext).AllColor() {
+			v.colors[cell.GetText()]++
 		}
 	}
 	stateCtx := ctx.GetParent().(*cp.StateContext)
@@ -67,29 +65,13 @@ func (v *beginnerStateVisitor) visitBeginnerState(ctx *cp.BeginnerStateContext) 
 }
 
 func (v *beginnerStateVisitor) visitSide(ctx *cp.SideContext) {
-	rows := ctx.AllRow()
-	if len(rows) < 3 {
-		warningMsg := fmt.Sprintf("side state should have 3 rows, has %d", len(rows))
+	colors := ctx.AllColor()
+	if len(colors) < 9 {
+		warningMsg := fmt.Sprintf("side state should have 9 cells, has %d", len(colors))
 		v.eh.AddWarning(ctx, warningMsg, v.fileName)
 		v.finished = false
-	} else if len(rows) > 3 {
-		errorMsg := fmt.Sprintf("invalid number of rows, wanted 3, has %d", len(rows))
-		v.eh.AddError(ctx, errorMsg, v.fileName)
-		v.valid = false
-	}
-	for _, row := range rows {
-		v.visitRow(row.(*cp.RowContext))
-	}
-}
-
-func (v *beginnerStateVisitor) visitRow(ctx *cp.RowContext) {
-	cells := ctx.AllColor()
-	if len(cells) < 3 {
-		errorMsg := fmt.Sprintf("side state row should have 3 cells, have %d", len(cells))
-		v.eh.AddWarning(ctx, errorMsg, v.fileName)
-		v.finished = false
-	} else if len(cells) > 3 {
-		errorMsg := fmt.Sprintf("invalid number of cells, wanted 3, have %d", len(cells))
+	} else if len(colors) > 9 {
+		errorMsg := fmt.Sprintf("invalid number of cell, wanted 9, has %d", len(colors))
 		v.eh.AddError(ctx, errorMsg, v.fileName)
 		v.valid = false
 	}

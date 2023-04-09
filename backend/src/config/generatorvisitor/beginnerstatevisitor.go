@@ -8,10 +8,11 @@ import (
 )
 
 type beginnerStateVisitor struct {
+	size int
 }
 
-func newBeginnerStateVisitor() *beginnerStateVisitor {
-	return &beginnerStateVisitor{}
+func newBeginnerStateVisitor(size int) *beginnerStateVisitor {
+	return &beginnerStateVisitor{size: size}
 }
 
 func (v *beginnerStateVisitor) visitBeginnerState(ctx *cp.BeginnerStateContext) models.Puzzle {
@@ -29,9 +30,15 @@ func (v *beginnerStateVisitor) visitColor(ctx *cp.ColorContext) color.Color {
 
 func (v *beginnerStateVisitor) visitSide(ctx *cp.SideContext) (cube.CubeSide, cube.Side) {
 	cubeSide := v.visitSideDef(ctx.SideDef().(*cp.SideDefContext))
-	side := make(cube.Side, len(ctx.AllRow()))
-	for i, row := range ctx.AllRow() {
-		side[i] = v.visitRow(row.(*cp.RowContext))
+	side := make(cube.Side, v.size)
+	for i := range side {
+		side[i] = make([]color.Color, v.size)
+		for j := range side[i] {
+			side[i][j] = color.Color("-")
+		}
+	}
+	for i, color := range ctx.AllColor() {
+		side[i/v.size][i%v.size] = v.visitColor(color.(*cp.ColorContext))
 	}
 	return cubeSide, side
 }
@@ -53,12 +60,4 @@ func (v *beginnerStateVisitor) visitSideDef(ctx *cp.SideDefContext) cube.CubeSid
 	default:
 		panic("invalid side")
 	}
-}
-
-func (v *beginnerStateVisitor) visitRow(ctx *cp.RowContext) []color.Color {
-	row := make([]color.Color, len(ctx.AllColor()))
-	for i, color := range ctx.AllColor() {
-		row[i] = v.visitColor(color.(*cp.ColorContext))
-	}
-	return row
 }

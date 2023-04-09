@@ -46,73 +46,67 @@ func configparserParserInit() {
 	staticData.ruleNames = []string{
 		"configFile", "configLine", "puzzleTypeDef", "puzzleType", "sizeDef",
 		"stateDescriptionDef", "stateDescription", "stateDef", "state", "beginnerState",
-		"side", "sideDef", "row", "color", "advancedState", "corners", "cornerLayer",
+		"side", "sideDef", "color", "advancedState", "corners", "cornerLayer",
 		"layerDef", "corner", "edges", "edgeLayer", "edge",
 	}
 	staticData.predictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 28, 153, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 1, 28, 140, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
 		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 2, 10, 7,
 		10, 2, 11, 7, 11, 2, 12, 7, 12, 2, 13, 7, 13, 2, 14, 7, 14, 2, 15, 7, 15,
-		2, 16, 7, 16, 2, 17, 7, 17, 2, 18, 7, 18, 2, 19, 7, 19, 2, 20, 7, 20, 2,
-		21, 7, 21, 1, 0, 5, 0, 46, 8, 0, 10, 0, 12, 0, 49, 9, 0, 1, 0, 1, 0, 1,
-		1, 1, 1, 1, 1, 1, 1, 3, 1, 57, 8, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1, 3, 1, 3,
-		1, 4, 1, 4, 1, 4, 1, 4, 1, 5, 1, 5, 1, 5, 1, 5, 1, 6, 1, 6, 1, 7, 1, 7,
-		1, 7, 1, 7, 1, 8, 1, 8, 1, 8, 3, 8, 82, 8, 8, 1, 9, 1, 9, 4, 9, 86, 8,
-		9, 11, 9, 12, 9, 87, 1, 9, 1, 9, 1, 10, 1, 10, 1, 10, 4, 10, 95, 8, 10,
-		11, 10, 12, 10, 96, 1, 11, 1, 11, 1, 12, 1, 12, 4, 12, 103, 8, 12, 11,
-		12, 12, 12, 104, 1, 12, 1, 12, 1, 13, 1, 13, 1, 14, 1, 14, 1, 14, 1, 14,
-		1, 14, 1, 14, 3, 14, 117, 8, 14, 1, 15, 1, 15, 1, 15, 4, 15, 122, 8, 15,
-		11, 15, 12, 15, 123, 1, 16, 1, 16, 1, 16, 4, 16, 129, 8, 16, 11, 16, 12,
-		16, 130, 1, 17, 1, 17, 1, 18, 1, 18, 1, 19, 1, 19, 1, 19, 4, 19, 140, 8,
-		19, 11, 19, 12, 19, 141, 1, 20, 1, 20, 1, 20, 4, 20, 147, 8, 20, 11, 20,
-		12, 20, 148, 1, 21, 1, 21, 1, 21, 0, 0, 22, 0, 2, 4, 6, 8, 10, 12, 14,
-		16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 0, 3, 2, 0, 1,
-		1, 3, 3, 5, 0, 2, 2, 6, 6, 8, 9, 13, 13, 17, 17, 3, 0, 6, 6, 10, 10, 17,
-		17, 144, 0, 47, 1, 0, 0, 0, 2, 56, 1, 0, 0, 0, 4, 58, 1, 0, 0, 0, 6, 62,
-		1, 0, 0, 0, 8, 64, 1, 0, 0, 0, 10, 68, 1, 0, 0, 0, 12, 72, 1, 0, 0, 0,
-		14, 74, 1, 0, 0, 0, 16, 81, 1, 0, 0, 0, 18, 83, 1, 0, 0, 0, 20, 91, 1,
-		0, 0, 0, 22, 98, 1, 0, 0, 0, 24, 100, 1, 0, 0, 0, 26, 108, 1, 0, 0, 0,
-		28, 116, 1, 0, 0, 0, 30, 118, 1, 0, 0, 0, 32, 125, 1, 0, 0, 0, 34, 132,
-		1, 0, 0, 0, 36, 134, 1, 0, 0, 0, 38, 136, 1, 0, 0, 0, 40, 143, 1, 0, 0,
-		0, 42, 150, 1, 0, 0, 0, 44, 46, 3, 2, 1, 0, 45, 44, 1, 0, 0, 0, 46, 49,
-		1, 0, 0, 0, 47, 45, 1, 0, 0, 0, 47, 48, 1, 0, 0, 0, 48, 50, 1, 0, 0, 0,
-		49, 47, 1, 0, 0, 0, 50, 51, 5, 0, 0, 1, 51, 1, 1, 0, 0, 0, 52, 57, 3, 4,
-		2, 0, 53, 57, 3, 8, 4, 0, 54, 57, 3, 10, 5, 0, 55, 57, 3, 14, 7, 0, 56,
-		52, 1, 0, 0, 0, 56, 53, 1, 0, 0, 0, 56, 54, 1, 0, 0, 0, 56, 55, 1, 0, 0,
-		0, 57, 3, 1, 0, 0, 0, 58, 59, 5, 11, 0, 0, 59, 60, 5, 24, 0, 0, 60, 61,
-		3, 6, 3, 0, 61, 5, 1, 0, 0, 0, 62, 63, 5, 5, 0, 0, 63, 7, 1, 0, 0, 0, 64,
-		65, 5, 14, 0, 0, 65, 66, 5, 24, 0, 0, 66, 67, 5, 25, 0, 0, 67, 9, 1, 0,
-		0, 0, 68, 69, 5, 16, 0, 0, 69, 70, 5, 24, 0, 0, 70, 71, 3, 12, 6, 0, 71,
-		11, 1, 0, 0, 0, 72, 73, 7, 0, 0, 0, 73, 13, 1, 0, 0, 0, 74, 75, 5, 15,
-		0, 0, 75, 76, 5, 24, 0, 0, 76, 77, 3, 16, 8, 0, 77, 15, 1, 0, 0, 0, 78,
-		82, 5, 12, 0, 0, 79, 82, 3, 18, 9, 0, 80, 82, 3, 28, 14, 0, 81, 78, 1,
-		0, 0, 0, 81, 79, 1, 0, 0, 0, 81, 80, 1, 0, 0, 0, 82, 17, 1, 0, 0, 0, 83,
-		85, 5, 18, 0, 0, 84, 86, 3, 20, 10, 0, 85, 84, 1, 0, 0, 0, 86, 87, 1, 0,
-		0, 0, 87, 85, 1, 0, 0, 0, 87, 88, 1, 0, 0, 0, 88, 89, 1, 0, 0, 0, 89, 90,
-		5, 19, 0, 0, 90, 19, 1, 0, 0, 0, 91, 92, 3, 22, 11, 0, 92, 94, 5, 24, 0,
-		0, 93, 95, 3, 24, 12, 0, 94, 93, 1, 0, 0, 0, 95, 96, 1, 0, 0, 0, 96, 94,
-		1, 0, 0, 0, 96, 97, 1, 0, 0, 0, 97, 21, 1, 0, 0, 0, 98, 99, 7, 1, 0, 0,
-		99, 23, 1, 0, 0, 0, 100, 102, 5, 22, 0, 0, 101, 103, 3, 26, 13, 0, 102,
-		101, 1, 0, 0, 0, 103, 104, 1, 0, 0, 0, 104, 102, 1, 0, 0, 0, 104, 105,
-		1, 0, 0, 0, 105, 106, 1, 0, 0, 0, 106, 107, 5, 23, 0, 0, 107, 25, 1, 0,
-		0, 0, 108, 109, 5, 26, 0, 0, 109, 27, 1, 0, 0, 0, 110, 111, 3, 30, 15,
-		0, 111, 112, 3, 38, 19, 0, 112, 117, 1, 0, 0, 0, 113, 114, 3, 38, 19, 0,
-		114, 115, 3, 30, 15, 0, 115, 117, 1, 0, 0, 0, 116, 110, 1, 0, 0, 0, 116,
-		113, 1, 0, 0, 0, 117, 29, 1, 0, 0, 0, 118, 119, 5, 4, 0, 0, 119, 121, 5,
-		24, 0, 0, 120, 122, 3, 32, 16, 0, 121, 120, 1, 0, 0, 0, 122, 123, 1, 0,
-		0, 0, 123, 121, 1, 0, 0, 0, 123, 124, 1, 0, 0, 0, 124, 31, 1, 0, 0, 0,
-		125, 126, 3, 34, 17, 0, 126, 128, 5, 24, 0, 0, 127, 129, 3, 36, 18, 0,
-		128, 127, 1, 0, 0, 0, 129, 130, 1, 0, 0, 0, 130, 128, 1, 0, 0, 0, 130,
-		131, 1, 0, 0, 0, 131, 33, 1, 0, 0, 0, 132, 133, 7, 2, 0, 0, 133, 35, 1,
-		0, 0, 0, 134, 135, 5, 26, 0, 0, 135, 37, 1, 0, 0, 0, 136, 137, 5, 7, 0,
-		0, 137, 139, 5, 24, 0, 0, 138, 140, 3, 40, 20, 0, 139, 138, 1, 0, 0, 0,
-		140, 141, 1, 0, 0, 0, 141, 139, 1, 0, 0, 0, 141, 142, 1, 0, 0, 0, 142,
-		39, 1, 0, 0, 0, 143, 144, 3, 34, 17, 0, 144, 146, 5, 24, 0, 0, 145, 147,
-		3, 42, 21, 0, 146, 145, 1, 0, 0, 0, 147, 148, 1, 0, 0, 0, 148, 146, 1,
-		0, 0, 0, 148, 149, 1, 0, 0, 0, 149, 41, 1, 0, 0, 0, 150, 151, 5, 26, 0,
-		0, 151, 43, 1, 0, 0, 0, 11, 47, 56, 81, 87, 96, 104, 116, 123, 130, 141,
-		148,
+		2, 16, 7, 16, 2, 17, 7, 17, 2, 18, 7, 18, 2, 19, 7, 19, 2, 20, 7, 20, 1,
+		0, 5, 0, 44, 8, 0, 10, 0, 12, 0, 47, 9, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1,
+		1, 1, 3, 1, 55, 8, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1, 3, 1, 3, 1, 4, 1, 4, 1,
+		4, 1, 4, 1, 5, 1, 5, 1, 5, 1, 5, 1, 6, 1, 6, 1, 7, 1, 7, 1, 7, 1, 7, 1,
+		8, 1, 8, 1, 8, 3, 8, 80, 8, 8, 1, 9, 4, 9, 83, 8, 9, 11, 9, 12, 9, 84,
+		1, 10, 1, 10, 1, 10, 4, 10, 90, 8, 10, 11, 10, 12, 10, 91, 1, 11, 1, 11,
+		1, 12, 1, 12, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 3, 13, 104, 8,
+		13, 1, 14, 1, 14, 1, 14, 4, 14, 109, 8, 14, 11, 14, 12, 14, 110, 1, 15,
+		1, 15, 1, 15, 4, 15, 116, 8, 15, 11, 15, 12, 15, 117, 1, 16, 1, 16, 1,
+		17, 1, 17, 1, 18, 1, 18, 1, 18, 4, 18, 127, 8, 18, 11, 18, 12, 18, 128,
+		1, 19, 1, 19, 1, 19, 4, 19, 134, 8, 19, 11, 19, 12, 19, 135, 1, 20, 1,
+		20, 1, 20, 0, 0, 21, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26,
+		28, 30, 32, 34, 36, 38, 40, 0, 3, 2, 0, 1, 1, 3, 3, 5, 0, 2, 2, 6, 6, 8,
+		9, 13, 13, 17, 17, 3, 0, 6, 6, 10, 10, 17, 17, 131, 0, 45, 1, 0, 0, 0,
+		2, 54, 1, 0, 0, 0, 4, 56, 1, 0, 0, 0, 6, 60, 1, 0, 0, 0, 8, 62, 1, 0, 0,
+		0, 10, 66, 1, 0, 0, 0, 12, 70, 1, 0, 0, 0, 14, 72, 1, 0, 0, 0, 16, 79,
+		1, 0, 0, 0, 18, 82, 1, 0, 0, 0, 20, 86, 1, 0, 0, 0, 22, 93, 1, 0, 0, 0,
+		24, 95, 1, 0, 0, 0, 26, 103, 1, 0, 0, 0, 28, 105, 1, 0, 0, 0, 30, 112,
+		1, 0, 0, 0, 32, 119, 1, 0, 0, 0, 34, 121, 1, 0, 0, 0, 36, 123, 1, 0, 0,
+		0, 38, 130, 1, 0, 0, 0, 40, 137, 1, 0, 0, 0, 42, 44, 3, 2, 1, 0, 43, 42,
+		1, 0, 0, 0, 44, 47, 1, 0, 0, 0, 45, 43, 1, 0, 0, 0, 45, 46, 1, 0, 0, 0,
+		46, 48, 1, 0, 0, 0, 47, 45, 1, 0, 0, 0, 48, 49, 5, 0, 0, 1, 49, 1, 1, 0,
+		0, 0, 50, 55, 3, 4, 2, 0, 51, 55, 3, 8, 4, 0, 52, 55, 3, 10, 5, 0, 53,
+		55, 3, 14, 7, 0, 54, 50, 1, 0, 0, 0, 54, 51, 1, 0, 0, 0, 54, 52, 1, 0,
+		0, 0, 54, 53, 1, 0, 0, 0, 55, 3, 1, 0, 0, 0, 56, 57, 5, 11, 0, 0, 57, 58,
+		5, 24, 0, 0, 58, 59, 3, 6, 3, 0, 59, 5, 1, 0, 0, 0, 60, 61, 5, 5, 0, 0,
+		61, 7, 1, 0, 0, 0, 62, 63, 5, 14, 0, 0, 63, 64, 5, 24, 0, 0, 64, 65, 5,
+		25, 0, 0, 65, 9, 1, 0, 0, 0, 66, 67, 5, 16, 0, 0, 67, 68, 5, 24, 0, 0,
+		68, 69, 3, 12, 6, 0, 69, 11, 1, 0, 0, 0, 70, 71, 7, 0, 0, 0, 71, 13, 1,
+		0, 0, 0, 72, 73, 5, 15, 0, 0, 73, 74, 5, 24, 0, 0, 74, 75, 3, 16, 8, 0,
+		75, 15, 1, 0, 0, 0, 76, 80, 5, 12, 0, 0, 77, 80, 3, 18, 9, 0, 78, 80, 3,
+		26, 13, 0, 79, 76, 1, 0, 0, 0, 79, 77, 1, 0, 0, 0, 79, 78, 1, 0, 0, 0,
+		80, 17, 1, 0, 0, 0, 81, 83, 3, 20, 10, 0, 82, 81, 1, 0, 0, 0, 83, 84, 1,
+		0, 0, 0, 84, 82, 1, 0, 0, 0, 84, 85, 1, 0, 0, 0, 85, 19, 1, 0, 0, 0, 86,
+		87, 3, 22, 11, 0, 87, 89, 5, 24, 0, 0, 88, 90, 3, 24, 12, 0, 89, 88, 1,
+		0, 0, 0, 90, 91, 1, 0, 0, 0, 91, 89, 1, 0, 0, 0, 91, 92, 1, 0, 0, 0, 92,
+		21, 1, 0, 0, 0, 93, 94, 7, 1, 0, 0, 94, 23, 1, 0, 0, 0, 95, 96, 5, 26,
+		0, 0, 96, 25, 1, 0, 0, 0, 97, 98, 3, 28, 14, 0, 98, 99, 3, 36, 18, 0, 99,
+		104, 1, 0, 0, 0, 100, 101, 3, 36, 18, 0, 101, 102, 3, 28, 14, 0, 102, 104,
+		1, 0, 0, 0, 103, 97, 1, 0, 0, 0, 103, 100, 1, 0, 0, 0, 104, 27, 1, 0, 0,
+		0, 105, 106, 5, 4, 0, 0, 106, 108, 5, 24, 0, 0, 107, 109, 3, 30, 15, 0,
+		108, 107, 1, 0, 0, 0, 109, 110, 1, 0, 0, 0, 110, 108, 1, 0, 0, 0, 110,
+		111, 1, 0, 0, 0, 111, 29, 1, 0, 0, 0, 112, 113, 3, 32, 16, 0, 113, 115,
+		5, 24, 0, 0, 114, 116, 3, 34, 17, 0, 115, 114, 1, 0, 0, 0, 116, 117, 1,
+		0, 0, 0, 117, 115, 1, 0, 0, 0, 117, 118, 1, 0, 0, 0, 118, 31, 1, 0, 0,
+		0, 119, 120, 7, 2, 0, 0, 120, 33, 1, 0, 0, 0, 121, 122, 5, 26, 0, 0, 122,
+		35, 1, 0, 0, 0, 123, 124, 5, 7, 0, 0, 124, 126, 5, 24, 0, 0, 125, 127,
+		3, 38, 19, 0, 126, 125, 1, 0, 0, 0, 127, 128, 1, 0, 0, 0, 128, 126, 1,
+		0, 0, 0, 128, 129, 1, 0, 0, 0, 129, 37, 1, 0, 0, 0, 130, 131, 3, 32, 16,
+		0, 131, 133, 5, 24, 0, 0, 132, 134, 3, 40, 20, 0, 133, 132, 1, 0, 0, 0,
+		134, 135, 1, 0, 0, 0, 135, 133, 1, 0, 0, 0, 135, 136, 1, 0, 0, 0, 136,
+		39, 1, 0, 0, 0, 137, 138, 5, 26, 0, 0, 138, 41, 1, 0, 0, 0, 10, 45, 54,
+		79, 84, 91, 103, 110, 117, 128, 135,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -195,16 +189,15 @@ const (
 	ConfigParserRULE_beginnerState       = 9
 	ConfigParserRULE_side                = 10
 	ConfigParserRULE_sideDef             = 11
-	ConfigParserRULE_row                 = 12
-	ConfigParserRULE_color               = 13
-	ConfigParserRULE_advancedState       = 14
-	ConfigParserRULE_corners             = 15
-	ConfigParserRULE_cornerLayer         = 16
-	ConfigParserRULE_layerDef            = 17
-	ConfigParserRULE_corner              = 18
-	ConfigParserRULE_edges               = 19
-	ConfigParserRULE_edgeLayer           = 20
-	ConfigParserRULE_edge                = 21
+	ConfigParserRULE_color               = 12
+	ConfigParserRULE_advancedState       = 13
+	ConfigParserRULE_corners             = 14
+	ConfigParserRULE_cornerLayer         = 15
+	ConfigParserRULE_layerDef            = 16
+	ConfigParserRULE_corner              = 17
+	ConfigParserRULE_edges               = 18
+	ConfigParserRULE_edgeLayer           = 19
+	ConfigParserRULE_edge                = 20
 )
 
 // IConfigFileContext is an interface to support dynamic dispatch.
@@ -323,22 +316,22 @@ func (p *ConfigParser) ConfigFile() (localctx IConfigFileContext) {
 	}()
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(47)
+	p.SetState(45)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for ((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<ConfigParserPUZZLE)|(1<<ConfigParserSIZE)|(1<<ConfigParserSTATE)|(1<<ConfigParserSTATE_DESCRIPTION))) != 0 {
 		{
-			p.SetState(44)
+			p.SetState(42)
 			p.ConfigLine()
 		}
 
-		p.SetState(49)
+		p.SetState(47)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(50)
+		p.SetState(48)
 		p.Match(ConfigParserEOF)
 	}
 
@@ -478,35 +471,35 @@ func (p *ConfigParser) ConfigLine() (localctx IConfigLineContext) {
 		}
 	}()
 
-	p.SetState(56)
+	p.SetState(54)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case ConfigParserPUZZLE:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(52)
+			p.SetState(50)
 			p.PuzzleTypeDef()
 		}
 
 	case ConfigParserSIZE:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(53)
+			p.SetState(51)
 			p.SizeDef()
 		}
 
 	case ConfigParserSTATE_DESCRIPTION:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(54)
+			p.SetState(52)
 			p.StateDescriptionDef()
 		}
 
 	case ConfigParserSTATE:
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(55)
+			p.SetState(53)
 			p.StateDef()
 		}
 
@@ -612,15 +605,15 @@ func (p *ConfigParser) PuzzleTypeDef() (localctx IPuzzleTypeDefContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(58)
+		p.SetState(56)
 		p.Match(ConfigParserPUZZLE)
 	}
 	{
-		p.SetState(59)
+		p.SetState(57)
 		p.Match(ConfigParserCOLON)
 	}
 	{
-		p.SetState(60)
+		p.SetState(58)
 		p.PuzzleType()
 	}
 
@@ -702,7 +695,7 @@ func (p *ConfigParser) PuzzleType() (localctx IPuzzleTypeContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(62)
+		p.SetState(60)
 		p.Match(ConfigParserCUBE)
 	}
 
@@ -792,15 +785,15 @@ func (p *ConfigParser) SizeDef() (localctx ISizeDefContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(64)
+		p.SetState(62)
 		p.Match(ConfigParserSIZE)
 	}
 	{
-		p.SetState(65)
+		p.SetState(63)
 		p.Match(ConfigParserCOLON)
 	}
 	{
-		p.SetState(66)
+		p.SetState(64)
 		p.Match(ConfigParserNUMBER)
 	}
 
@@ -902,15 +895,15 @@ func (p *ConfigParser) StateDescriptionDef() (localctx IStateDescriptionDefConte
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(68)
+		p.SetState(66)
 		p.Match(ConfigParserSTATE_DESCRIPTION)
 	}
 	{
-		p.SetState(69)
+		p.SetState(67)
 		p.Match(ConfigParserCOLON)
 	}
 	{
-		p.SetState(70)
+		p.SetState(68)
 		p.StateDescription()
 	}
 
@@ -997,7 +990,7 @@ func (p *ConfigParser) StateDescription() (localctx IStateDescriptionContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(72)
+		p.SetState(70)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(_la == ConfigParserADVANCED || _la == ConfigParserBEGINNER) {
@@ -1106,15 +1099,15 @@ func (p *ConfigParser) StateDef() (localctx IStateDefContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(74)
+		p.SetState(72)
 		p.Match(ConfigParserSTATE)
 	}
 	{
-		p.SetState(75)
+		p.SetState(73)
 		p.Match(ConfigParserCOLON)
 	}
 	{
-		p.SetState(76)
+		p.SetState(74)
 		p.State()
 	}
 
@@ -1226,28 +1219,28 @@ func (p *ConfigParser) State() (localctx IStateContext) {
 		}
 	}()
 
-	p.SetState(81)
+	p.SetState(79)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case ConfigParserRANDOM:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(78)
+			p.SetState(76)
 			p.Match(ConfigParserRANDOM)
 		}
 
-	case ConfigParserLCURLY:
+	case ConfigParserBACK, ConfigParserDOWN, ConfigParserFRONT, ConfigParserLEFT, ConfigParserRIGHT, ConfigParserUP:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(79)
+			p.SetState(77)
 			p.BeginnerState()
 		}
 
 	case ConfigParserCORNERS, ConfigParserEDGES:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(80)
+			p.SetState(78)
 			p.AdvancedState()
 		}
 
@@ -1295,14 +1288,6 @@ func NewBeginnerStateContext(parser antlr.Parser, parent antlr.ParserRuleContext
 }
 
 func (s *BeginnerStateContext) GetParser() antlr.Parser { return s.parser }
-
-func (s *BeginnerStateContext) LCURLY() antlr.TerminalNode {
-	return s.GetToken(ConfigParserLCURLY, 0)
-}
-
-func (s *BeginnerStateContext) RCURLY() antlr.TerminalNode {
-	return s.GetToken(ConfigParserRCURLY, 0)
-}
 
 func (s *BeginnerStateContext) AllSide() []ISideContext {
 	children := s.GetChildren()
@@ -1378,27 +1363,19 @@ func (p *ConfigParser) BeginnerState() (localctx IBeginnerStateContext) {
 	}()
 
 	p.EnterOuterAlt(localctx, 1)
-	{
-		p.SetState(83)
-		p.Match(ConfigParserLCURLY)
-	}
-	p.SetState(85)
+	p.SetState(82)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for ok := true; ok; ok = (((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<ConfigParserBACK)|(1<<ConfigParserDOWN)|(1<<ConfigParserFRONT)|(1<<ConfigParserLEFT)|(1<<ConfigParserRIGHT)|(1<<ConfigParserUP))) != 0) {
 		{
-			p.SetState(84)
+			p.SetState(81)
 			p.Side()
 		}
 
-		p.SetState(87)
+		p.SetState(84)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
-	}
-	{
-		p.SetState(89)
-		p.Match(ConfigParserRCURLY)
 	}
 
 	return localctx
@@ -1462,20 +1439,20 @@ func (s *SideContext) COLON() antlr.TerminalNode {
 	return s.GetToken(ConfigParserCOLON, 0)
 }
 
-func (s *SideContext) AllRow() []IRowContext {
+func (s *SideContext) AllColor() []IColorContext {
 	children := s.GetChildren()
 	len := 0
 	for _, ctx := range children {
-		if _, ok := ctx.(IRowContext); ok {
+		if _, ok := ctx.(IColorContext); ok {
 			len++
 		}
 	}
 
-	tst := make([]IRowContext, len)
+	tst := make([]IColorContext, len)
 	i := 0
 	for _, ctx := range children {
-		if t, ok := ctx.(IRowContext); ok {
-			tst[i] = t.(IRowContext)
+		if t, ok := ctx.(IColorContext); ok {
+			tst[i] = t.(IColorContext)
 			i++
 		}
 	}
@@ -1483,11 +1460,11 @@ func (s *SideContext) AllRow() []IRowContext {
 	return tst
 }
 
-func (s *SideContext) Row(i int) IRowContext {
+func (s *SideContext) Color(i int) IColorContext {
 	var t antlr.RuleContext
 	j := 0
 	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(IRowContext); ok {
+		if _, ok := ctx.(IColorContext); ok {
 			if j == i {
 				t = ctx.(antlr.RuleContext)
 				break
@@ -1500,7 +1477,7 @@ func (s *SideContext) Row(i int) IRowContext {
 		return nil
 	}
 
-	return t.(IRowContext)
+	return t.(IColorContext)
 }
 
 func (s *SideContext) GetRuleContext() antlr.RuleContext {
@@ -1537,24 +1514,24 @@ func (p *ConfigParser) Side() (localctx ISideContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(91)
+		p.SetState(86)
 		p.SideDef()
 	}
 	{
-		p.SetState(92)
+		p.SetState(87)
 		p.Match(ConfigParserCOLON)
 	}
-	p.SetState(94)
+	p.SetState(89)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	for ok := true; ok; ok = _la == ConfigParserLPAREN {
+	for ok := true; ok; ok = _la == ConfigParserWORD {
 		{
-			p.SetState(93)
-			p.Row()
+			p.SetState(88)
+			p.Color()
 		}
 
-		p.SetState(96)
+		p.SetState(91)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -1658,7 +1635,7 @@ func (p *ConfigParser) SideDef() (localctx ISideDefContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(98)
+		p.SetState(93)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<ConfigParserBACK)|(1<<ConfigParserDOWN)|(1<<ConfigParserFRONT)|(1<<ConfigParserLEFT)|(1<<ConfigParserRIGHT)|(1<<ConfigParserUP))) != 0) {
@@ -1667,152 +1644,6 @@ func (p *ConfigParser) SideDef() (localctx ISideDefContext) {
 			p.GetErrorHandler().ReportMatch(p)
 			p.Consume()
 		}
-	}
-
-	return localctx
-}
-
-// IRowContext is an interface to support dynamic dispatch.
-type IRowContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
-
-	// IsRowContext differentiates from other interfaces.
-	IsRowContext()
-}
-
-type RowContext struct {
-	*antlr.BaseParserRuleContext
-	parser antlr.Parser
-}
-
-func NewEmptyRowContext() *RowContext {
-	var p = new(RowContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = ConfigParserRULE_row
-	return p
-}
-
-func (*RowContext) IsRowContext() {}
-
-func NewRowContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *RowContext {
-	var p = new(RowContext)
-
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
-
-	p.parser = parser
-	p.RuleIndex = ConfigParserRULE_row
-
-	return p
-}
-
-func (s *RowContext) GetParser() antlr.Parser { return s.parser }
-
-func (s *RowContext) LPAREN() antlr.TerminalNode {
-	return s.GetToken(ConfigParserLPAREN, 0)
-}
-
-func (s *RowContext) RPAREN() antlr.TerminalNode {
-	return s.GetToken(ConfigParserRPAREN, 0)
-}
-
-func (s *RowContext) AllColor() []IColorContext {
-	children := s.GetChildren()
-	len := 0
-	for _, ctx := range children {
-		if _, ok := ctx.(IColorContext); ok {
-			len++
-		}
-	}
-
-	tst := make([]IColorContext, len)
-	i := 0
-	for _, ctx := range children {
-		if t, ok := ctx.(IColorContext); ok {
-			tst[i] = t.(IColorContext)
-			i++
-		}
-	}
-
-	return tst
-}
-
-func (s *RowContext) Color(i int) IColorContext {
-	var t antlr.RuleContext
-	j := 0
-	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(IColorContext); ok {
-			if j == i {
-				t = ctx.(antlr.RuleContext)
-				break
-			}
-			j++
-		}
-	}
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(IColorContext)
-}
-
-func (s *RowContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *RowContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
-	return antlr.TreesStringTree(s, ruleNames, recog)
-}
-
-func (p *ConfigParser) Row() (localctx IRowContext) {
-	this := p
-	_ = this
-
-	localctx = NewRowContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 24, ConfigParserRULE_row)
-	var _la int
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
-	p.EnterOuterAlt(localctx, 1)
-	{
-		p.SetState(100)
-		p.Match(ConfigParserLPAREN)
-	}
-	p.SetState(102)
-	p.GetErrorHandler().Sync(p)
-	_la = p.GetTokenStream().LA(1)
-
-	for ok := true; ok; ok = _la == ConfigParserWORD {
-		{
-			p.SetState(101)
-			p.Color()
-		}
-
-		p.SetState(104)
-		p.GetErrorHandler().Sync(p)
-		_la = p.GetTokenStream().LA(1)
-	}
-	{
-		p.SetState(106)
-		p.Match(ConfigParserRPAREN)
 	}
 
 	return localctx
@@ -1873,7 +1704,7 @@ func (p *ConfigParser) Color() (localctx IColorContext) {
 	_ = this
 
 	localctx = NewColorContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 26, ConfigParserRULE_color)
+	p.EnterRule(localctx, 24, ConfigParserRULE_color)
 
 	defer func() {
 		p.ExitRule()
@@ -1893,7 +1724,7 @@ func (p *ConfigParser) Color() (localctx IColorContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(108)
+		p.SetState(95)
 		p.Match(ConfigParserWORD)
 	}
 
@@ -1983,7 +1814,7 @@ func (p *ConfigParser) AdvancedState() (localctx IAdvancedStateContext) {
 	_ = this
 
 	localctx = NewAdvancedStateContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 28, ConfigParserRULE_advancedState)
+	p.EnterRule(localctx, 26, ConfigParserRULE_advancedState)
 
 	defer func() {
 		p.ExitRule()
@@ -2001,29 +1832,29 @@ func (p *ConfigParser) AdvancedState() (localctx IAdvancedStateContext) {
 		}
 	}()
 
-	p.SetState(116)
+	p.SetState(103)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case ConfigParserCORNERS:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(110)
+			p.SetState(97)
 			p.Corners()
 		}
 		{
-			p.SetState(111)
+			p.SetState(98)
 			p.Edges()
 		}
 
 	case ConfigParserEDGES:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(113)
+			p.SetState(100)
 			p.Edges()
 		}
 		{
-			p.SetState(114)
+			p.SetState(101)
 			p.Corners()
 		}
 
@@ -2134,7 +1965,7 @@ func (p *ConfigParser) Corners() (localctx ICornersContext) {
 	_ = this
 
 	localctx = NewCornersContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 30, ConfigParserRULE_corners)
+	p.EnterRule(localctx, 28, ConfigParserRULE_corners)
 	var _la int
 
 	defer func() {
@@ -2155,24 +1986,24 @@ func (p *ConfigParser) Corners() (localctx ICornersContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(118)
+		p.SetState(105)
 		p.Match(ConfigParserCORNERS)
 	}
 	{
-		p.SetState(119)
+		p.SetState(106)
 		p.Match(ConfigParserCOLON)
 	}
-	p.SetState(121)
+	p.SetState(108)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for ok := true; ok; ok = (((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<ConfigParserDOWN)|(1<<ConfigParserMIDDLE)|(1<<ConfigParserUP))) != 0) {
 		{
-			p.SetState(120)
+			p.SetState(107)
 			p.CornerLayer()
 		}
 
-		p.SetState(123)
+		p.SetState(110)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -2292,7 +2123,7 @@ func (p *ConfigParser) CornerLayer() (localctx ICornerLayerContext) {
 	_ = this
 
 	localctx = NewCornerLayerContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 32, ConfigParserRULE_cornerLayer)
+	p.EnterRule(localctx, 30, ConfigParserRULE_cornerLayer)
 	var _la int
 
 	defer func() {
@@ -2313,24 +2144,24 @@ func (p *ConfigParser) CornerLayer() (localctx ICornerLayerContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(125)
+		p.SetState(112)
 		p.LayerDef()
 	}
 	{
-		p.SetState(126)
+		p.SetState(113)
 		p.Match(ConfigParserCOLON)
 	}
-	p.SetState(128)
+	p.SetState(115)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for ok := true; ok; ok = _la == ConfigParserWORD {
 		{
-			p.SetState(127)
+			p.SetState(114)
 			p.Corner()
 		}
 
-		p.SetState(130)
+		p.SetState(117)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -2401,7 +2232,7 @@ func (p *ConfigParser) LayerDef() (localctx ILayerDefContext) {
 	_ = this
 
 	localctx = NewLayerDefContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 34, ConfigParserRULE_layerDef)
+	p.EnterRule(localctx, 32, ConfigParserRULE_layerDef)
 	var _la int
 
 	defer func() {
@@ -2422,7 +2253,7 @@ func (p *ConfigParser) LayerDef() (localctx ILayerDefContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(132)
+		p.SetState(119)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<ConfigParserDOWN)|(1<<ConfigParserMIDDLE)|(1<<ConfigParserUP))) != 0) {
@@ -2491,7 +2322,7 @@ func (p *ConfigParser) Corner() (localctx ICornerContext) {
 	_ = this
 
 	localctx = NewCornerContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 36, ConfigParserRULE_corner)
+	p.EnterRule(localctx, 34, ConfigParserRULE_corner)
 
 	defer func() {
 		p.ExitRule()
@@ -2511,7 +2342,7 @@ func (p *ConfigParser) Corner() (localctx ICornerContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(134)
+		p.SetState(121)
 		p.Match(ConfigParserWORD)
 	}
 
@@ -2618,7 +2449,7 @@ func (p *ConfigParser) Edges() (localctx IEdgesContext) {
 	_ = this
 
 	localctx = NewEdgesContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 38, ConfigParserRULE_edges)
+	p.EnterRule(localctx, 36, ConfigParserRULE_edges)
 	var _la int
 
 	defer func() {
@@ -2639,24 +2470,24 @@ func (p *ConfigParser) Edges() (localctx IEdgesContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(136)
+		p.SetState(123)
 		p.Match(ConfigParserEDGES)
 	}
 	{
-		p.SetState(137)
+		p.SetState(124)
 		p.Match(ConfigParserCOLON)
 	}
-	p.SetState(139)
+	p.SetState(126)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for ok := true; ok; ok = (((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<ConfigParserDOWN)|(1<<ConfigParserMIDDLE)|(1<<ConfigParserUP))) != 0) {
 		{
-			p.SetState(138)
+			p.SetState(125)
 			p.EdgeLayer()
 		}
 
-		p.SetState(141)
+		p.SetState(128)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -2776,7 +2607,7 @@ func (p *ConfigParser) EdgeLayer() (localctx IEdgeLayerContext) {
 	_ = this
 
 	localctx = NewEdgeLayerContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 40, ConfigParserRULE_edgeLayer)
+	p.EnterRule(localctx, 38, ConfigParserRULE_edgeLayer)
 	var _la int
 
 	defer func() {
@@ -2797,24 +2628,24 @@ func (p *ConfigParser) EdgeLayer() (localctx IEdgeLayerContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(143)
+		p.SetState(130)
 		p.LayerDef()
 	}
 	{
-		p.SetState(144)
+		p.SetState(131)
 		p.Match(ConfigParserCOLON)
 	}
-	p.SetState(146)
+	p.SetState(133)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for ok := true; ok; ok = _la == ConfigParserWORD {
 		{
-			p.SetState(145)
+			p.SetState(132)
 			p.Edge()
 		}
 
-		p.SetState(148)
+		p.SetState(135)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -2877,7 +2708,7 @@ func (p *ConfigParser) Edge() (localctx IEdgeContext) {
 	_ = this
 
 	localctx = NewEdgeContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 42, ConfigParserRULE_edge)
+	p.EnterRule(localctx, 40, ConfigParserRULE_edge)
 
 	defer func() {
 		p.ExitRule()
@@ -2897,7 +2728,7 @@ func (p *ConfigParser) Edge() (localctx IEdgeContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(150)
+		p.SetState(137)
 		p.Match(ConfigParserWORD)
 	}
 

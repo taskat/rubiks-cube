@@ -17,10 +17,9 @@ stateDescription: BEGINNER | ADVANCED;
 stateDef: STATE COLON state;
 state: RANDOM | beginnerState | advancedState;
 
-beginnerState: LCURLY side+ RCURLY;
-side: sideDef COLON row+;
+beginnerState: side+;
+side: sideDef COLON color+;
 sideDef: FRONT | BACK | LEFT | RIGHT | UP | DOWN;
-row: LPAREN color+ RPAREN;
 color: WORD;
 
 advancedState: corners edges | edges corners;

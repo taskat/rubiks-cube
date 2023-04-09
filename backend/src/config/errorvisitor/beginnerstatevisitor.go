@@ -78,11 +78,11 @@ func (v *beginnerStateVisitor) visitBeginnerState(ctx *cp.BeginnerStateContext) 
 func (v *beginnerStateVisitor) visitSide(ctx *cp.SideContext) {
 	rows := ctx.AllRow()
 	if len(rows) < 3 {
-		errorMsg := fmt.Sprintf("side state should have 3 rows, have %d", len(rows))
-		v.eh.AddWarning(ctx, errorMsg, v.fileName)
+		warningMsg := fmt.Sprintf("side state should have 3 rows, has %d", len(rows))
+		v.eh.AddWarning(ctx, warningMsg, v.fileName)
 		v.finished = false
 	} else if len(rows) > 3 {
-		errorMsg := fmt.Sprintf("invalid number of rows, wanted 3, have %d", len(rows))
+		errorMsg := fmt.Sprintf("invalid number of rows, wanted 3, has %d", len(rows))
 		v.eh.AddError(ctx, errorMsg, v.fileName)
 		v.valid = false
 	}

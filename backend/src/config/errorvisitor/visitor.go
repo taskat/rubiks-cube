@@ -27,10 +27,6 @@ func (v *Visitor) Visit(tree antlr.Tree) {
 	v.visitConfigFile(ctx)
 }
 
-func (v *Visitor) visitAdvancedState(ctx *cp.AdvancedStateContext) {
-	v.eh.AddError(ctx, "advanced stated description not implemented yet", v.fileName)
-}
-
 func (v *Visitor) visitConfigFile(ctx *cp.ConfigFileContext) {
 	puzzleDefs := getLines[*cp.PuzzleTypeDefContext](ctx.AllConfigLine())
 	puzzleDef := checkOnlyOneDef(puzzleDefs, "puzzle definition", true, v)
@@ -93,7 +89,8 @@ func (v *Visitor) visitState(ctx *cp.StateContext) {
 				v.eh.AddError(v.stateDescriptionCtx, errorMsg, v.fileName)
 			}
 		} else {
-			v.visitAdvancedState(ctx.AdvancedState().(*cp.AdvancedStateContext))
+			visitor := newAdvancedStateVisitor(v.fileName, v.eh)
+			visitor.visitAdvancedState(ctx.AdvancedState().(*cp.AdvancedStateContext))
 		}
 	}
 }

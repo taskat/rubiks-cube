@@ -1,6 +1,7 @@
 import Tab from "./tab";
 import * as monaco from "monaco-editor";
 import { State } from "./state";
+import { configText } from "./defaulttext";
 
 
 export default class Editor {
@@ -8,8 +9,8 @@ export default class Editor {
     editor: monaco.editor.IStandaloneCodeEditor;
     constructor() {
         let map = new Map();
-        map.set("config", new Tab(monaco.editor.createModel("Hello from config", "txt"), null));
-        map.set("algo", new Tab(monaco.editor.createModel("Hello from algo", "txt"), null));
+        map.set("config", new Tab(monaco.editor.createModel(this.getDefaultText("config"), "txt"), null));
+        map.set("algo", new Tab(monaco.editor.createModel(this.getDefaultText("algo"), "txt"), null));
         this.tabs = map;
         this.editor = monaco.editor.create(document.getElementById("editor") as HTMLElement, {
             model: this.tabs.get("config")?.model,
@@ -37,5 +38,13 @@ export default class Editor {
 
     getText(tab: string): string {
         return this.tabs.get(tab)?.model?.getValue() as string;
+    }
+
+    getDefaultText(tab: string): string {
+        if (tab === "config") {
+            return configText;
+        } else {
+            return "Hello from algo!";
+        }
     }
 }

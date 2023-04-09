@@ -78,7 +78,7 @@ func (v *Visitor) visitState(ctx *cp.StateContext) {
 				v.eh.AddError(v.stateDescriptionCtx, errorMsg, v.fileName)
 			}
 		} else {
-			visitor := newBeginnerStateVisitor(v.fileName, v.eh)
+			visitor := newBeginnerStateVisitor(v.fileName, &v.eh)
 			visitor.visitBeginnerState(ctx.BeginnerState().(*cp.BeginnerStateContext))
 		}
 	}
@@ -89,7 +89,7 @@ func (v *Visitor) visitState(ctx *cp.StateContext) {
 				v.eh.AddError(v.stateDescriptionCtx, errorMsg, v.fileName)
 			}
 		} else {
-			visitor := newAdvancedStateVisitor(v.fileName, v.eh)
+			visitor := newAdvancedStateVisitor(v.fileName, &v.eh)
 			visitor.visitAdvancedState(ctx.AdvancedState().(*cp.AdvancedStateContext))
 		}
 	}

@@ -8,14 +8,11 @@ import (
 )
 
 type beginnerStateVisitor struct {
-	fileName string
-	finished bool
-	valid    bool
-	eh       eh.Errorhandler
+	baseVisitor
 }
 
-func newBeginnerStateVisitor(fileName string, errorHandler eh.Errorhandler) *beginnerStateVisitor {
-	return &beginnerStateVisitor{fileName: fileName, finished: true, valid: true, eh: errorHandler}
+func newBeginnerStateVisitor(fileName string, errorHandler *eh.Errorhandler) *beginnerStateVisitor {
+	return &beginnerStateVisitor{baseVisitor: *newBaseVisitor(fileName, errorHandler)}
 }
 
 func (v *beginnerStateVisitor) checkSideNames(sides []cp.ISideContext) {
@@ -39,22 +36,16 @@ func (v *beginnerStateVisitor) checkColors(ctx *cp.BeginnerStateContext) {
 	if !v.valid {
 		return
 	}
-	colors := make(map[string]int)
 	for _, side := range ctx.AllSide() {
 		for _, row := range side.(*cp.SideContext).AllRow() {
 			for _, cell := range row.(*cp.RowContext).AllColor() {
-				colors[cell.GetText()] += 1
+				v.colors[cell.GetText()]++
 			}
 		}
 	}
 	stateCtx := ctx.GetParent().(*cp.StateContext)
 	stateDefCtx := stateCtx.GetParent().(*cp.StateDefContext)
-	for color, amount := range colors {
-		if amount > 9 || (v.finished && amount < 9) {
-			errorMsg := fmt.Sprintf("color %s is defined %d times, should be 9 times", color, amount)
-			v.eh.AddWarning(stateDefCtx, errorMsg, v.fileName)
-		}
-	}
+	checkColors(stateDefCtx, v, 9)
 }
 
 func (v *beginnerStateVisitor) visitBeginnerState(ctx *cp.BeginnerStateContext) {

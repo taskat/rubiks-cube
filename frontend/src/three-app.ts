@@ -142,7 +142,7 @@ export default class Simulator{
     const pieceGeoemtry = this.model.clone();
     const normalAttribute = pieceGeoemtry.getAttribute("normal") as THREE.BufferAttribute;
 
-    const colors = [];
+    const colors: number[] = [];
 
     for (let normalIndex = 0; normalIndex < normalAttribute.count; normalIndex += 3) {
 
@@ -190,7 +190,6 @@ export default class Simulator{
     return this.puzzleGroup.children.find(child => child.userData.id === piece.id) as THREE.Object3D;
   }
 
-  
   resetUiPiece(uiPiece: THREE.Object3D, piece: Piece) {
     const isEvenSizedCube = this.cubeSize % 2 === 0;
     const adjustValue = (v: number) => isEvenSizedCube ? v < 0 ? v + 0.5 : v - 0.5 : v;
@@ -211,6 +210,10 @@ export default class Simulator{
 
   recreateUiPieces() {
     this.cube = new Cube(this.cubeSize, this.colorPalette);
+    this.puzzleGroup.children.forEach(child => {
+      let mesh = child as THREE.Mesh;
+      mesh.geometry.dispose();
+    });
     this.puzzleGroup.clear();
     this.createUiPieces();
   }

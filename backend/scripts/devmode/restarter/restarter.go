@@ -38,7 +38,7 @@ func (r *Restarter) killServer() {
 	cmd := exec.Command("bash", "-c", "kill "+strconv.Itoa(r.pid))
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
-	err := cmd.Start()
+	err := cmd.Run()
 	if err != nil {
 		panic("Could not kill server" + err.Error())
 	}
@@ -94,5 +94,6 @@ func (r *Restarter) waitForKill() {
 			break
 		}
 		time.Sleep(100 * time.Millisecond)
+		r.killServer()
 	}
 }

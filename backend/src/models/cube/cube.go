@@ -17,7 +17,7 @@ func NewCube(size int) *Cube {
 	}
 }
 
-func NewFromBeginnerState(sides map[CubeSide]Side) *Cube {
+func NewWithSides(sides map[CubeSide]Side) *Cube {
 	return &Cube{
 		sides: sides,
 		size:  len(sides[Front]),

@@ -16,6 +16,12 @@ export default class Editor {
             model: this.tabs.get("config")?.model,
             theme: "vs-dark",
         });
+        this.editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, () => {
+            this.editor.trigger('keyboard', 'type', { text: '' });
+        });
+        this.editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
+            this.editor.trigger('keyboard', 'type', { text: '' });
+        });
     }
 
     changeTab() {

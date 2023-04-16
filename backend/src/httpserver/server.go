@@ -23,7 +23,7 @@ func NewServer() *Server {
 }
 
 func (s Server) addHeaders(response http.ResponseWriter, request *http.Request) {
-	response.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+	response.Header().Set("Access-Control-Allow-Origin", "http://localhost:8081")
 	response.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
 	response.Header().Set("Content-Type", "application/json")
 	if request.Method == "OPTIONS" {

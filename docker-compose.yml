@@ -1,0 +1,22 @@
+services:
+  backend:
+    image: taskat/rubik-server:latest
+    ports:
+      - 8080:8080
+    volumes:
+      - type: bind
+        source: ./backend
+        target: /app/dev
+
+  frontend:
+    image: taskat/rubik-frontend:latest
+    ports:
+      - 8081:8081
+    volumes:
+      - type: bind
+        source: ./frontend/src
+        target: /app/src  
+      - type: bind
+        source: ./frontend/public
+        target: /app/public    
+    

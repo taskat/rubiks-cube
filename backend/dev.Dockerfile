@@ -11,4 +11,5 @@ ENV WATCH_FOLDER="/app/dev"
 ENV INCLUDE_FILES="^.*(\.go|go\.sum|go\.mod)$"
 ENV START_SERVER_SCRIPT="/app/scripts/start_server.sh"
 ENV KILL_SERVER_SCRIPT="/app/scripts/kill_server.sh"
+EXPOSE 8080
 ENTRYPOINT ["/bin/dev_server"]

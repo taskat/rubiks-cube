@@ -32,62 +32,81 @@ var configparserParserStaticData struct {
 func configparserParserInit() {
 	staticData := &configparserParserStaticData
 	staticData.literalNames = []string{
-		"", "'advanced'", "'back'", "'beginner'", "'cube'", "'down'", "'front'",
-		"'left'", "'puzzle'", "'random'", "'right'", "'size'", "'state'", "'state description'",
-		"'up'", "'{'", "'}'", "'['", "']'", "'('", "')'", "':'",
+		"", "'advanced'", "'back'", "'beginner'", "'corners'", "'cube'", "'down'",
+		"'edges'", "'front'", "'left'", "'middle'", "'puzzle'", "'random'",
+		"'right'", "'size'", "'state'", "'state description'", "'up'", "'{'",
+		"'}'", "'['", "']'", "'('", "')'", "':'",
 	}
 	staticData.symbolicNames = []string{
-		"", "ADVANCED", "BACK", "BEGINNER", "CUBE", "DOWN", "FRONT", "LEFT",
-		"PUZZLE", "RANDOM", "RIGHT", "SIZE", "STATE", "STATE_DESCRIPTION", "UP",
-		"LCURLY", "RCURLY", "LBRACKET", "RBRACKET", "LPAREN", "RPAREN", "COLON",
-		"NUMBER", "WORD", "LINE_COMMENT", "WS",
+		"", "ADVANCED", "BACK", "BEGINNER", "CORNERS", "CUBE", "DOWN", "EDGES",
+		"FRONT", "LEFT", "MIDDLE", "PUZZLE", "RANDOM", "RIGHT", "SIZE", "STATE",
+		"STATE_DESCRIPTION", "UP", "LCURLY", "RCURLY", "LBRACKET", "RBRACKET",
+		"LPAREN", "RPAREN", "COLON", "NUMBER", "WORD", "LINE_COMMENT", "WS",
 	}
 	staticData.ruleNames = []string{
 		"configFile", "configLine", "puzzleTypeDef", "puzzleType", "sizeDef",
 		"stateDescriptionDef", "stateDescription", "stateDef", "state", "beginnerState",
-		"side", "sideDef", "row", "color", "advancedState",
+		"side", "sideDef", "color", "advancedState", "corners", "cornerLayer",
+		"layerDef", "corner", "edges", "edgeLayer", "edge",
 	}
 	staticData.predictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 25, 101, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 1, 28, 140, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
 		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 2, 10, 7,
-		10, 2, 11, 7, 11, 2, 12, 7, 12, 2, 13, 7, 13, 2, 14, 7, 14, 1, 0, 5, 0,
-		32, 8, 0, 10, 0, 12, 0, 35, 9, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 3,
-		1, 43, 8, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1, 3, 1, 3, 1, 4, 1, 4, 1, 4, 1, 4,
-		1, 5, 1, 5, 1, 5, 1, 5, 1, 6, 1, 6, 1, 7, 1, 7, 1, 7, 1, 7, 1, 8, 1, 8,
-		1, 8, 3, 8, 68, 8, 8, 1, 9, 1, 9, 4, 9, 72, 8, 9, 11, 9, 12, 9, 73, 1,
-		9, 1, 9, 1, 10, 1, 10, 1, 10, 4, 10, 81, 8, 10, 11, 10, 12, 10, 82, 1,
-		11, 1, 11, 1, 12, 1, 12, 4, 12, 89, 8, 12, 11, 12, 12, 12, 90, 1, 12, 1,
-		12, 1, 13, 1, 13, 1, 14, 1, 14, 1, 14, 1, 14, 1, 14, 0, 0, 15, 0, 2, 4,
-		6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 0, 2, 2, 0, 1, 1, 3, 3, 4,
-		0, 2, 2, 5, 7, 10, 10, 14, 14, 94, 0, 33, 1, 0, 0, 0, 2, 42, 1, 0, 0, 0,
-		4, 44, 1, 0, 0, 0, 6, 48, 1, 0, 0, 0, 8, 50, 1, 0, 0, 0, 10, 54, 1, 0,
-		0, 0, 12, 58, 1, 0, 0, 0, 14, 60, 1, 0, 0, 0, 16, 67, 1, 0, 0, 0, 18, 69,
-		1, 0, 0, 0, 20, 77, 1, 0, 0, 0, 22, 84, 1, 0, 0, 0, 24, 86, 1, 0, 0, 0,
-		26, 94, 1, 0, 0, 0, 28, 96, 1, 0, 0, 0, 30, 32, 3, 2, 1, 0, 31, 30, 1,
-		0, 0, 0, 32, 35, 1, 0, 0, 0, 33, 31, 1, 0, 0, 0, 33, 34, 1, 0, 0, 0, 34,
-		36, 1, 0, 0, 0, 35, 33, 1, 0, 0, 0, 36, 37, 5, 0, 0, 1, 37, 1, 1, 0, 0,
-		0, 38, 43, 3, 4, 2, 0, 39, 43, 3, 8, 4, 0, 40, 43, 3, 10, 5, 0, 41, 43,
-		3, 14, 7, 0, 42, 38, 1, 0, 0, 0, 42, 39, 1, 0, 0, 0, 42, 40, 1, 0, 0, 0,
-		42, 41, 1, 0, 0, 0, 43, 3, 1, 0, 0, 0, 44, 45, 5, 8, 0, 0, 45, 46, 5, 21,
-		0, 0, 46, 47, 3, 6, 3, 0, 47, 5, 1, 0, 0, 0, 48, 49, 5, 4, 0, 0, 49, 7,
-		1, 0, 0, 0, 50, 51, 5, 11, 0, 0, 51, 52, 5, 21, 0, 0, 52, 53, 5, 22, 0,
-		0, 53, 9, 1, 0, 0, 0, 54, 55, 5, 13, 0, 0, 55, 56, 5, 21, 0, 0, 56, 57,
-		3, 12, 6, 0, 57, 11, 1, 0, 0, 0, 58, 59, 7, 0, 0, 0, 59, 13, 1, 0, 0, 0,
-		60, 61, 5, 12, 0, 0, 61, 62, 5, 21, 0, 0, 62, 63, 3, 16, 8, 0, 63, 15,
-		1, 0, 0, 0, 64, 68, 5, 9, 0, 0, 65, 68, 3, 18, 9, 0, 66, 68, 3, 28, 14,
-		0, 67, 64, 1, 0, 0, 0, 67, 65, 1, 0, 0, 0, 67, 66, 1, 0, 0, 0, 68, 17,
-		1, 0, 0, 0, 69, 71, 5, 15, 0, 0, 70, 72, 3, 20, 10, 0, 71, 70, 1, 0, 0,
-		0, 72, 73, 1, 0, 0, 0, 73, 71, 1, 0, 0, 0, 73, 74, 1, 0, 0, 0, 74, 75,
-		1, 0, 0, 0, 75, 76, 5, 16, 0, 0, 76, 19, 1, 0, 0, 0, 77, 78, 3, 22, 11,
-		0, 78, 80, 5, 21, 0, 0, 79, 81, 3, 24, 12, 0, 80, 79, 1, 0, 0, 0, 81, 82,
-		1, 0, 0, 0, 82, 80, 1, 0, 0, 0, 82, 83, 1, 0, 0, 0, 83, 21, 1, 0, 0, 0,
-		84, 85, 7, 1, 0, 0, 85, 23, 1, 0, 0, 0, 86, 88, 5, 19, 0, 0, 87, 89, 3,
-		26, 13, 0, 88, 87, 1, 0, 0, 0, 89, 90, 1, 0, 0, 0, 90, 88, 1, 0, 0, 0,
-		90, 91, 1, 0, 0, 0, 91, 92, 1, 0, 0, 0, 92, 93, 5, 20, 0, 0, 93, 25, 1,
-		0, 0, 0, 94, 95, 5, 23, 0, 0, 95, 27, 1, 0, 0, 0, 96, 97, 5, 15, 0, 0,
-		97, 98, 5, 1, 0, 0, 98, 99, 5, 16, 0, 0, 99, 29, 1, 0, 0, 0, 6, 33, 42,
-		67, 73, 82, 90,
+		10, 2, 11, 7, 11, 2, 12, 7, 12, 2, 13, 7, 13, 2, 14, 7, 14, 2, 15, 7, 15,
+		2, 16, 7, 16, 2, 17, 7, 17, 2, 18, 7, 18, 2, 19, 7, 19, 2, 20, 7, 20, 1,
+		0, 5, 0, 44, 8, 0, 10, 0, 12, 0, 47, 9, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1,
+		1, 1, 3, 1, 55, 8, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1, 3, 1, 3, 1, 4, 1, 4, 1,
+		4, 1, 4, 1, 5, 1, 5, 1, 5, 1, 5, 1, 6, 1, 6, 1, 7, 1, 7, 1, 7, 1, 7, 1,
+		8, 1, 8, 1, 8, 3, 8, 80, 8, 8, 1, 9, 4, 9, 83, 8, 9, 11, 9, 12, 9, 84,
+		1, 10, 1, 10, 1, 10, 4, 10, 90, 8, 10, 11, 10, 12, 10, 91, 1, 11, 1, 11,
+		1, 12, 1, 12, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 3, 13, 104, 8,
+		13, 1, 14, 1, 14, 1, 14, 4, 14, 109, 8, 14, 11, 14, 12, 14, 110, 1, 15,
+		1, 15, 1, 15, 4, 15, 116, 8, 15, 11, 15, 12, 15, 117, 1, 16, 1, 16, 1,
+		17, 1, 17, 1, 18, 1, 18, 1, 18, 4, 18, 127, 8, 18, 11, 18, 12, 18, 128,
+		1, 19, 1, 19, 1, 19, 4, 19, 134, 8, 19, 11, 19, 12, 19, 135, 1, 20, 1,
+		20, 1, 20, 0, 0, 21, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26,
+		28, 30, 32, 34, 36, 38, 40, 0, 3, 2, 0, 1, 1, 3, 3, 5, 0, 2, 2, 6, 6, 8,
+		9, 13, 13, 17, 17, 3, 0, 6, 6, 10, 10, 17, 17, 131, 0, 45, 1, 0, 0, 0,
+		2, 54, 1, 0, 0, 0, 4, 56, 1, 0, 0, 0, 6, 60, 1, 0, 0, 0, 8, 62, 1, 0, 0,
+		0, 10, 66, 1, 0, 0, 0, 12, 70, 1, 0, 0, 0, 14, 72, 1, 0, 0, 0, 16, 79,
+		1, 0, 0, 0, 18, 82, 1, 0, 0, 0, 20, 86, 1, 0, 0, 0, 22, 93, 1, 0, 0, 0,
+		24, 95, 1, 0, 0, 0, 26, 103, 1, 0, 0, 0, 28, 105, 1, 0, 0, 0, 30, 112,
+		1, 0, 0, 0, 32, 119, 1, 0, 0, 0, 34, 121, 1, 0, 0, 0, 36, 123, 1, 0, 0,
+		0, 38, 130, 1, 0, 0, 0, 40, 137, 1, 0, 0, 0, 42, 44, 3, 2, 1, 0, 43, 42,
+		1, 0, 0, 0, 44, 47, 1, 0, 0, 0, 45, 43, 1, 0, 0, 0, 45, 46, 1, 0, 0, 0,
+		46, 48, 1, 0, 0, 0, 47, 45, 1, 0, 0, 0, 48, 49, 5, 0, 0, 1, 49, 1, 1, 0,
+		0, 0, 50, 55, 3, 4, 2, 0, 51, 55, 3, 8, 4, 0, 52, 55, 3, 10, 5, 0, 53,
+		55, 3, 14, 7, 0, 54, 50, 1, 0, 0, 0, 54, 51, 1, 0, 0, 0, 54, 52, 1, 0,
+		0, 0, 54, 53, 1, 0, 0, 0, 55, 3, 1, 0, 0, 0, 56, 57, 5, 11, 0, 0, 57, 58,
+		5, 24, 0, 0, 58, 59, 3, 6, 3, 0, 59, 5, 1, 0, 0, 0, 60, 61, 5, 5, 0, 0,
+		61, 7, 1, 0, 0, 0, 62, 63, 5, 14, 0, 0, 63, 64, 5, 24, 0, 0, 64, 65, 5,
+		25, 0, 0, 65, 9, 1, 0, 0, 0, 66, 67, 5, 16, 0, 0, 67, 68, 5, 24, 0, 0,
+		68, 69, 3, 12, 6, 0, 69, 11, 1, 0, 0, 0, 70, 71, 7, 0, 0, 0, 71, 13, 1,
+		0, 0, 0, 72, 73, 5, 15, 0, 0, 73, 74, 5, 24, 0, 0, 74, 75, 3, 16, 8, 0,
+		75, 15, 1, 0, 0, 0, 76, 80, 5, 12, 0, 0, 77, 80, 3, 18, 9, 0, 78, 80, 3,
+		26, 13, 0, 79, 76, 1, 0, 0, 0, 79, 77, 1, 0, 0, 0, 79, 78, 1, 0, 0, 0,
+		80, 17, 1, 0, 0, 0, 81, 83, 3, 20, 10, 0, 82, 81, 1, 0, 0, 0, 83, 84, 1,
+		0, 0, 0, 84, 82, 1, 0, 0, 0, 84, 85, 1, 0, 0, 0, 85, 19, 1, 0, 0, 0, 86,
+		87, 3, 22, 11, 0, 87, 89, 5, 24, 0, 0, 88, 90, 3, 24, 12, 0, 89, 88, 1,
+		0, 0, 0, 90, 91, 1, 0, 0, 0, 91, 89, 1, 0, 0, 0, 91, 92, 1, 0, 0, 0, 92,
+		21, 1, 0, 0, 0, 93, 94, 7, 1, 0, 0, 94, 23, 1, 0, 0, 0, 95, 96, 5, 26,
+		0, 0, 96, 25, 1, 0, 0, 0, 97, 98, 3, 28, 14, 0, 98, 99, 3, 36, 18, 0, 99,
+		104, 1, 0, 0, 0, 100, 101, 3, 36, 18, 0, 101, 102, 3, 28, 14, 0, 102, 104,
+		1, 0, 0, 0, 103, 97, 1, 0, 0, 0, 103, 100, 1, 0, 0, 0, 104, 27, 1, 0, 0,
+		0, 105, 106, 5, 4, 0, 0, 106, 108, 5, 24, 0, 0, 107, 109, 3, 30, 15, 0,
+		108, 107, 1, 0, 0, 0, 109, 110, 1, 0, 0, 0, 110, 108, 1, 0, 0, 0, 110,
+		111, 1, 0, 0, 0, 111, 29, 1, 0, 0, 0, 112, 113, 3, 32, 16, 0, 113, 115,
+		5, 24, 0, 0, 114, 116, 3, 34, 17, 0, 115, 114, 1, 0, 0, 0, 116, 117, 1,
+		0, 0, 0, 117, 115, 1, 0, 0, 0, 117, 118, 1, 0, 0, 0, 118, 31, 1, 0, 0,
+		0, 119, 120, 7, 2, 0, 0, 120, 33, 1, 0, 0, 0, 121, 122, 5, 26, 0, 0, 122,
+		35, 1, 0, 0, 0, 123, 124, 5, 7, 0, 0, 124, 126, 5, 24, 0, 0, 125, 127,
+		3, 38, 19, 0, 126, 125, 1, 0, 0, 0, 127, 128, 1, 0, 0, 0, 128, 126, 1,
+		0, 0, 0, 128, 129, 1, 0, 0, 0, 129, 37, 1, 0, 0, 0, 130, 131, 3, 32, 16,
+		0, 131, 133, 5, 24, 0, 0, 132, 134, 3, 40, 20, 0, 133, 132, 1, 0, 0, 0,
+		134, 135, 1, 0, 0, 0, 135, 133, 1, 0, 0, 0, 135, 136, 1, 0, 0, 0, 136,
+		39, 1, 0, 0, 0, 137, 138, 5, 26, 0, 0, 138, 41, 1, 0, 0, 0, 10, 45, 54,
+		79, 84, 91, 103, 110, 117, 128, 135,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -129,28 +148,31 @@ const (
 	ConfigParserADVANCED          = 1
 	ConfigParserBACK              = 2
 	ConfigParserBEGINNER          = 3
-	ConfigParserCUBE              = 4
-	ConfigParserDOWN              = 5
-	ConfigParserFRONT             = 6
-	ConfigParserLEFT              = 7
-	ConfigParserPUZZLE            = 8
-	ConfigParserRANDOM            = 9
-	ConfigParserRIGHT             = 10
-	ConfigParserSIZE              = 11
-	ConfigParserSTATE             = 12
-	ConfigParserSTATE_DESCRIPTION = 13
-	ConfigParserUP                = 14
-	ConfigParserLCURLY            = 15
-	ConfigParserRCURLY            = 16
-	ConfigParserLBRACKET          = 17
-	ConfigParserRBRACKET          = 18
-	ConfigParserLPAREN            = 19
-	ConfigParserRPAREN            = 20
-	ConfigParserCOLON             = 21
-	ConfigParserNUMBER            = 22
-	ConfigParserWORD              = 23
-	ConfigParserLINE_COMMENT      = 24
-	ConfigParserWS                = 25
+	ConfigParserCORNERS           = 4
+	ConfigParserCUBE              = 5
+	ConfigParserDOWN              = 6
+	ConfigParserEDGES             = 7
+	ConfigParserFRONT             = 8
+	ConfigParserLEFT              = 9
+	ConfigParserMIDDLE            = 10
+	ConfigParserPUZZLE            = 11
+	ConfigParserRANDOM            = 12
+	ConfigParserRIGHT             = 13
+	ConfigParserSIZE              = 14
+	ConfigParserSTATE             = 15
+	ConfigParserSTATE_DESCRIPTION = 16
+	ConfigParserUP                = 17
+	ConfigParserLCURLY            = 18
+	ConfigParserRCURLY            = 19
+	ConfigParserLBRACKET          = 20
+	ConfigParserRBRACKET          = 21
+	ConfigParserLPAREN            = 22
+	ConfigParserRPAREN            = 23
+	ConfigParserCOLON             = 24
+	ConfigParserNUMBER            = 25
+	ConfigParserWORD              = 26
+	ConfigParserLINE_COMMENT      = 27
+	ConfigParserWS                = 28
 )
 
 // ConfigParser rules.
@@ -167,9 +189,15 @@ const (
 	ConfigParserRULE_beginnerState       = 9
 	ConfigParserRULE_side                = 10
 	ConfigParserRULE_sideDef             = 11
-	ConfigParserRULE_row                 = 12
-	ConfigParserRULE_color               = 13
-	ConfigParserRULE_advancedState       = 14
+	ConfigParserRULE_color               = 12
+	ConfigParserRULE_advancedState       = 13
+	ConfigParserRULE_corners             = 14
+	ConfigParserRULE_cornerLayer         = 15
+	ConfigParserRULE_layerDef            = 16
+	ConfigParserRULE_corner              = 17
+	ConfigParserRULE_edges               = 18
+	ConfigParserRULE_edgeLayer           = 19
+	ConfigParserRULE_edge                = 20
 )
 
 // IConfigFileContext is an interface to support dynamic dispatch.
@@ -288,22 +316,22 @@ func (p *ConfigParser) ConfigFile() (localctx IConfigFileContext) {
 	}()
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(33)
+	p.SetState(45)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for ((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<ConfigParserPUZZLE)|(1<<ConfigParserSIZE)|(1<<ConfigParserSTATE)|(1<<ConfigParserSTATE_DESCRIPTION))) != 0 {
 		{
-			p.SetState(30)
+			p.SetState(42)
 			p.ConfigLine()
 		}
 
-		p.SetState(35)
+		p.SetState(47)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(36)
+		p.SetState(48)
 		p.Match(ConfigParserEOF)
 	}
 
@@ -443,35 +471,35 @@ func (p *ConfigParser) ConfigLine() (localctx IConfigLineContext) {
 		}
 	}()
 
-	p.SetState(42)
+	p.SetState(54)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case ConfigParserPUZZLE:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(38)
+			p.SetState(50)
 			p.PuzzleTypeDef()
 		}
 
 	case ConfigParserSIZE:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(39)
+			p.SetState(51)
 			p.SizeDef()
 		}
 
 	case ConfigParserSTATE_DESCRIPTION:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(40)
+			p.SetState(52)
 			p.StateDescriptionDef()
 		}
 
 	case ConfigParserSTATE:
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(41)
+			p.SetState(53)
 			p.StateDef()
 		}
 
@@ -577,15 +605,15 @@ func (p *ConfigParser) PuzzleTypeDef() (localctx IPuzzleTypeDefContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(44)
+		p.SetState(56)
 		p.Match(ConfigParserPUZZLE)
 	}
 	{
-		p.SetState(45)
+		p.SetState(57)
 		p.Match(ConfigParserCOLON)
 	}
 	{
-		p.SetState(46)
+		p.SetState(58)
 		p.PuzzleType()
 	}
 
@@ -667,7 +695,7 @@ func (p *ConfigParser) PuzzleType() (localctx IPuzzleTypeContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(48)
+		p.SetState(60)
 		p.Match(ConfigParserCUBE)
 	}
 
@@ -757,15 +785,15 @@ func (p *ConfigParser) SizeDef() (localctx ISizeDefContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(50)
+		p.SetState(62)
 		p.Match(ConfigParserSIZE)
 	}
 	{
-		p.SetState(51)
+		p.SetState(63)
 		p.Match(ConfigParserCOLON)
 	}
 	{
-		p.SetState(52)
+		p.SetState(64)
 		p.Match(ConfigParserNUMBER)
 	}
 
@@ -867,15 +895,15 @@ func (p *ConfigParser) StateDescriptionDef() (localctx IStateDescriptionDefConte
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(54)
+		p.SetState(66)
 		p.Match(ConfigParserSTATE_DESCRIPTION)
 	}
 	{
-		p.SetState(55)
+		p.SetState(67)
 		p.Match(ConfigParserCOLON)
 	}
 	{
-		p.SetState(56)
+		p.SetState(68)
 		p.StateDescription()
 	}
 
@@ -962,7 +990,7 @@ func (p *ConfigParser) StateDescription() (localctx IStateDescriptionContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(58)
+		p.SetState(70)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(_la == ConfigParserADVANCED || _la == ConfigParserBEGINNER) {
@@ -1071,15 +1099,15 @@ func (p *ConfigParser) StateDef() (localctx IStateDefContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(60)
+		p.SetState(72)
 		p.Match(ConfigParserSTATE)
 	}
 	{
-		p.SetState(61)
+		p.SetState(73)
 		p.Match(ConfigParserCOLON)
 	}
 	{
-		p.SetState(62)
+		p.SetState(74)
 		p.State()
 	}
 
@@ -1191,30 +1219,33 @@ func (p *ConfigParser) State() (localctx IStateContext) {
 		}
 	}()
 
-	p.SetState(67)
+	p.SetState(79)
 	p.GetErrorHandler().Sync(p)
-	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 2, p.GetParserRuleContext()) {
-	case 1:
+
+	switch p.GetTokenStream().LA(1) {
+	case ConfigParserRANDOM:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(64)
+			p.SetState(76)
 			p.Match(ConfigParserRANDOM)
 		}
 
-	case 2:
+	case ConfigParserBACK, ConfigParserDOWN, ConfigParserFRONT, ConfigParserLEFT, ConfigParserRIGHT, ConfigParserUP:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(65)
+			p.SetState(77)
 			p.BeginnerState()
 		}
 
-	case 3:
+	case ConfigParserCORNERS, ConfigParserEDGES:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(66)
+			p.SetState(78)
 			p.AdvancedState()
 		}
 
+	default:
+		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
 	}
 
 	return localctx
@@ -1257,14 +1288,6 @@ func NewBeginnerStateContext(parser antlr.Parser, parent antlr.ParserRuleContext
 }
 
 func (s *BeginnerStateContext) GetParser() antlr.Parser { return s.parser }
-
-func (s *BeginnerStateContext) LCURLY() antlr.TerminalNode {
-	return s.GetToken(ConfigParserLCURLY, 0)
-}
-
-func (s *BeginnerStateContext) RCURLY() antlr.TerminalNode {
-	return s.GetToken(ConfigParserRCURLY, 0)
-}
 
 func (s *BeginnerStateContext) AllSide() []ISideContext {
 	children := s.GetChildren()
@@ -1340,27 +1363,19 @@ func (p *ConfigParser) BeginnerState() (localctx IBeginnerStateContext) {
 	}()
 
 	p.EnterOuterAlt(localctx, 1)
-	{
-		p.SetState(69)
-		p.Match(ConfigParserLCURLY)
-	}
-	p.SetState(71)
+	p.SetState(82)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for ok := true; ok; ok = (((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<ConfigParserBACK)|(1<<ConfigParserDOWN)|(1<<ConfigParserFRONT)|(1<<ConfigParserLEFT)|(1<<ConfigParserRIGHT)|(1<<ConfigParserUP))) != 0) {
 		{
-			p.SetState(70)
+			p.SetState(81)
 			p.Side()
 		}
 
-		p.SetState(73)
+		p.SetState(84)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
-	}
-	{
-		p.SetState(75)
-		p.Match(ConfigParserRCURLY)
 	}
 
 	return localctx
@@ -1424,20 +1439,20 @@ func (s *SideContext) COLON() antlr.TerminalNode {
 	return s.GetToken(ConfigParserCOLON, 0)
 }
 
-func (s *SideContext) AllRow() []IRowContext {
+func (s *SideContext) AllColor() []IColorContext {
 	children := s.GetChildren()
 	len := 0
 	for _, ctx := range children {
-		if _, ok := ctx.(IRowContext); ok {
+		if _, ok := ctx.(IColorContext); ok {
 			len++
 		}
 	}
 
-	tst := make([]IRowContext, len)
+	tst := make([]IColorContext, len)
 	i := 0
 	for _, ctx := range children {
-		if t, ok := ctx.(IRowContext); ok {
-			tst[i] = t.(IRowContext)
+		if t, ok := ctx.(IColorContext); ok {
+			tst[i] = t.(IColorContext)
 			i++
 		}
 	}
@@ -1445,11 +1460,11 @@ func (s *SideContext) AllRow() []IRowContext {
 	return tst
 }
 
-func (s *SideContext) Row(i int) IRowContext {
+func (s *SideContext) Color(i int) IColorContext {
 	var t antlr.RuleContext
 	j := 0
 	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(IRowContext); ok {
+		if _, ok := ctx.(IColorContext); ok {
 			if j == i {
 				t = ctx.(antlr.RuleContext)
 				break
@@ -1462,7 +1477,7 @@ func (s *SideContext) Row(i int) IRowContext {
 		return nil
 	}
 
-	return t.(IRowContext)
+	return t.(IColorContext)
 }
 
 func (s *SideContext) GetRuleContext() antlr.RuleContext {
@@ -1499,24 +1514,24 @@ func (p *ConfigParser) Side() (localctx ISideContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(77)
+		p.SetState(86)
 		p.SideDef()
 	}
 	{
-		p.SetState(78)
+		p.SetState(87)
 		p.Match(ConfigParserCOLON)
 	}
-	p.SetState(80)
+	p.SetState(89)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	for ok := true; ok; ok = _la == ConfigParserLPAREN {
+	for ok := true; ok; ok = _la == ConfigParserWORD {
 		{
-			p.SetState(79)
-			p.Row()
+			p.SetState(88)
+			p.Color()
 		}
 
-		p.SetState(82)
+		p.SetState(91)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -1620,7 +1635,7 @@ func (p *ConfigParser) SideDef() (localctx ISideDefContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(84)
+		p.SetState(93)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<ConfigParserBACK)|(1<<ConfigParserDOWN)|(1<<ConfigParserFRONT)|(1<<ConfigParserLEFT)|(1<<ConfigParserRIGHT)|(1<<ConfigParserUP))) != 0) {
@@ -1629,152 +1644,6 @@ func (p *ConfigParser) SideDef() (localctx ISideDefContext) {
 			p.GetErrorHandler().ReportMatch(p)
 			p.Consume()
 		}
-	}
-
-	return localctx
-}
-
-// IRowContext is an interface to support dynamic dispatch.
-type IRowContext interface {
-	antlr.ParserRuleContext
-
-	// GetParser returns the parser.
-	GetParser() antlr.Parser
-
-	// IsRowContext differentiates from other interfaces.
-	IsRowContext()
-}
-
-type RowContext struct {
-	*antlr.BaseParserRuleContext
-	parser antlr.Parser
-}
-
-func NewEmptyRowContext() *RowContext {
-	var p = new(RowContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = ConfigParserRULE_row
-	return p
-}
-
-func (*RowContext) IsRowContext() {}
-
-func NewRowContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *RowContext {
-	var p = new(RowContext)
-
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
-
-	p.parser = parser
-	p.RuleIndex = ConfigParserRULE_row
-
-	return p
-}
-
-func (s *RowContext) GetParser() antlr.Parser { return s.parser }
-
-func (s *RowContext) LPAREN() antlr.TerminalNode {
-	return s.GetToken(ConfigParserLPAREN, 0)
-}
-
-func (s *RowContext) RPAREN() antlr.TerminalNode {
-	return s.GetToken(ConfigParserRPAREN, 0)
-}
-
-func (s *RowContext) AllColor() []IColorContext {
-	children := s.GetChildren()
-	len := 0
-	for _, ctx := range children {
-		if _, ok := ctx.(IColorContext); ok {
-			len++
-		}
-	}
-
-	tst := make([]IColorContext, len)
-	i := 0
-	for _, ctx := range children {
-		if t, ok := ctx.(IColorContext); ok {
-			tst[i] = t.(IColorContext)
-			i++
-		}
-	}
-
-	return tst
-}
-
-func (s *RowContext) Color(i int) IColorContext {
-	var t antlr.RuleContext
-	j := 0
-	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(IColorContext); ok {
-			if j == i {
-				t = ctx.(antlr.RuleContext)
-				break
-			}
-			j++
-		}
-	}
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(IColorContext)
-}
-
-func (s *RowContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *RowContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
-	return antlr.TreesStringTree(s, ruleNames, recog)
-}
-
-func (p *ConfigParser) Row() (localctx IRowContext) {
-	this := p
-	_ = this
-
-	localctx = NewRowContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 24, ConfigParserRULE_row)
-	var _la int
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
-	p.EnterOuterAlt(localctx, 1)
-	{
-		p.SetState(86)
-		p.Match(ConfigParserLPAREN)
-	}
-	p.SetState(88)
-	p.GetErrorHandler().Sync(p)
-	_la = p.GetTokenStream().LA(1)
-
-	for ok := true; ok; ok = _la == ConfigParserWORD {
-		{
-			p.SetState(87)
-			p.Color()
-		}
-
-		p.SetState(90)
-		p.GetErrorHandler().Sync(p)
-		_la = p.GetTokenStream().LA(1)
-	}
-	{
-		p.SetState(92)
-		p.Match(ConfigParserRPAREN)
 	}
 
 	return localctx
@@ -1835,7 +1704,7 @@ func (p *ConfigParser) Color() (localctx IColorContext) {
 	_ = this
 
 	localctx = NewColorContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 26, ConfigParserRULE_color)
+	p.EnterRule(localctx, 24, ConfigParserRULE_color)
 
 	defer func() {
 		p.ExitRule()
@@ -1855,7 +1724,7 @@ func (p *ConfigParser) Color() (localctx IColorContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(94)
+		p.SetState(95)
 		p.Match(ConfigParserWORD)
 	}
 
@@ -1900,16 +1769,36 @@ func NewAdvancedStateContext(parser antlr.Parser, parent antlr.ParserRuleContext
 
 func (s *AdvancedStateContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *AdvancedStateContext) LCURLY() antlr.TerminalNode {
-	return s.GetToken(ConfigParserLCURLY, 0)
+func (s *AdvancedStateContext) Corners() ICornersContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ICornersContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ICornersContext)
 }
 
-func (s *AdvancedStateContext) ADVANCED() antlr.TerminalNode {
-	return s.GetToken(ConfigParserADVANCED, 0)
-}
+func (s *AdvancedStateContext) Edges() IEdgesContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IEdgesContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
 
-func (s *AdvancedStateContext) RCURLY() antlr.TerminalNode {
-	return s.GetToken(ConfigParserRCURLY, 0)
+	if t == nil {
+		return nil
+	}
+
+	return t.(IEdgesContext)
 }
 
 func (s *AdvancedStateContext) GetRuleContext() antlr.RuleContext {
@@ -1925,7 +1814,159 @@ func (p *ConfigParser) AdvancedState() (localctx IAdvancedStateContext) {
 	_ = this
 
 	localctx = NewAdvancedStateContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 28, ConfigParserRULE_advancedState)
+	p.EnterRule(localctx, 26, ConfigParserRULE_advancedState)
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.SetState(103)
+	p.GetErrorHandler().Sync(p)
+
+	switch p.GetTokenStream().LA(1) {
+	case ConfigParserCORNERS:
+		p.EnterOuterAlt(localctx, 1)
+		{
+			p.SetState(97)
+			p.Corners()
+		}
+		{
+			p.SetState(98)
+			p.Edges()
+		}
+
+	case ConfigParserEDGES:
+		p.EnterOuterAlt(localctx, 2)
+		{
+			p.SetState(100)
+			p.Edges()
+		}
+		{
+			p.SetState(101)
+			p.Corners()
+		}
+
+	default:
+		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+	}
+
+	return localctx
+}
+
+// ICornersContext is an interface to support dynamic dispatch.
+type ICornersContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// IsCornersContext differentiates from other interfaces.
+	IsCornersContext()
+}
+
+type CornersContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyCornersContext() *CornersContext {
+	var p = new(CornersContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = ConfigParserRULE_corners
+	return p
+}
+
+func (*CornersContext) IsCornersContext() {}
+
+func NewCornersContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *CornersContext {
+	var p = new(CornersContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = ConfigParserRULE_corners
+
+	return p
+}
+
+func (s *CornersContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *CornersContext) CORNERS() antlr.TerminalNode {
+	return s.GetToken(ConfigParserCORNERS, 0)
+}
+
+func (s *CornersContext) COLON() antlr.TerminalNode {
+	return s.GetToken(ConfigParserCOLON, 0)
+}
+
+func (s *CornersContext) AllCornerLayer() []ICornerLayerContext {
+	children := s.GetChildren()
+	len := 0
+	for _, ctx := range children {
+		if _, ok := ctx.(ICornerLayerContext); ok {
+			len++
+		}
+	}
+
+	tst := make([]ICornerLayerContext, len)
+	i := 0
+	for _, ctx := range children {
+		if t, ok := ctx.(ICornerLayerContext); ok {
+			tst[i] = t.(ICornerLayerContext)
+			i++
+		}
+	}
+
+	return tst
+}
+
+func (s *CornersContext) CornerLayer(i int) ICornerLayerContext {
+	var t antlr.RuleContext
+	j := 0
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ICornerLayerContext); ok {
+			if j == i {
+				t = ctx.(antlr.RuleContext)
+				break
+			}
+			j++
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ICornerLayerContext)
+}
+
+func (s *CornersContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *CornersContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (p *ConfigParser) Corners() (localctx ICornersContext) {
+	this := p
+	_ = this
+
+	localctx = NewCornersContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 28, ConfigParserRULE_corners)
+	var _la int
 
 	defer func() {
 		p.ExitRule()
@@ -1945,16 +1986,750 @@ func (p *ConfigParser) AdvancedState() (localctx IAdvancedStateContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(96)
-		p.Match(ConfigParserLCURLY)
+		p.SetState(105)
+		p.Match(ConfigParserCORNERS)
 	}
 	{
-		p.SetState(97)
-		p.Match(ConfigParserADVANCED)
+		p.SetState(106)
+		p.Match(ConfigParserCOLON)
+	}
+	p.SetState(108)
+	p.GetErrorHandler().Sync(p)
+	_la = p.GetTokenStream().LA(1)
+
+	for ok := true; ok; ok = (((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<ConfigParserDOWN)|(1<<ConfigParserMIDDLE)|(1<<ConfigParserUP))) != 0) {
+		{
+			p.SetState(107)
+			p.CornerLayer()
+		}
+
+		p.SetState(110)
+		p.GetErrorHandler().Sync(p)
+		_la = p.GetTokenStream().LA(1)
+	}
+
+	return localctx
+}
+
+// ICornerLayerContext is an interface to support dynamic dispatch.
+type ICornerLayerContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// IsCornerLayerContext differentiates from other interfaces.
+	IsCornerLayerContext()
+}
+
+type CornerLayerContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyCornerLayerContext() *CornerLayerContext {
+	var p = new(CornerLayerContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = ConfigParserRULE_cornerLayer
+	return p
+}
+
+func (*CornerLayerContext) IsCornerLayerContext() {}
+
+func NewCornerLayerContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *CornerLayerContext {
+	var p = new(CornerLayerContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = ConfigParserRULE_cornerLayer
+
+	return p
+}
+
+func (s *CornerLayerContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *CornerLayerContext) LayerDef() ILayerDefContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ILayerDefContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ILayerDefContext)
+}
+
+func (s *CornerLayerContext) COLON() antlr.TerminalNode {
+	return s.GetToken(ConfigParserCOLON, 0)
+}
+
+func (s *CornerLayerContext) AllCorner() []ICornerContext {
+	children := s.GetChildren()
+	len := 0
+	for _, ctx := range children {
+		if _, ok := ctx.(ICornerContext); ok {
+			len++
+		}
+	}
+
+	tst := make([]ICornerContext, len)
+	i := 0
+	for _, ctx := range children {
+		if t, ok := ctx.(ICornerContext); ok {
+			tst[i] = t.(ICornerContext)
+			i++
+		}
+	}
+
+	return tst
+}
+
+func (s *CornerLayerContext) Corner(i int) ICornerContext {
+	var t antlr.RuleContext
+	j := 0
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ICornerContext); ok {
+			if j == i {
+				t = ctx.(antlr.RuleContext)
+				break
+			}
+			j++
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ICornerContext)
+}
+
+func (s *CornerLayerContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *CornerLayerContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (p *ConfigParser) CornerLayer() (localctx ICornerLayerContext) {
+	this := p
+	_ = this
+
+	localctx = NewCornerLayerContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 30, ConfigParserRULE_cornerLayer)
+	var _la int
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(112)
+		p.LayerDef()
 	}
 	{
-		p.SetState(98)
-		p.Match(ConfigParserRCURLY)
+		p.SetState(113)
+		p.Match(ConfigParserCOLON)
+	}
+	p.SetState(115)
+	p.GetErrorHandler().Sync(p)
+	_la = p.GetTokenStream().LA(1)
+
+	for ok := true; ok; ok = _la == ConfigParserWORD {
+		{
+			p.SetState(114)
+			p.Corner()
+		}
+
+		p.SetState(117)
+		p.GetErrorHandler().Sync(p)
+		_la = p.GetTokenStream().LA(1)
+	}
+
+	return localctx
+}
+
+// ILayerDefContext is an interface to support dynamic dispatch.
+type ILayerDefContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// IsLayerDefContext differentiates from other interfaces.
+	IsLayerDefContext()
+}
+
+type LayerDefContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyLayerDefContext() *LayerDefContext {
+	var p = new(LayerDefContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = ConfigParserRULE_layerDef
+	return p
+}
+
+func (*LayerDefContext) IsLayerDefContext() {}
+
+func NewLayerDefContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *LayerDefContext {
+	var p = new(LayerDefContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = ConfigParserRULE_layerDef
+
+	return p
+}
+
+func (s *LayerDefContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *LayerDefContext) UP() antlr.TerminalNode {
+	return s.GetToken(ConfigParserUP, 0)
+}
+
+func (s *LayerDefContext) MIDDLE() antlr.TerminalNode {
+	return s.GetToken(ConfigParserMIDDLE, 0)
+}
+
+func (s *LayerDefContext) DOWN() antlr.TerminalNode {
+	return s.GetToken(ConfigParserDOWN, 0)
+}
+
+func (s *LayerDefContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *LayerDefContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (p *ConfigParser) LayerDef() (localctx ILayerDefContext) {
+	this := p
+	_ = this
+
+	localctx = NewLayerDefContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 32, ConfigParserRULE_layerDef)
+	var _la int
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(119)
+		_la = p.GetTokenStream().LA(1)
+
+		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<ConfigParserDOWN)|(1<<ConfigParserMIDDLE)|(1<<ConfigParserUP))) != 0) {
+			p.GetErrorHandler().RecoverInline(p)
+		} else {
+			p.GetErrorHandler().ReportMatch(p)
+			p.Consume()
+		}
+	}
+
+	return localctx
+}
+
+// ICornerContext is an interface to support dynamic dispatch.
+type ICornerContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// IsCornerContext differentiates from other interfaces.
+	IsCornerContext()
+}
+
+type CornerContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyCornerContext() *CornerContext {
+	var p = new(CornerContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = ConfigParserRULE_corner
+	return p
+}
+
+func (*CornerContext) IsCornerContext() {}
+
+func NewCornerContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *CornerContext {
+	var p = new(CornerContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = ConfigParserRULE_corner
+
+	return p
+}
+
+func (s *CornerContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *CornerContext) WORD() antlr.TerminalNode {
+	return s.GetToken(ConfigParserWORD, 0)
+}
+
+func (s *CornerContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *CornerContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (p *ConfigParser) Corner() (localctx ICornerContext) {
+	this := p
+	_ = this
+
+	localctx = NewCornerContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 34, ConfigParserRULE_corner)
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(121)
+		p.Match(ConfigParserWORD)
+	}
+
+	return localctx
+}
+
+// IEdgesContext is an interface to support dynamic dispatch.
+type IEdgesContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// IsEdgesContext differentiates from other interfaces.
+	IsEdgesContext()
+}
+
+type EdgesContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyEdgesContext() *EdgesContext {
+	var p = new(EdgesContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = ConfigParserRULE_edges
+	return p
+}
+
+func (*EdgesContext) IsEdgesContext() {}
+
+func NewEdgesContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *EdgesContext {
+	var p = new(EdgesContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = ConfigParserRULE_edges
+
+	return p
+}
+
+func (s *EdgesContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *EdgesContext) EDGES() antlr.TerminalNode {
+	return s.GetToken(ConfigParserEDGES, 0)
+}
+
+func (s *EdgesContext) COLON() antlr.TerminalNode {
+	return s.GetToken(ConfigParserCOLON, 0)
+}
+
+func (s *EdgesContext) AllEdgeLayer() []IEdgeLayerContext {
+	children := s.GetChildren()
+	len := 0
+	for _, ctx := range children {
+		if _, ok := ctx.(IEdgeLayerContext); ok {
+			len++
+		}
+	}
+
+	tst := make([]IEdgeLayerContext, len)
+	i := 0
+	for _, ctx := range children {
+		if t, ok := ctx.(IEdgeLayerContext); ok {
+			tst[i] = t.(IEdgeLayerContext)
+			i++
+		}
+	}
+
+	return tst
+}
+
+func (s *EdgesContext) EdgeLayer(i int) IEdgeLayerContext {
+	var t antlr.RuleContext
+	j := 0
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IEdgeLayerContext); ok {
+			if j == i {
+				t = ctx.(antlr.RuleContext)
+				break
+			}
+			j++
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IEdgeLayerContext)
+}
+
+func (s *EdgesContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *EdgesContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (p *ConfigParser) Edges() (localctx IEdgesContext) {
+	this := p
+	_ = this
+
+	localctx = NewEdgesContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 36, ConfigParserRULE_edges)
+	var _la int
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(123)
+		p.Match(ConfigParserEDGES)
+	}
+	{
+		p.SetState(124)
+		p.Match(ConfigParserCOLON)
+	}
+	p.SetState(126)
+	p.GetErrorHandler().Sync(p)
+	_la = p.GetTokenStream().LA(1)
+
+	for ok := true; ok; ok = (((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<ConfigParserDOWN)|(1<<ConfigParserMIDDLE)|(1<<ConfigParserUP))) != 0) {
+		{
+			p.SetState(125)
+			p.EdgeLayer()
+		}
+
+		p.SetState(128)
+		p.GetErrorHandler().Sync(p)
+		_la = p.GetTokenStream().LA(1)
+	}
+
+	return localctx
+}
+
+// IEdgeLayerContext is an interface to support dynamic dispatch.
+type IEdgeLayerContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// IsEdgeLayerContext differentiates from other interfaces.
+	IsEdgeLayerContext()
+}
+
+type EdgeLayerContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyEdgeLayerContext() *EdgeLayerContext {
+	var p = new(EdgeLayerContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = ConfigParserRULE_edgeLayer
+	return p
+}
+
+func (*EdgeLayerContext) IsEdgeLayerContext() {}
+
+func NewEdgeLayerContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *EdgeLayerContext {
+	var p = new(EdgeLayerContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = ConfigParserRULE_edgeLayer
+
+	return p
+}
+
+func (s *EdgeLayerContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *EdgeLayerContext) LayerDef() ILayerDefContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ILayerDefContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ILayerDefContext)
+}
+
+func (s *EdgeLayerContext) COLON() antlr.TerminalNode {
+	return s.GetToken(ConfigParserCOLON, 0)
+}
+
+func (s *EdgeLayerContext) AllEdge() []IEdgeContext {
+	children := s.GetChildren()
+	len := 0
+	for _, ctx := range children {
+		if _, ok := ctx.(IEdgeContext); ok {
+			len++
+		}
+	}
+
+	tst := make([]IEdgeContext, len)
+	i := 0
+	for _, ctx := range children {
+		if t, ok := ctx.(IEdgeContext); ok {
+			tst[i] = t.(IEdgeContext)
+			i++
+		}
+	}
+
+	return tst
+}
+
+func (s *EdgeLayerContext) Edge(i int) IEdgeContext {
+	var t antlr.RuleContext
+	j := 0
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IEdgeContext); ok {
+			if j == i {
+				t = ctx.(antlr.RuleContext)
+				break
+			}
+			j++
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IEdgeContext)
+}
+
+func (s *EdgeLayerContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *EdgeLayerContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (p *ConfigParser) EdgeLayer() (localctx IEdgeLayerContext) {
+	this := p
+	_ = this
+
+	localctx = NewEdgeLayerContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 38, ConfigParserRULE_edgeLayer)
+	var _la int
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(130)
+		p.LayerDef()
+	}
+	{
+		p.SetState(131)
+		p.Match(ConfigParserCOLON)
+	}
+	p.SetState(133)
+	p.GetErrorHandler().Sync(p)
+	_la = p.GetTokenStream().LA(1)
+
+	for ok := true; ok; ok = _la == ConfigParserWORD {
+		{
+			p.SetState(132)
+			p.Edge()
+		}
+
+		p.SetState(135)
+		p.GetErrorHandler().Sync(p)
+		_la = p.GetTokenStream().LA(1)
+	}
+
+	return localctx
+}
+
+// IEdgeContext is an interface to support dynamic dispatch.
+type IEdgeContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// IsEdgeContext differentiates from other interfaces.
+	IsEdgeContext()
+}
+
+type EdgeContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyEdgeContext() *EdgeContext {
+	var p = new(EdgeContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = ConfigParserRULE_edge
+	return p
+}
+
+func (*EdgeContext) IsEdgeContext() {}
+
+func NewEdgeContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *EdgeContext {
+	var p = new(EdgeContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = ConfigParserRULE_edge
+
+	return p
+}
+
+func (s *EdgeContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *EdgeContext) WORD() antlr.TerminalNode {
+	return s.GetToken(ConfigParserWORD, 0)
+}
+
+func (s *EdgeContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *EdgeContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (p *ConfigParser) Edge() (localctx IEdgeContext) {
+	this := p
+	_ = this
+
+	localctx = NewEdgeContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 40, ConfigParserRULE_edge)
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(137)
+		p.Match(ConfigParserWORD)
 	}
 
 	return localctx

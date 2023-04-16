@@ -1,16 +1,13 @@
-#! /bin/bash
+#!/bin/sh
 # Stop on error
 set -e
-# Get scripts folder"
-SCRIPTS="$(dirname $(realpath "$0"))"
-cd ${SCRIPTS}/..
 # Compile the source codes
-go build -o rubik_server.exe src/main.go
+go build -o rubik_server ./src/main.go
 # Run it
-./rubik_server.exe &
+./rubik_server &
 # Get pid
-PID=$!
+SERVER_PID=$!
 # Save pid to file
-echo $PID > rubik_server.pid
+echo $SERVER_PID > /tmp/server.pid
 # Unset stopping on error
 set +e

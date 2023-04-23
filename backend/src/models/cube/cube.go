@@ -44,6 +44,23 @@ func (c *Cube) getCorners() map[sideCoord]color.Color {
 	return corners
 }
 
+func (c *Cube) getEdgePieces() []edgePiece {
+	edgePieces := make([]edgePiece, 0, 12)
+	for _, edge := range edgeCoords {
+		edgePieces = append(edgePieces, newEdgePiece(c, edge))
+	}
+	return edgePieces
+}
+
+func (c *Cube) getGoalSide(color color.Color) CubeSide {
+	for sideName, side := range c.sides {
+		if side[1][1] == color {
+			return sideName
+		}
+	}
+	panic(fmt.Sprintf("No side with color %s", color.String()))
+}
+
 func (c *Cube) GetValidator() models.Validator {
 	return newValidator(c)
 }

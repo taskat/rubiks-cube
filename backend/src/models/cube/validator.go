@@ -37,13 +37,20 @@ func (v *validator) checkCornerTwists() []string {
 		}
 	}
 	if sum%3 != 0 {
-		return []string{"There are some corner twists"}
+		return []string{fmt.Sprintf("There are some corner twists (%d)", sum%3)}
 	}
 	return nil
 }
 
 func (v *validator) checkEdgeFlips() []string {
-	fmt.Println("checkEdgeFlips")
+	edgePieces := v.cube.getEdgePieces()
+	moves := 0
+	for _, piece := range edgePieces {
+		moves += piece.movesToGoal()
+	}
+	if moves%2 != 0 {
+		return []string{fmt.Sprintf("There are some edge flips")}
+	}
 	return nil
 }
 

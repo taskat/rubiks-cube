@@ -17,7 +17,37 @@ func (c CubeSide) String() string {
 	return string(c)
 }
 
+func (c CubeSide) getOpposite() CubeSide {
+	switch c {
+	case Front:
+		return Back
+	case Back:
+		return Front
+	case Left:
+		return Right
+	case Right:
+		return Left
+	case Up:
+		return Down
+	case Down:
+		return Up
+	}
+	panic("Invalid side")
+}
+
+func (c CubeSide) isOpposite(other CubeSide) bool {
+	opposite := c.getOpposite()
+	return opposite == other
+}
+
 type sideCoord struct {
 	side CubeSide
 	coord.Coord
+}
+
+func newSideCoord(side CubeSide, row, col int) sideCoord {
+	return sideCoord{
+		side:  side,
+		Coord: coord.NewCoord(row, col),
+	}
 }

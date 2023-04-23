@@ -1,4 +1,3 @@
 frontend/node_modules
 backend/grammars/.antlr
-backend/rubik_server.exe
-backend/dev_mode.exe
+backend/rubik_server

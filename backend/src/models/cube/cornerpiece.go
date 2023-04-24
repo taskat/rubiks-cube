@@ -22,13 +22,22 @@ func newCornerPiece(c *Cube, coords []sideCoord) cornerPiece {
 	return cornerPiece{location, colors, goalLocation}
 }
 
+func (c cornerPiece) getTwist(isGood func(color.Color) bool) int {
+	for i, color := range c.colors {
+		if isGood(color) {
+			return i
+		}
+	}
+	panic("No good side found")
+}
+
 var cornerCoords = [][]sideCoord{
 	{newSideCoord(Up, 0, 0), newSideCoord(Left, 0, 0), newSideCoord(Back, 0, 2)},
 	{newSideCoord(Up, 0, 2), newSideCoord(Back, 0, 0), newSideCoord(Right, 0, 2)},
 	{newSideCoord(Up, 2, 2), newSideCoord(Right, 0, 0), newSideCoord(Front, 0, 2)},
 	{newSideCoord(Up, 2, 0), newSideCoord(Front, 0, 0), newSideCoord(Left, 0, 2)},
-	{newSideCoord(Down, 0, 0), newSideCoord(Front, 2, 0), newSideCoord(Left, 2, 2)},
+	{newSideCoord(Down, 0, 0), newSideCoord(Left, 2, 2), newSideCoord(Front, 2, 0)},
 	{newSideCoord(Down, 0, 2), newSideCoord(Front, 2, 2), newSideCoord(Right, 2, 0)},
-	{newSideCoord(Down, 2, 2), newSideCoord(Back, 2, 0), newSideCoord(Right, 2, 2)},
+	{newSideCoord(Down, 2, 2), newSideCoord(Right, 2, 2), newSideCoord(Back, 2, 0)},
 	{newSideCoord(Down, 2, 0), newSideCoord(Back, 2, 2), newSideCoord(Left, 2, 0)},
 }

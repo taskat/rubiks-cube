@@ -20,21 +20,10 @@ func (v *validator) checkCornerTwists() []string {
 	isGoodColor := func(c color.Color) bool {
 		return c == upColor || c == downColor
 	}
-	corners := v.cube.getCorners()
+	corners := v.cube.getCornerPieces()
 	sum := 0
-	for sideCoord, color := range corners {
-		if !isGoodColor(color) {
-			continue
-		}
-		if sideCoord.side == Up || sideCoord.side == Down {
-			continue
-		}
-		coordSum := sideCoord.Row + sideCoord.Col
-		if coordSum == 2 {
-			sum++
-		} else {
-			sum += 2
-		}
+	for _, corner := range corners {
+		sum += corner.getTwist(isGoodColor)
 	}
 	if sum%3 != 0 {
 		return []string{fmt.Sprintf("There are some corner twists (%d)", sum%3)}
@@ -111,7 +100,6 @@ func (v *validator) checkEdgeFlips() []string {
 func (v *validator) checkPermutations() []string {
 	cornerCycles := v.checkCornerCycles()
 	edgeCycles := v.checkEdgeCycles()
-	fmt.Println(cornerCycles, edgeCycles)
 	if (cornerCycles+edgeCycles)%2 != 0 {
 		return []string{fmt.Sprintf("There are some impossible permutations")}
 	}

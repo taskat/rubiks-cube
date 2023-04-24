@@ -6,7 +6,6 @@ import (
 
 	"github.com/taskat/rubiks-cube/src/color"
 	"github.com/taskat/rubiks-cube/src/models"
-	"github.com/taskat/rubiks-cube/src/models/coord"
 )
 
 type Cube struct {
@@ -26,22 +25,6 @@ func NewWithSides(sides map[CubeSide]Side) *Cube {
 		sides: sides,
 		size:  len(sides[Front]),
 	}
-}
-
-func (c *Cube) getCorners() map[sideCoord]color.Color {
-	corners := make(map[sideCoord]color.Color, 24)
-	cornerCoords := []coord.Coord{
-		{Row: 0, Col: 0},
-		{Row: 0, Col: 2},
-		{Row: 2, Col: 0},
-		{Row: 2, Col: 2},
-	}
-	for sideName, side := range c.sides {
-		for _, cornerCoord := range cornerCoords {
-			corners[sideCoord{sideName, cornerCoord}] = side[cornerCoord.Row][cornerCoord.Col]
-		}
-	}
-	return corners
 }
 
 func (c *Cube) getCornerPieces() []cornerPiece {

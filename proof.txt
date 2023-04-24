@@ -1,0 +1,75 @@
+number of cycles even <==> number of even length cycles even
+
+=>
+    odd number of corner cycles & odd number of edge cycles
+        corner
+            sum of corner cycle length will be even (8)
+                if there would be even number of even length, these sum would be even
+                but number of cycles is odd => odd number of odd length cycles
+                sum of even cycle lengths is even
+                sum of odd cycle lengths is odd
+                even + odd = odd, but this is a contradiction
+                => number of even corner cycles will be odd 
+        edge
+            sum of edge cycle length will be even (12)
+                if there would be even number of even length, these sum would be even
+                but number of cycles is odd => odd number of odd length cycles
+                sum of even cycle lengths is even
+                sum of odd cycle lengths is odd
+                even + odd = odd, but this is a contradiction
+                => number of even edge cycles will be odd 
+        odd + odd = even, we are good
+    even number of corner cycles & even number of edge cycles
+        corner
+            sum of corner cycle length will be even (8)
+                the number of odd length cycles will be even, otherwise the sum would be odd
+                even - even = even
+                => the number of even length corner cycle is even
+        edge
+            sum of edge cycle length will be even (8)
+                the number of odd length cycles will be even, otherwise the sum would be odd
+                even - even = even
+                => the number of even length edge cycle is even
+        even + even = even, we are good
+    both paths good, this direction is valid
+
+<=
+    odd number of even corner cycles & odd number of even edge cycles
+        corner
+            sum of corner cycle length will be even (8)
+                sum of even cycle lengths is even
+                even - even = even
+                sum of odd cycle lengths is even
+                this could only be, if the there is even number of odd corner cycles
+                even + even = even
+                => number of corner cycles will be even
+        edge
+            sum of edge cycle length will be even (12)
+                sum of even cycle lengths is even
+                even - even = even
+                sum of odd cycle lengths is even
+                this could only be, if the there is even number of odd edge cycles
+                even + even = even
+                => number of edge cycles will be even
+        even + even = even, we are good
+    even number of even corner cycles & even number of even edge cycles
+        corner
+            sum of corner cycle length will be even (8)
+                sum of even cycle lengths is even
+                even - even = even
+                sum of odd cycle lengths is even
+                this could only be, if the there is even number of odd corner cycles
+                even + even = even
+                => number of corner cycles will be even
+        edge
+            sum of edge cycle length will be even (12)
+                sum of even cycle lengths is even
+                even - even = even
+                sum of odd cycle lengths is even
+                this could only be, if the there is even number of odd edge cycles
+                even + even = even
+                => number of edge cycles will be even
+        even + even = even, we are good
+    both paths good, this direction is valid
+
+Both directions are valid, we are good

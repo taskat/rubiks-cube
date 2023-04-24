@@ -35,6 +35,10 @@ func (c CubeSide) getOpposite() CubeSide {
 	panic("Invalid side")
 }
 
+func (c CubeSide) getHash() string {
+	return string(c[0])
+}
+
 func (c CubeSide) isOpposite(other CubeSide) bool {
 	opposite := c.getOpposite()
 	return opposite == other

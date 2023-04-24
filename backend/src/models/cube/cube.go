@@ -44,6 +44,14 @@ func (c *Cube) getCorners() map[sideCoord]color.Color {
 	return corners
 }
 
+func (c *Cube) getCornerPieces() []cornerPiece {
+	cornerPieces := make([]cornerPiece, 0, 8)
+	for _, corner := range cornerCoords {
+		cornerPieces = append(cornerPieces, newCornerPiece(c, corner))
+	}
+	return cornerPieces
+}
+
 func (c *Cube) getEdgePieces() []edgePiece {
 	edgePieces := make([]edgePiece, 0, 12)
 	for _, edge := range edgeCoords {

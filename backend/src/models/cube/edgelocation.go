@@ -1,9 +1,17 @@
 package cube
 
-type edgeLocation [2]CubeSide
+import (
+	"sort"
+	"strings"
+)
+
+type edgeLocation struct {
+	sides [2]CubeSide
+	hash  string
+}
 
 func newEdgeLocation(s1, s2 CubeSide) edgeLocation {
-	return edgeLocation{s1, s2}
+	return edgeLocation{sides: [2]CubeSide{s1, s2}, hash: ""}
 }
 
 func (e edgeLocation) distance(other edgeLocation) int {
@@ -11,9 +19,7 @@ func (e edgeLocation) distance(other edgeLocation) int {
 		return 0
 	}
 	if !e.hasSameSide(other) {
-		middle := e.getMiddleLocation(other)
-		e[0] = middle[0]
-		e[1] = middle[1]
+		e.sides = e.getMiddleLocation(other).sides
 	}
 	diffSides := e.getDifferentSides(other)
 	if diffSides[0].isOpposite(diffSides[1]) {
@@ -24,58 +30,66 @@ func (e edgeLocation) distance(other edgeLocation) int {
 
 func (e edgeLocation) getDifferentSides(other edgeLocation) [2]CubeSide {
 	switch {
-	case e[0] == other[0]:
-		return [2]CubeSide{e[1], other[1]}
-	case e[0] == other[1]:
-		return [2]CubeSide{e[1], other[0]}
-	case e[1] == other[0]:
-		return [2]CubeSide{e[0], other[1]}
-	case e[1] == other[1]:
-		return [2]CubeSide{e[0], other[0]}
+	case e.sides[0] == other.sides[0]:
+		return [2]CubeSide{e.sides[1], other.sides[1]}
+	case e.sides[0] == other.sides[1]:
+		return [2]CubeSide{e.sides[1], other.sides[0]}
+	case e.sides[1] == other.sides[0]:
+		return [2]CubeSide{e.sides[0], other.sides[1]}
+	case e.sides[1] == other.sides[1]:
+		return [2]CubeSide{e.sides[0], other.sides[0]}
 	}
 	panic("There is more than two different sides")
 }
 
 func (e edgeLocation) getSameSide(other edgeLocation) CubeSide {
 	switch {
-	case e[0] == other[0]:
-		return e[0]
-	case e[0] == other[1]:
-		return e[0]
-	case e[1] == other[0]:
-		return e[1]
-	case e[1] == other[1]:
-		return e[1]
+	case e.sides[0] == other.sides[0]:
+		return e.sides[0]
+	case e.sides[0] == other.sides[1]:
+		return e.sides[0]
+	case e.sides[1] == other.sides[0]:
+		return e.sides[1]
+	case e.sides[1] == other.sides[1]:
+		return e.sides[1]
 	}
 	panic("There is no same side")
 }
 
 func (e edgeLocation) getMiddleLocation(other edgeLocation) edgeLocation {
-	newLocation := newEdgeLocation(e[0], e[1])
-	newLocation[0] = newLocation[0].getOpposite()
+	newLocation := newEdgeLocation(e.sides[0], e.sides[1])
+	newLocation.sides[0] = newLocation.sides[0].getOpposite()
 	if newLocation.hasSameSide(other) {
 		return newLocation
 	}
-	newLocation[0] = newLocation[0].getOpposite()
-	newLocation[1] = newLocation[1].getOpposite()
+	newLocation.sides[0] = newLocation.sides[0].getOpposite()
+	newLocation.sides[1] = newLocation.sides[1].getOpposite()
 	if newLocation.hasSameSide(other) {
 		return newLocation
 	}
 	panic("There is no middle location")
+}
 
+func (e edgeLocation) getHash() string {
+	if e.hash != "" {
+		return e.hash
+	}
+	hashes := []string{e.sides[0].getHash(), e.sides[1].getHash()}
+	sort.Strings(hashes)
+	return strings.Join(hashes, "")
 }
 
 func (e edgeLocation) hasSameSide(other edgeLocation) bool {
-	return e[0] == other[0] || e[0] == other[1] || e[1] == other[0] || e[1] == other[1]
+	return e.sides[0] == other.sides[0] || e.sides[0] == other.sides[1] || e.sides[1] == other.sides[0] || e.sides[1] == other.sides[1]
 }
 
 func (e edgeLocation) flipCost(goal edgeLocation) int {
-	if e[0] == goal[0] && e[1] == goal[1] {
+	if e.sides[0] == goal.sides[0] || e.sides[1] == goal.sides[1] {
 		return 0
 	}
 	return 3
 }
 
 func (e edgeLocation) same(other edgeLocation) bool {
-	return (e[0] == other[0] && e[1] == other[1]) || (e[0] == other[1] && e[1] == other[0])
+	return (e.sides[0] == other.sides[0] && e.sides[1] == other.sides[1]) || (e.sides[0] == other.sides[1] && e.sides[1] == other.sides[0])
 }

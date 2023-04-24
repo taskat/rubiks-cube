@@ -1,11 +1,14 @@
 package cube
 
-import "github.com/taskat/rubiks-cube/src/color"
+import (
+	"github.com/taskat/rubiks-cube/src/color"
+)
 
 type edgePiece struct {
 	location     edgeLocation
 	colors       [2]color.Color
 	goalLocation edgeLocation
+	c            *Cube
 }
 
 func newEdgePiece(c *Cube, coords []sideCoord) edgePiece {
@@ -13,7 +16,7 @@ func newEdgePiece(c *Cube, coords []sideCoord) edgePiece {
 	colors := [2]color.Color{c.sides[coords[0].side][coords[0].Row][coords[0].Col],
 		c.sides[coords[1].side][coords[1].Row][coords[1].Col]}
 	goalLocation := newEdgeLocation(c.getGoalSide(colors[0]), c.getGoalSide(colors[1]))
-	return edgePiece{location, colors, goalLocation}
+	return edgePiece{location, colors, goalLocation, c}
 }
 
 func (e edgePiece) movesToGoal() int {
@@ -35,8 +38,11 @@ func (e edgePiece) costToSolveFlip() int {
 
 func (e edgePiece) isFlipped() bool {
 	sameSide := e.location.getSameSide(e.goalLocation)
-	return (sameSide == e.location[0] && sameSide == e.goalLocation[0]) ||
-		(sameSide == e.location[1] && sameSide == e.goalLocation[1])
+
+	if e.location.sides[0] == sameSide {
+		return e.c.getGoalSide(e.colors[0]) != sameSide
+	}
+	return e.c.getGoalSide(e.colors[1]) != sameSide
 }
 
 var edgeCoords = [][]sideCoord{

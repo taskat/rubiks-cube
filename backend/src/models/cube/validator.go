@@ -42,6 +42,60 @@ func (v *validator) checkCornerTwists() []string {
 	return nil
 }
 
+func (v *validator) checkCornerCycles() int {
+	cornerPiecesArray := v.cube.getCornerPieces()
+	cornerPieces := make(map[string]cornerPiece, len(cornerPiecesArray))
+	for _, piece := range cornerPiecesArray {
+		cornerPieces[piece.location.getHash()] = piece
+	}
+	numberOfCycles := 0
+	var startLocation, currentLocation string
+	for len(cornerPieces) > 0 {
+		for location := range cornerPieces {
+			startLocation = location
+			currentLocation = location
+			break
+		}
+		for {
+			nextLocation := cornerPieces[currentLocation].goalLocation.getHash()
+			delete(cornerPieces, currentLocation)
+			currentLocation = nextLocation
+			if currentLocation == startLocation {
+				break
+			}
+		}
+		numberOfCycles++
+	}
+	return numberOfCycles
+}
+
+func (v *validator) checkEdgeCycles() int {
+	edgePiecesArray := v.cube.getEdgePieces()
+	edgePieces := make(map[string]edgePiece, len(edgePiecesArray))
+	for _, piece := range edgePiecesArray {
+		edgePieces[piece.location.getHash()] = piece
+	}
+	numberOfCycles := 0
+	var startLocation, currentLocation string
+	for len(edgePieces) > 0 {
+		for location := range edgePieces {
+			startLocation = location
+			currentLocation = location
+			break
+		}
+		for {
+			nextLocation := edgePieces[currentLocation].goalLocation.getHash()
+			delete(edgePieces, currentLocation)
+			currentLocation = nextLocation
+			if currentLocation == startLocation {
+				break
+			}
+		}
+		numberOfCycles++
+	}
+	return numberOfCycles
+}
+
 func (v *validator) checkEdgeFlips() []string {
 	edgePieces := v.cube.getEdgePieces()
 	moves := 0
@@ -55,7 +109,12 @@ func (v *validator) checkEdgeFlips() []string {
 }
 
 func (v *validator) checkPermutations() []string {
-	fmt.Println("checkPermutations")
+	cornerCycles := v.checkCornerCycles()
+	edgeCycles := v.checkEdgeCycles()
+	fmt.Println(cornerCycles, edgeCycles)
+	if (cornerCycles+edgeCycles)%2 != 0 {
+		return []string{fmt.Sprintf("There are some impossible permutations")}
+	}
 	return nil
 }
 

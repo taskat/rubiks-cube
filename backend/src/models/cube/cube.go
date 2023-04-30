@@ -11,20 +11,37 @@ import (
 type Cube struct {
 	sides map[CubeSide]Side
 	size  int
+	moves map[string]move
 }
 
 func NewCube(size int) *Cube {
-	return &Cube{
+	c := Cube{
 		sides: make(map[CubeSide]Side, 6),
 		size:  size,
 	}
+	c.generateMoves()
+	return &c
 }
 
 func NewWithSides(sides map[CubeSide]Side) *Cube {
-	return &Cube{
+	c := Cube{
 		sides: sides,
 		size:  len(sides[Front]),
 	}
+	c.generateMoves()
+	c.turn("S2")
+	c.turn("E2")
+	c.turn("M2")
+	return &c
+}
+
+func (c *Cube) generateMoves() {
+	mg := newMoveGenerator(c.size)
+	c.moves = mg.generateAllMoves()
+}
+
+func (c *Cube) getColor(coord sideCoord) color.Color {
+	return c.sides[coord.side][coord.Row][coord.Col]
 }
 
 func (c *Cube) getCornerPieces() []cornerPiece {
@@ -68,6 +85,25 @@ func (c *Cube) String() string {
 		s += fmt.Sprintf("  %s:\n%s\n", sideName.String(), sideString)
 	}
 	return s
+}
+
+func (c *Cube) turn(name string) {
+	move := c.moves[name]
+	for _, cycle := range move.cycles {
+		moved := make(map[sideCoord]color.Color)
+		for i, coord := range cycle {
+			var currentColor color.Color
+			if color, ok := moved[coord]; ok {
+				currentColor = color
+			} else {
+				currentColor = c.getColor(coord)
+			}
+			nextCoord := cycle[(i+move.steps)%len(cycle)]
+			nextColor := c.getColor(nextCoord)
+			moved[nextCoord] = nextColor
+			c.sides[nextCoord.side][nextCoord.Row][nextCoord.Col] = currentColor
+		}
+	}
 }
 
 func (c *Cube) MarshalJSON() ([]byte, error) {

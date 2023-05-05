@@ -1,0 +1,34 @@
+goal: white(Up 0 1) and white(Up 1 2) and white(Up 2 1) and white(Up 1 0) and same(Front 0 1, Front 1 1) and same(Left 0 1, Left 1 1) and same(Back 0 1, Back 1 1) and same(Right 0 1, Right 1 1)
+    white(Up 0 1, Up 1 2, Up 2 1, Up 1 0) and same(Front 0 1, Front 1 1) and same(Left 0 1, Left 1 1) and same(Back 0 1, Back 1 1) and same(Right 0 1, Right 1 1)
+    white(Up 0 1, Up 1 2, Up 2 1, Up 1 0) and blocks([Front 0 1, Front 1 1], [Left 0 1, Left 1 1], [Back 0 1, Back 1 1], [Right 0 1, Right 1 1])
+branches:
+    if: white(Up 2 1) and same (Front 0 1, Front 1 1)
+        do: y
+    if: white(Front 0 1) and same(Up 2 1, Front 1 1)
+        do: F R' D' R F2 y
+    if: white(Down 0 1) and same(Front 1 1, Front 2 1)
+        do: F2 y
+    if: white(Front 2 1) and same(Down 0 1, Front 1 1)
+        do: D R F' R' y
+    prepare:
+        pos = find(edge, white, color(Front))
+        frontdown = (white(Front 2 1) and color(Front)(Down 0 1)) or (white(Down 0 1) and color(Front)(Front 2 1)) 
+        if: pos.Down
+            goal: frontdown
+                do: D
+        if: pos.Front
+            if: pos.Left
+                do: F
+            if: pos.Right
+                do: F'
+        if: pos.Up
+            do: pos.other(Up)2
+                goal: frontdown
+                    do: D
+        if: pos.Back
+            if: pos.Left
+                do: L' D L
+            if: pos.Right
+                do: R D' R'
+    trials: 3
+        

@@ -1,0 +1,14 @@
+helper-steps:
+
+steps:
+    white-up:
+        ...
+    white-cross:
+        ...
+    white-corners:
+        ...
+
+output:
+    x2 //white side is Up
+    F2 y ...  //white cross is ready
+    ...

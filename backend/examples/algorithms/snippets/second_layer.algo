@@ -1,0 +1,19 @@
+goal: orientation([Front, Right], [Right, Back], [Back, Left], [Left, Front])
+branches:
+    if: orientation(Front, Right)
+        do: y
+    if: place(Front, Right) or (same(Front 1 1, Front 2 1) and same(Down 0 1, Right 1 1))
+        do #algo: D' R' D R D F D' F'
+    prepare:
+        pos = find(Front, Right)
+        goal: piece(Front, Right) at (Front, Down)
+        branches:
+            if: pos.Down
+                do: D
+            if: pos.Front and Pos.Left
+                do: y' #algo y
+            if: pos.Back and Pos.Left
+                do: y2 #algo y2
+            if: pos.Right and Pos.back
+                do: y #algo y'
+            

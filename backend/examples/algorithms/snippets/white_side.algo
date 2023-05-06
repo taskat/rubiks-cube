@@ -1,0 +1,28 @@
+goal: orientation([Up, Front, Right], [Up, Right, Back], [Up, Back, Left], [Up, Left, Front])
+branches:
+    if: orientation(Up, Front, Right)
+        do: y
+    if: piece(Up, Front, Right) like (Right, Up, Front)
+        do: R' D' R D
+    if: piece(Up, Front, Right) like (Front, Right, Up)
+        do: R' D R
+    if: piece(Up, Front, Right) like (Down, Right, Front)
+        do: R' D2 R D 
+    if: piece(Up, Front, Right) like (Front, Down, Right)
+        do: D' R' D R y
+    if: piece(Up, Front, Right) like (Right, Front, Down)
+        do: D F D' F' y
+    prepare:
+        pos = find(corner, white, color(Front), color(Right))
+        goal: place(Down, Front, Right)
+            branches:
+                if: pos.Down
+                    do: D
+                if: pos.Front and pos.Left
+                    do: L D L'
+                if: pos.Left and pos.Back
+                    do: B D2 B'
+                if: pos.Back and pos.Right
+                    do: B' D' B
+
+        

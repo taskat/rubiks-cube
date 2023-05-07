@@ -1,0 +1,7 @@
+goal: place([Up, Front, Right], [Up, Right, Back], [Up, Back, Left], [Up, Left, Front])
+branches:
+    if: place(Up, Front, Right)
+        do: U R U' L' U R' U' L
+    prepare:
+        do: y
+        trials: 3

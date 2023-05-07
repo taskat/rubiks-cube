@@ -1,0 +1,17 @@
+goal: orientation(Up, Front) and orientation(Up, Right) and orientation(Up, Back) and orientation(Up, Left)
+branches:
+    if: orientation(Up, Back) and orientation(Up, Right)
+        do: #swapTwo: R U R' U R U2 R' U
+    if: orientation(Up, Back) and orientation(Up, Left)
+        do: y
+    if: orientation(Up, Front) and orientation(Up, Right)
+        do: y'
+    if: orientation(Up, Front) and orientation(Up, Left)
+        do: y2
+    prepare:
+        do: U
+        trials: 4
+    if: orientation(Up, Back)
+        do: #swapTwo
+        clear
+    

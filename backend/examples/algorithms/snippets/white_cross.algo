@@ -5,23 +5,25 @@ goal: white(Up 0 1) and white(Up 1 2) and white(Up 2 1) and white(Up 1 0) and sa
 branches:
     if: orientation(Up, Front)
         do: y
-    if: place(Up, Front)
+    if: piece(Up, Front) at place(Up, Front)
         do: F R' D' R F2 y
-    if: place(Front, Down)
+    if: piece(Up, Front) at place(Front, Down)
         do: F2
+    if: piece(Up, Front) at place(Up, Right)
+        do: R2 D'
+    if: piece(Up, Front) at place(Up, Back)
+        do: B2 D2
+    if: piece(Up, Front) at place(Up, Left)
+        do: L2 D
+    if: piece(Up, Front) at place(Right, Front)
+        do: F
+    if: piece(Up, Front) at place(Front, Left)
+        do: F'
+    if: piece(Up, Front) at place(Left, Back)
+        do: L'
+    if: piece(Up, Front) at place(Back, Right)
+        do: R
     prepare:
-        pos = find(edge, white, color(Front))
-        goal: place(Up, Front) or place (Front, Down)
-        branches:
-            if: pos.Down
-                do: D
-            if: pos.Front
-                do: F
-            if: pos.Up
-                do: U
-                after:
-                    F ?U' F'
-            if: pos.Back
-                do: B
+        do: D  
     trials: 3
         

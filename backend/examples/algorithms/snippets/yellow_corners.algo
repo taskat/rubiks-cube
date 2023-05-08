@@ -1,7 +1,9 @@
 goal: place([Up, Front, Right], [Up, Right, Back], [Up, Back, Left], [Up, Left, Front])
+helpers:
+    cycleCorners: U R U' L' U R' U' L
 runs: 9
 branches:
     if: place(Up, Front, Right)
-        do #cycleCorners: U R U' L' U R' U' L
+        do: cycleCorners
     prepare: y
     prepare: cycleCorners

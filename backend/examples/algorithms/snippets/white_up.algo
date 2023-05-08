@@ -1,8 +1,0 @@
-goal: white(Up 1 1)
-runs: 4
-branches:
-    if: white(Down 1 1)
-        do: x2
-    if: white(Front 1 1)
-        do: x
-    prepare: y

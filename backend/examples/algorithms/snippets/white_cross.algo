@@ -1,4 +1,4 @@
-goal: orientation(Up, Front) and orientation(Up, Right) and orientation(Up, Back) and orientation(Up, Left)
+goal: orientation([Up, Front], [Up, Right], [Up, Back], [Up, Left])
 runs: 20
 branches:
     if: orientation(Up, Front)

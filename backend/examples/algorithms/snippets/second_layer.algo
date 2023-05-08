@@ -6,9 +6,9 @@ runs: 16
 branches:
     if: orientation(Front, Right)
         do: y
-    if: place(Front, Right) or (same(Front 1 1, Front 2 1) and same(Down 0 1, Right 1 1))
+    if: place(Front, Right) or piece(Front, Right) like (Front, Down)
         do: right
-    if: same(Front 1 1, Down 0 1) and same(Front 2 1, Right 1 1)
+    if: piece(Front, Right) like (Down, Front)
         do: D y left
     if: piece(Front, Right) at (Front, Left)
         do: left D2

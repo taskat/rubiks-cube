@@ -9,6 +9,6 @@ branches:
         do: fromL
     if: yellow(Up 1 0, Up 1 2)
         do: fromDash
-    if: not_yellow(Up 0 1, Up 1 0, Up 1 2, Up 2 1)
+    if: none(yellow(_), [Up 0 1, Up 1 0, Up 1 2, Up 2 1])
         do: fromDash U2 fromL
     prepare: U

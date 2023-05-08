@@ -1,5 +1,6 @@
 pre: x2
 goal: yellow(Up 0 1, Up 1 0, Up 1 2, Up 2 1)
+runs: 4
 branches:
     if: yellow(Up 0 1, Up 1 0)
         do #fromL: F U R U' R' F'
@@ -7,6 +8,4 @@ branches:
         do #fromDash: F R U R' U' F'
     if: not_yellow(Up 0 1, Up 1 0, Up 1 2, Up 2 1)
         do: #fromDash U2 #fromL
-    prepare:
-        do: U
-    trials: 3
+    prepare: U

@@ -1,4 +1,5 @@
 goal: orientation([Front, Right], [Right, Back], [Back, Left], [Left, Front])
+tims: 16
 branches:
     if: orientation(Front, Right)
         do: y
@@ -12,6 +13,5 @@ branches:
         do: y' #left y D'
     if: piece(Front, Right) at (Back, Right):
         do: y #right y' D
-    prepare:
-        do: D
+    prepare: D
             

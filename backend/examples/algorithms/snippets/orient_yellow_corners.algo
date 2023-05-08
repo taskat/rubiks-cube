@@ -1,7 +1,9 @@
 goal: orientation([Up, Front, Right], [Up, Right, Back], [Up, Back, Left], [Up, Left, Front])
-    if: yellow(Up, 2, 2)
+runs: 4
+branches:
+    if: yellow(Up 2 2)
         do: U
-    if: yellow(Front, 0 2)
+    if: yellow(Front 0 2)
         do: 4(R' D' R D) U
     if: yellow(Right 0 0)
         do: 2(R' D' R D) U

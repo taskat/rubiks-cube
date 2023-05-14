@@ -34,7 +34,7 @@ steps:
                 do: L'
             if piece(Up, Front) at (Back, Right):
                 do: R
-            prepare: D  
+            prepare: D
     step white_side:
         goal: orientation([(Up, Front, Right), (Up, Right, Back), (Up, Back, Left), (Up, Left, Front)])
         runs: 16
@@ -87,10 +87,11 @@ steps:
             fromDash: F R U R' U' F'
         runs: 4
         branches:
-            if yellow(Up 0 1, Up 1 0):
+            if yellow([Up 0 1, Up 1 0]):
                 do: fromL
-            if yellow(Up 1 0, Up 1 2):
+            if yellow([Up 1 0, Up 1 2]):
                 do: fromDash
+            if yellow(Up 1 1) or blue(Up 1 1):
             if none(yellow(?), [Up 0 1, Up 1 0, Up 1 2, Up 2 1]):
                 do: fromDash U2 fromL
             prepare: U

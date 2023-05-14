@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/taskat/rubiks-cube/src/algo/handler"
 	"github.com/taskat/rubiks-cube/src/config/handler"
 	eh "github.com/taskat/rubiks-cube/src/errorhandler"
 )
@@ -19,6 +20,7 @@ func NewServer() *Server {
 	s := &Server{mux: mux}
 	s.mux.HandleFunc("/", s.check)
 	s.mux.HandleFunc("/config", s.configHandler)
+	s.mux.HandleFunc("/algo", s.algoHandler)
 	return s
 }
 
@@ -33,6 +35,35 @@ func (s Server) addHeaders(response http.ResponseWriter, request *http.Request) 
 		return
 	}
 	s.mux.ServeHTTP(response, request)
+}
+
+func (s Server) algoHandler(response http.ResponseWriter, request *http.Request) {
+	if request.Method != "POST" {
+		response.Header().Set("Allow", "POST")
+		response.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+	body, err := ioutil.ReadAll(request.Body)
+	if err != nil {
+		s.writeError(response, http.StatusBadRequest, err)
+		return
+	}
+	var content Request
+	err = json.Unmarshal(body, &content)
+	if err != nil {
+		s.writeError(response, http.StatusBadRequest, err)
+		return
+	}
+	errorHandler := eh.NewHandler()
+	algohandler.Handle("algorithm.algo", string(content.Config), errorHandler)
+	messages := errorHandler.GetMessages()
+	result := NewResult(0, messages)
+	data, err := json.Marshal(result)
+	if err != nil {
+		s.writeError(response, http.StatusInternalServerError, err)
+		return
+	}
+	response.Write(data)
 }
 
 func (s Server) check(response http.ResponseWriter, request *http.Request) {

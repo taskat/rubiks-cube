@@ -6,7 +6,7 @@ import (
 )
 
 type ErrorCollector struct {
-	antlr.ErrorListener
+	antlr.DefaultErrorListener
 	file string
 	eh   eh.Errorhandler
 }

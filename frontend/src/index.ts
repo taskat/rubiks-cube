@@ -78,7 +78,10 @@ class App {
   }
 
   solve() {
-    console.log("solve");
+    let content = this.editor.getText("algo");
+    this.httpClient.postAlgo(content).then((response) => {
+      this.updateErrors(response.errors);
+    });
   }
 
   updateErrors(errors: Error[]) {

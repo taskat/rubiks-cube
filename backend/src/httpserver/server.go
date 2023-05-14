@@ -55,7 +55,7 @@ func (s Server) algoHandler(response http.ResponseWriter, request *http.Request)
 		return
 	}
 	errorHandler := eh.NewHandler()
-	algohandler.Handle("algorithm.algo", string(content.Config), errorHandler)
+	algohandler.Handle("algorithm.algo", string(content.Algo), errorHandler)
 	messages := errorHandler.GetMessages()
 	result := NewResult(0, messages)
 	data, err := json.Marshal(result)

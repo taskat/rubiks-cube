@@ -3,7 +3,7 @@ import { Error } from "../error/error";
 
 export class ConfigResult {
     colorPalette: Map<Side, string[][]> = new Map();
-    errors: Error[];
+    errors: Error[] = [];
     constructor(data: any) {
         this.createEmptyPalette();
         if (data.data) {
@@ -15,8 +15,6 @@ export class ConfigResult {
         }
         if (data.errors) {
             this.errors = data.errors.map((error: any) => new Error(error));
-        } else {
-            this.errors = [];
         }
     }
 

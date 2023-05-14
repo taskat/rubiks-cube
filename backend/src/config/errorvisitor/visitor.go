@@ -3,7 +3,7 @@ package errorvisitor
 import (
 	"strconv"
 
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
 	cp "github.com/taskat/rubiks-cube/src/config/parser"
 	eh "github.com/taskat/rubiks-cube/src/errorhandler"
 )

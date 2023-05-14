@@ -1,7 +1,7 @@
 package errorvisitor
 
 import (
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
 	eh "github.com/taskat/rubiks-cube/src/errorhandler"
 )
 

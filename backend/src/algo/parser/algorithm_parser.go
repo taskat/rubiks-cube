@@ -1,4 +1,4 @@
-// Code generated from grammars/AlgorithmParser.g4 by ANTLR 4.10.1. DO NOT EDIT.
+// Code generated from grammars/AlgorithmParser.g4 by ANTLR 4.12.0. DO NOT EDIT.
 
 package algoparser // AlgorithmParser
 import (
@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
 )
 
 // Suppress unused import errors
@@ -81,88 +81,88 @@ func algorithmparserParserInit() {
 		3, 28, 245, 8, 28, 1, 28, 1, 28, 1, 29, 1, 29, 1, 29, 5, 29, 252, 8, 29,
 		10, 29, 12, 29, 255, 9, 29, 1, 30, 1, 30, 1, 30, 0, 1, 32, 31, 0, 2, 4,
 		6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42,
-		44, 46, 48, 50, 52, 54, 56, 58, 60, 0, 2, 1, 0, 25, 26, 2, 0, 1, 2, 9,
-		9, 260, 0, 62, 1, 0, 0, 0, 2, 65, 1, 0, 0, 0, 4, 72, 1, 0, 0, 0, 6, 79,
-		1, 0, 0, 0, 8, 82, 1, 0, 0, 0, 10, 96, 1, 0, 0, 0, 12, 98, 1, 0, 0, 0,
-		14, 102, 1, 0, 0, 0, 16, 106, 1, 0, 0, 0, 18, 113, 1, 0, 0, 0, 20, 119,
-		1, 0, 0, 0, 22, 121, 1, 0, 0, 0, 24, 126, 1, 0, 0, 0, 26, 132, 1, 0, 0,
-		0, 28, 137, 1, 0, 0, 0, 30, 141, 1, 0, 0, 0, 32, 154, 1, 0, 0, 0, 34, 165,
-		1, 0, 0, 0, 36, 167, 1, 0, 0, 0, 38, 172, 1, 0, 0, 0, 40, 174, 1, 0, 0,
-		0, 42, 179, 1, 0, 0, 0, 44, 183, 1, 0, 0, 0, 46, 190, 1, 0, 0, 0, 48, 197,
-		1, 0, 0, 0, 50, 200, 1, 0, 0, 0, 52, 215, 1, 0, 0, 0, 54, 224, 1, 0, 0,
-		0, 56, 228, 1, 0, 0, 0, 58, 248, 1, 0, 0, 0, 60, 256, 1, 0, 0, 0, 62, 63,
-		3, 2, 1, 0, 63, 64, 3, 6, 3, 0, 64, 1, 1, 0, 0, 0, 65, 66, 5, 7, 0, 0,
-		66, 68, 5, 17, 0, 0, 67, 69, 3, 4, 2, 0, 68, 67, 1, 0, 0, 0, 69, 70, 1,
-		0, 0, 0, 70, 68, 1, 0, 0, 0, 70, 71, 1, 0, 0, 0, 71, 3, 1, 0, 0, 0, 72,
-		73, 5, 29, 0, 0, 73, 74, 5, 17, 0, 0, 74, 75, 3, 28, 14, 0, 75, 5, 1, 0,
-		0, 0, 76, 78, 3, 8, 4, 0, 77, 76, 1, 0, 0, 0, 78, 81, 1, 0, 0, 0, 79, 77,
-		1, 0, 0, 0, 79, 80, 1, 0, 0, 0, 80, 7, 1, 0, 0, 0, 81, 79, 1, 0, 0, 0,
-		82, 83, 5, 15, 0, 0, 83, 84, 5, 29, 0, 0, 84, 88, 5, 17, 0, 0, 85, 87,
-		3, 10, 5, 0, 86, 85, 1, 0, 0, 0, 87, 90, 1, 0, 0, 0, 88, 86, 1, 0, 0, 0,
-		88, 89, 1, 0, 0, 0, 89, 9, 1, 0, 0, 0, 90, 88, 1, 0, 0, 0, 91, 97, 3, 12,
-		6, 0, 92, 97, 3, 2, 1, 0, 93, 97, 3, 14, 7, 0, 94, 97, 3, 16, 8, 0, 95,
-		97, 3, 18, 9, 0, 96, 91, 1, 0, 0, 0, 96, 92, 1, 0, 0, 0, 96, 93, 1, 0,
-		0, 0, 96, 94, 1, 0, 0, 0, 96, 95, 1, 0, 0, 0, 97, 11, 1, 0, 0, 0, 98, 99,
-		5, 6, 0, 0, 99, 100, 5, 17, 0, 0, 100, 101, 3, 32, 16, 0, 101, 13, 1, 0,
-		0, 0, 102, 103, 5, 14, 0, 0, 103, 104, 5, 17, 0, 0, 104, 105, 5, 28, 0,
-		0, 105, 15, 1, 0, 0, 0, 106, 107, 5, 3, 0, 0, 107, 109, 5, 17, 0, 0, 108,
-		110, 3, 20, 10, 0, 109, 108, 1, 0, 0, 0, 110, 111, 1, 0, 0, 0, 111, 109,
-		1, 0, 0, 0, 111, 112, 1, 0, 0, 0, 112, 17, 1, 0, 0, 0, 113, 114, 5, 5,
-		0, 0, 114, 115, 5, 17, 0, 0, 115, 116, 3, 28, 14, 0, 116, 19, 1, 0, 0,
-		0, 117, 120, 3, 22, 11, 0, 118, 120, 3, 24, 12, 0, 119, 117, 1, 0, 0, 0,
-		119, 118, 1, 0, 0, 0, 120, 21, 1, 0, 0, 0, 121, 122, 5, 8, 0, 0, 122, 123,
-		3, 32, 16, 0, 123, 124, 5, 17, 0, 0, 124, 125, 3, 18, 9, 0, 125, 23, 1,
-		0, 0, 0, 126, 127, 5, 13, 0, 0, 127, 128, 5, 17, 0, 0, 128, 130, 3, 18,
-		9, 0, 129, 131, 3, 26, 13, 0, 130, 129, 1, 0, 0, 0, 130, 131, 1, 0, 0,
-		0, 131, 25, 1, 0, 0, 0, 132, 133, 5, 4, 0, 0, 133, 134, 5, 17, 0, 0, 134,
-		135, 5, 28, 0, 0, 135, 27, 1, 0, 0, 0, 136, 138, 3, 30, 15, 0, 137, 136,
-		1, 0, 0, 0, 138, 139, 1, 0, 0, 0, 139, 137, 1, 0, 0, 0, 139, 140, 1, 0,
-		0, 0, 140, 29, 1, 0, 0, 0, 141, 143, 5, 29, 0, 0, 142, 144, 5, 20, 0, 0,
-		143, 142, 1, 0, 0, 0, 143, 144, 1, 0, 0, 0, 144, 31, 1, 0, 0, 0, 145, 146,
-		6, 16, -1, 0, 146, 147, 3, 34, 17, 0, 147, 148, 3, 32, 16, 4, 148, 155,
-		1, 0, 0, 0, 149, 150, 5, 21, 0, 0, 150, 151, 3, 32, 16, 0, 151, 152, 5,
-		22, 0, 0, 152, 155, 1, 0, 0, 0, 153, 155, 3, 38, 19, 0, 154, 145, 1, 0,
-		0, 0, 154, 149, 1, 0, 0, 0, 154, 153, 1, 0, 0, 0, 155, 162, 1, 0, 0, 0,
-		156, 157, 10, 3, 0, 0, 157, 158, 3, 36, 18, 0, 158, 159, 3, 32, 16, 4,
-		159, 161, 1, 0, 0, 0, 160, 156, 1, 0, 0, 0, 161, 164, 1, 0, 0, 0, 162,
-		160, 1, 0, 0, 0, 162, 163, 1, 0, 0, 0, 163, 33, 1, 0, 0, 0, 164, 162, 1,
-		0, 0, 0, 165, 166, 5, 27, 0, 0, 166, 35, 1, 0, 0, 0, 167, 168, 7, 0, 0,
-		0, 168, 37, 1, 0, 0, 0, 169, 173, 3, 40, 20, 0, 170, 173, 3, 42, 21, 0,
-		171, 173, 3, 44, 22, 0, 172, 169, 1, 0, 0, 0, 172, 170, 1, 0, 0, 0, 172,
-		171, 1, 0, 0, 0, 173, 39, 1, 0, 0, 0, 174, 175, 5, 29, 0, 0, 175, 176,
-		5, 21, 0, 0, 176, 177, 3, 48, 24, 0, 177, 178, 5, 22, 0, 0, 178, 41, 1,
-		0, 0, 0, 179, 180, 3, 48, 24, 0, 180, 181, 5, 29, 0, 0, 181, 182, 3, 48,
-		24, 0, 182, 43, 1, 0, 0, 0, 183, 184, 3, 46, 23, 0, 184, 185, 5, 21, 0,
-		0, 185, 186, 3, 38, 19, 0, 186, 187, 5, 18, 0, 0, 187, 188, 3, 56, 28,
-		0, 188, 189, 5, 22, 0, 0, 189, 45, 1, 0, 0, 0, 190, 191, 7, 1, 0, 0, 191,
-		47, 1, 0, 0, 0, 192, 198, 3, 50, 25, 0, 193, 198, 3, 52, 26, 0, 194, 198,
-		3, 54, 27, 0, 195, 198, 3, 56, 28, 0, 196, 198, 5, 19, 0, 0, 197, 192,
-		1, 0, 0, 0, 197, 193, 1, 0, 0, 0, 197, 194, 1, 0, 0, 0, 197, 195, 1, 0,
-		0, 0, 197, 196, 1, 0, 0, 0, 198, 49, 1, 0, 0, 0, 199, 201, 5, 10, 0, 0,
-		200, 199, 1, 0, 0, 0, 200, 201, 1, 0, 0, 0, 201, 202, 1, 0, 0, 0, 202,
-		203, 5, 21, 0, 0, 203, 205, 3, 58, 29, 0, 204, 206, 5, 28, 0, 0, 205, 204,
-		1, 0, 0, 0, 205, 206, 1, 0, 0, 0, 206, 207, 1, 0, 0, 0, 207, 208, 5, 22,
-		0, 0, 208, 51, 1, 0, 0, 0, 209, 211, 5, 11, 0, 0, 210, 209, 1, 0, 0, 0,
-		210, 211, 1, 0, 0, 0, 211, 216, 1, 0, 0, 0, 212, 214, 5, 12, 0, 0, 213,
-		212, 1, 0, 0, 0, 213, 214, 1, 0, 0, 0, 214, 216, 1, 0, 0, 0, 215, 210,
-		1, 0, 0, 0, 215, 213, 1, 0, 0, 0, 216, 217, 1, 0, 0, 0, 217, 218, 5, 21,
-		0, 0, 218, 220, 3, 58, 29, 0, 219, 221, 5, 28, 0, 0, 220, 219, 1, 0, 0,
-		0, 220, 221, 1, 0, 0, 0, 221, 222, 1, 0, 0, 0, 222, 223, 5, 22, 0, 0, 223,
-		53, 1, 0, 0, 0, 224, 225, 5, 29, 0, 0, 225, 226, 5, 28, 0, 0, 226, 227,
-		5, 28, 0, 0, 227, 55, 1, 0, 0, 0, 228, 244, 5, 23, 0, 0, 229, 231, 3, 50,
-		25, 0, 230, 229, 1, 0, 0, 0, 231, 232, 1, 0, 0, 0, 232, 230, 1, 0, 0, 0,
-		232, 233, 1, 0, 0, 0, 233, 245, 1, 0, 0, 0, 234, 236, 3, 52, 26, 0, 235,
-		234, 1, 0, 0, 0, 236, 237, 1, 0, 0, 0, 237, 235, 1, 0, 0, 0, 237, 238,
-		1, 0, 0, 0, 238, 245, 1, 0, 0, 0, 239, 241, 3, 54, 27, 0, 240, 239, 1,
-		0, 0, 0, 241, 242, 1, 0, 0, 0, 242, 240, 1, 0, 0, 0, 242, 243, 1, 0, 0,
-		0, 243, 245, 1, 0, 0, 0, 244, 230, 1, 0, 0, 0, 244, 235, 1, 0, 0, 0, 244,
-		240, 1, 0, 0, 0, 245, 246, 1, 0, 0, 0, 246, 247, 5, 24, 0, 0, 247, 57,
-		1, 0, 0, 0, 248, 253, 3, 60, 30, 0, 249, 250, 5, 18, 0, 0, 250, 252, 3,
-		60, 30, 0, 251, 249, 1, 0, 0, 0, 252, 255, 1, 0, 0, 0, 253, 251, 1, 0,
-		0, 0, 253, 254, 1, 0, 0, 0, 254, 59, 1, 0, 0, 0, 255, 253, 1, 0, 0, 0,
-		256, 257, 5, 29, 0, 0, 257, 61, 1, 0, 0, 0, 24, 70, 79, 88, 96, 111, 119,
-		130, 139, 143, 154, 162, 172, 197, 200, 205, 210, 213, 215, 220, 232, 237,
-		242, 244, 253,
+		44, 46, 48, 50, 52, 54, 56, 58, 60, 0, 3, 2, 0, 20, 20, 28, 28, 1, 0, 25,
+		26, 2, 0, 1, 2, 9, 9, 260, 0, 62, 1, 0, 0, 0, 2, 65, 1, 0, 0, 0, 4, 72,
+		1, 0, 0, 0, 6, 79, 1, 0, 0, 0, 8, 82, 1, 0, 0, 0, 10, 96, 1, 0, 0, 0, 12,
+		98, 1, 0, 0, 0, 14, 102, 1, 0, 0, 0, 16, 106, 1, 0, 0, 0, 18, 113, 1, 0,
+		0, 0, 20, 119, 1, 0, 0, 0, 22, 121, 1, 0, 0, 0, 24, 126, 1, 0, 0, 0, 26,
+		132, 1, 0, 0, 0, 28, 137, 1, 0, 0, 0, 30, 141, 1, 0, 0, 0, 32, 154, 1,
+		0, 0, 0, 34, 165, 1, 0, 0, 0, 36, 167, 1, 0, 0, 0, 38, 172, 1, 0, 0, 0,
+		40, 174, 1, 0, 0, 0, 42, 179, 1, 0, 0, 0, 44, 183, 1, 0, 0, 0, 46, 190,
+		1, 0, 0, 0, 48, 197, 1, 0, 0, 0, 50, 200, 1, 0, 0, 0, 52, 215, 1, 0, 0,
+		0, 54, 224, 1, 0, 0, 0, 56, 228, 1, 0, 0, 0, 58, 248, 1, 0, 0, 0, 60, 256,
+		1, 0, 0, 0, 62, 63, 3, 2, 1, 0, 63, 64, 3, 6, 3, 0, 64, 1, 1, 0, 0, 0,
+		65, 66, 5, 7, 0, 0, 66, 68, 5, 17, 0, 0, 67, 69, 3, 4, 2, 0, 68, 67, 1,
+		0, 0, 0, 69, 70, 1, 0, 0, 0, 70, 68, 1, 0, 0, 0, 70, 71, 1, 0, 0, 0, 71,
+		3, 1, 0, 0, 0, 72, 73, 5, 29, 0, 0, 73, 74, 5, 17, 0, 0, 74, 75, 3, 28,
+		14, 0, 75, 5, 1, 0, 0, 0, 76, 78, 3, 8, 4, 0, 77, 76, 1, 0, 0, 0, 78, 81,
+		1, 0, 0, 0, 79, 77, 1, 0, 0, 0, 79, 80, 1, 0, 0, 0, 80, 7, 1, 0, 0, 0,
+		81, 79, 1, 0, 0, 0, 82, 83, 5, 15, 0, 0, 83, 84, 5, 29, 0, 0, 84, 88, 5,
+		17, 0, 0, 85, 87, 3, 10, 5, 0, 86, 85, 1, 0, 0, 0, 87, 90, 1, 0, 0, 0,
+		88, 86, 1, 0, 0, 0, 88, 89, 1, 0, 0, 0, 89, 9, 1, 0, 0, 0, 90, 88, 1, 0,
+		0, 0, 91, 97, 3, 12, 6, 0, 92, 97, 3, 2, 1, 0, 93, 97, 3, 14, 7, 0, 94,
+		97, 3, 16, 8, 0, 95, 97, 3, 18, 9, 0, 96, 91, 1, 0, 0, 0, 96, 92, 1, 0,
+		0, 0, 96, 93, 1, 0, 0, 0, 96, 94, 1, 0, 0, 0, 96, 95, 1, 0, 0, 0, 97, 11,
+		1, 0, 0, 0, 98, 99, 5, 6, 0, 0, 99, 100, 5, 17, 0, 0, 100, 101, 3, 32,
+		16, 0, 101, 13, 1, 0, 0, 0, 102, 103, 5, 14, 0, 0, 103, 104, 5, 17, 0,
+		0, 104, 105, 5, 28, 0, 0, 105, 15, 1, 0, 0, 0, 106, 107, 5, 3, 0, 0, 107,
+		109, 5, 17, 0, 0, 108, 110, 3, 20, 10, 0, 109, 108, 1, 0, 0, 0, 110, 111,
+		1, 0, 0, 0, 111, 109, 1, 0, 0, 0, 111, 112, 1, 0, 0, 0, 112, 17, 1, 0,
+		0, 0, 113, 114, 5, 5, 0, 0, 114, 115, 5, 17, 0, 0, 115, 116, 3, 28, 14,
+		0, 116, 19, 1, 0, 0, 0, 117, 120, 3, 22, 11, 0, 118, 120, 3, 24, 12, 0,
+		119, 117, 1, 0, 0, 0, 119, 118, 1, 0, 0, 0, 120, 21, 1, 0, 0, 0, 121, 122,
+		5, 8, 0, 0, 122, 123, 3, 32, 16, 0, 123, 124, 5, 17, 0, 0, 124, 125, 3,
+		18, 9, 0, 125, 23, 1, 0, 0, 0, 126, 127, 5, 13, 0, 0, 127, 128, 5, 17,
+		0, 0, 128, 130, 3, 18, 9, 0, 129, 131, 3, 26, 13, 0, 130, 129, 1, 0, 0,
+		0, 130, 131, 1, 0, 0, 0, 131, 25, 1, 0, 0, 0, 132, 133, 5, 4, 0, 0, 133,
+		134, 5, 17, 0, 0, 134, 135, 5, 28, 0, 0, 135, 27, 1, 0, 0, 0, 136, 138,
+		3, 30, 15, 0, 137, 136, 1, 0, 0, 0, 138, 139, 1, 0, 0, 0, 139, 137, 1,
+		0, 0, 0, 139, 140, 1, 0, 0, 0, 140, 29, 1, 0, 0, 0, 141, 143, 5, 29, 0,
+		0, 142, 144, 7, 0, 0, 0, 143, 142, 1, 0, 0, 0, 143, 144, 1, 0, 0, 0, 144,
+		31, 1, 0, 0, 0, 145, 146, 6, 16, -1, 0, 146, 147, 3, 34, 17, 0, 147, 148,
+		3, 32, 16, 4, 148, 155, 1, 0, 0, 0, 149, 150, 5, 21, 0, 0, 150, 151, 3,
+		32, 16, 0, 151, 152, 5, 22, 0, 0, 152, 155, 1, 0, 0, 0, 153, 155, 3, 38,
+		19, 0, 154, 145, 1, 0, 0, 0, 154, 149, 1, 0, 0, 0, 154, 153, 1, 0, 0, 0,
+		155, 162, 1, 0, 0, 0, 156, 157, 10, 3, 0, 0, 157, 158, 3, 36, 18, 0, 158,
+		159, 3, 32, 16, 4, 159, 161, 1, 0, 0, 0, 160, 156, 1, 0, 0, 0, 161, 164,
+		1, 0, 0, 0, 162, 160, 1, 0, 0, 0, 162, 163, 1, 0, 0, 0, 163, 33, 1, 0,
+		0, 0, 164, 162, 1, 0, 0, 0, 165, 166, 5, 27, 0, 0, 166, 35, 1, 0, 0, 0,
+		167, 168, 7, 1, 0, 0, 168, 37, 1, 0, 0, 0, 169, 173, 3, 40, 20, 0, 170,
+		173, 3, 42, 21, 0, 171, 173, 3, 44, 22, 0, 172, 169, 1, 0, 0, 0, 172, 170,
+		1, 0, 0, 0, 172, 171, 1, 0, 0, 0, 173, 39, 1, 0, 0, 0, 174, 175, 5, 29,
+		0, 0, 175, 176, 5, 21, 0, 0, 176, 177, 3, 48, 24, 0, 177, 178, 5, 22, 0,
+		0, 178, 41, 1, 0, 0, 0, 179, 180, 3, 48, 24, 0, 180, 181, 5, 29, 0, 0,
+		181, 182, 3, 48, 24, 0, 182, 43, 1, 0, 0, 0, 183, 184, 3, 46, 23, 0, 184,
+		185, 5, 21, 0, 0, 185, 186, 3, 38, 19, 0, 186, 187, 5, 18, 0, 0, 187, 188,
+		3, 56, 28, 0, 188, 189, 5, 22, 0, 0, 189, 45, 1, 0, 0, 0, 190, 191, 7,
+		2, 0, 0, 191, 47, 1, 0, 0, 0, 192, 198, 3, 50, 25, 0, 193, 198, 3, 52,
+		26, 0, 194, 198, 3, 54, 27, 0, 195, 198, 3, 56, 28, 0, 196, 198, 5, 19,
+		0, 0, 197, 192, 1, 0, 0, 0, 197, 193, 1, 0, 0, 0, 197, 194, 1, 0, 0, 0,
+		197, 195, 1, 0, 0, 0, 197, 196, 1, 0, 0, 0, 198, 49, 1, 0, 0, 0, 199, 201,
+		5, 10, 0, 0, 200, 199, 1, 0, 0, 0, 200, 201, 1, 0, 0, 0, 201, 202, 1, 0,
+		0, 0, 202, 203, 5, 21, 0, 0, 203, 205, 3, 58, 29, 0, 204, 206, 5, 28, 0,
+		0, 205, 204, 1, 0, 0, 0, 205, 206, 1, 0, 0, 0, 206, 207, 1, 0, 0, 0, 207,
+		208, 5, 22, 0, 0, 208, 51, 1, 0, 0, 0, 209, 211, 5, 11, 0, 0, 210, 209,
+		1, 0, 0, 0, 210, 211, 1, 0, 0, 0, 211, 216, 1, 0, 0, 0, 212, 214, 5, 12,
+		0, 0, 213, 212, 1, 0, 0, 0, 213, 214, 1, 0, 0, 0, 214, 216, 1, 0, 0, 0,
+		215, 210, 1, 0, 0, 0, 215, 213, 1, 0, 0, 0, 216, 217, 1, 0, 0, 0, 217,
+		218, 5, 21, 0, 0, 218, 220, 3, 58, 29, 0, 219, 221, 5, 28, 0, 0, 220, 219,
+		1, 0, 0, 0, 220, 221, 1, 0, 0, 0, 221, 222, 1, 0, 0, 0, 222, 223, 5, 22,
+		0, 0, 223, 53, 1, 0, 0, 0, 224, 225, 5, 29, 0, 0, 225, 226, 5, 28, 0, 0,
+		226, 227, 5, 28, 0, 0, 227, 55, 1, 0, 0, 0, 228, 244, 5, 23, 0, 0, 229,
+		231, 3, 50, 25, 0, 230, 229, 1, 0, 0, 0, 231, 232, 1, 0, 0, 0, 232, 230,
+		1, 0, 0, 0, 232, 233, 1, 0, 0, 0, 233, 245, 1, 0, 0, 0, 234, 236, 3, 52,
+		26, 0, 235, 234, 1, 0, 0, 0, 236, 237, 1, 0, 0, 0, 237, 235, 1, 0, 0, 0,
+		237, 238, 1, 0, 0, 0, 238, 245, 1, 0, 0, 0, 239, 241, 3, 54, 27, 0, 240,
+		239, 1, 0, 0, 0, 241, 242, 1, 0, 0, 0, 242, 240, 1, 0, 0, 0, 242, 243,
+		1, 0, 0, 0, 243, 245, 1, 0, 0, 0, 244, 230, 1, 0, 0, 0, 244, 235, 1, 0,
+		0, 0, 244, 240, 1, 0, 0, 0, 245, 246, 1, 0, 0, 0, 246, 247, 5, 24, 0, 0,
+		247, 57, 1, 0, 0, 0, 248, 253, 3, 60, 30, 0, 249, 250, 5, 18, 0, 0, 250,
+		252, 3, 60, 30, 0, 251, 249, 1, 0, 0, 0, 252, 255, 1, 0, 0, 0, 253, 251,
+		1, 0, 0, 0, 253, 254, 1, 0, 0, 0, 254, 59, 1, 0, 0, 0, 255, 253, 1, 0,
+		0, 0, 256, 257, 5, 29, 0, 0, 257, 61, 1, 0, 0, 0, 24, 70, 79, 88, 96, 111,
+		119, 130, 139, 143, 154, 162, 172, 197, 200, 205, 210, 213, 215, 220, 232,
+		237, 242, 244, 253,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -277,6 +277,10 @@ type IAlgorithmFileContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	Helpers() IHelpersContext
+	Steps() IStepsContext
+
 	// IsAlgorithmFileContext differentiates from other interfaces.
 	IsAlgorithmFileContext()
 }
@@ -390,6 +394,12 @@ type IHelpersContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	HELPERS() antlr.TerminalNode
+	COLON() antlr.TerminalNode
+	AllHelperLine() []IHelperLineContext
+	HelperLine(i int) IHelperLineContext
 
 	// IsHelpersContext differentiates from other interfaces.
 	IsHelpersContext()
@@ -537,6 +547,11 @@ type IHelperLineContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	WORD() antlr.TerminalNode
+	COLON() antlr.TerminalNode
+	Algorithm() IAlgorithmContext
+
 	// IsHelperLineContext differentiates from other interfaces.
 	IsHelperLineContext()
 }
@@ -646,6 +661,10 @@ type IStepsContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	AllStep() []IStepContext
+	Step(i int) IStepContext
 
 	// IsStepsContext differentiates from other interfaces.
 	IsStepsContext()
@@ -776,6 +795,13 @@ type IStepContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	STEP() antlr.TerminalNode
+	WORD() antlr.TerminalNode
+	COLON() antlr.TerminalNode
+	AllStepLine() []IStepLineContext
+	StepLine(i int) IStepLineContext
 
 	// IsStepContext differentiates from other interfaces.
 	IsStepContext()
@@ -910,7 +936,7 @@ func (p *AlgorithmParser) Step() (localctx IStepContext) {
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	for ((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<AlgorithmParserBRANCHES)|(1<<AlgorithmParserDO)|(1<<AlgorithmParserGOAL)|(1<<AlgorithmParserHELPERS)|(1<<AlgorithmParserRUNS))) != 0 {
+	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&16616) != 0 {
 		{
 			p.SetState(85)
 			p.StepLine()
@@ -930,6 +956,13 @@ type IStepLineContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	Goal() IGoalContext
+	Helpers() IHelpersContext
+	Runs() IRunsContext
+	Branches() IBranchesContext
+	DoDef() IDoDefContext
 
 	// IsStepLineContext differentiates from other interfaces.
 	IsStepLineContext()
@@ -1126,6 +1159,11 @@ type IGoalContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	GOAL() antlr.TerminalNode
+	COLON() antlr.TerminalNode
+	BoolExpr() IBoolExprContext
+
 	// IsGoalContext differentiates from other interfaces.
 	IsGoalContext()
 }
@@ -1236,6 +1274,11 @@ type IRunsContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	RUNS() antlr.TerminalNode
+	COLON() antlr.TerminalNode
+	NUMBER() antlr.TerminalNode
+
 	// IsRunsContext differentiates from other interfaces.
 	IsRunsContext()
 }
@@ -1333,6 +1376,12 @@ type IBranchesContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	BRANCHES() antlr.TerminalNode
+	COLON() antlr.TerminalNode
+	AllBranch() []IBranchContext
+	Branch(i int) IBranchContext
 
 	// IsBranchesContext differentiates from other interfaces.
 	IsBranchesContext()
@@ -1480,6 +1529,11 @@ type IDoDefContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	DO() antlr.TerminalNode
+	COLON() antlr.TerminalNode
+	Algorithm() IAlgorithmContext
+
 	// IsDoDefContext differentiates from other interfaces.
 	IsDoDefContext()
 }
@@ -1589,6 +1643,10 @@ type IBranchContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	IfBranch() IIfBranchContext
+	PrepareBranch() IPrepareBranchContext
 
 	// IsBranchContext differentiates from other interfaces.
 	IsBranchContext()
@@ -1715,6 +1773,12 @@ type IIfBranchContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	IF() antlr.TerminalNode
+	BoolExpr() IBoolExprContext
+	COLON() antlr.TerminalNode
+	DoDef() IDoDefContext
 
 	// IsIfBranchContext differentiates from other interfaces.
 	IsIfBranchContext()
@@ -1845,6 +1909,12 @@ type IPrepareBranchContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	PREPARE() antlr.TerminalNode
+	COLON() antlr.TerminalNode
+	DoDef() IDoDefContext
+	Consecutive() IConsecutiveContext
 
 	// IsPrepareBranchContext differentiates from other interfaces.
 	IsPrepareBranchContext()
@@ -1984,6 +2054,11 @@ type IConsecutiveContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	CONSECUTIVE() antlr.TerminalNode
+	COLON() antlr.TerminalNode
+	NUMBER() antlr.TerminalNode
+
 	// IsConsecutiveContext differentiates from other interfaces.
 	IsConsecutiveContext()
 }
@@ -2081,6 +2156,10 @@ type IAlgorithmContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	AllTurn() []ITurnContext
+	Turn(i int) ITurnContext
 
 	// IsAlgorithmContext differentiates from other interfaces.
 	IsAlgorithmContext()
@@ -2218,6 +2297,11 @@ type ITurnContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	WORD() antlr.TerminalNode
+	NUMBER() antlr.TerminalNode
+	PRIME() antlr.TerminalNode
+
 	// IsTurnContext differentiates from other interfaces.
 	IsTurnContext()
 }
@@ -2251,6 +2335,10 @@ func (s *TurnContext) GetParser() antlr.Parser { return s.parser }
 
 func (s *TurnContext) WORD() antlr.TerminalNode {
 	return s.GetToken(AlgorithmParserWORD, 0)
+}
+
+func (s *TurnContext) NUMBER() antlr.TerminalNode {
+	return s.GetToken(AlgorithmParserNUMBER, 0)
 }
 
 func (s *TurnContext) PRIME() antlr.TerminalNode {
@@ -2298,10 +2386,17 @@ func (p *AlgorithmParser) Turn() (localctx ITurnContext) {
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	if _la == AlgorithmParserPRIME {
+	if _la == AlgorithmParserPRIME || _la == AlgorithmParserNUMBER {
 		{
 			p.SetState(142)
-			p.Match(AlgorithmParserPRIME)
+			_la = p.GetTokenStream().LA(1)
+
+			if !(_la == AlgorithmParserPRIME || _la == AlgorithmParserNUMBER) {
+				p.GetErrorHandler().RecoverInline(p)
+			} else {
+				p.GetErrorHandler().ReportMatch(p)
+				p.Consume()
+			}
 		}
 
 	}
@@ -2315,6 +2410,15 @@ type IBoolExprContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	UnaryOp() IUnaryOpContext
+	AllBoolExpr() []IBoolExprContext
+	BoolExpr(i int) IBoolExprContext
+	LPAREN() antlr.TerminalNode
+	RPAREN() antlr.TerminalNode
+	Expr() IExprContext
+	BinaryOp() IBinaryOpContext
 
 	// IsBoolExprContext differentiates from other interfaces.
 	IsBoolExprContext()
@@ -2564,6 +2668,9 @@ type IUnaryOpContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	NOT() antlr.TerminalNode
+
 	// IsUnaryOpContext differentiates from other interfaces.
 	IsUnaryOpContext()
 }
@@ -2645,6 +2752,10 @@ type IBinaryOpContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	AND() antlr.TerminalNode
+	OR() antlr.TerminalNode
 
 	// IsBinaryOpContext differentiates from other interfaces.
 	IsBinaryOpContext()
@@ -2739,6 +2850,11 @@ type IExprContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	UnaryExpr() IUnaryExprContext
+	BinaryExpr() IBinaryExprContext
+	FunctionalExpr() IFunctionalExprContext
 
 	// IsExprContext differentiates from other interfaces.
 	IsExprContext()
@@ -2886,6 +3002,12 @@ type IUnaryExprContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	WORD() antlr.TerminalNode
+	LPAREN() antlr.TerminalNode
+	Parameter() IParameterContext
+	RPAREN() antlr.TerminalNode
+
 	// IsUnaryExprContext differentiates from other interfaces.
 	IsUnaryExprContext()
 }
@@ -3003,6 +3125,11 @@ type IBinaryExprContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	AllParameter() []IParameterContext
+	Parameter(i int) IParameterContext
+	WORD() antlr.TerminalNode
 
 	// IsBinaryExprContext differentiates from other interfaces.
 	IsBinaryExprContext()
@@ -3134,6 +3261,14 @@ type IFunctionalExprContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	Function() IFunctionContext
+	LPAREN() antlr.TerminalNode
+	Expr() IExprContext
+	COMMA() antlr.TerminalNode
+	List() IListContext
+	RPAREN() antlr.TerminalNode
 
 	// IsFunctionalExprContext differentiates from other interfaces.
 	IsFunctionalExprContext()
@@ -3293,6 +3428,11 @@ type IFunctionContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	ALL() antlr.TerminalNode
+	ANY() antlr.TerminalNode
+	NONE() antlr.TerminalNode
+
 	// IsFunctionContext differentiates from other interfaces.
 	IsFunctionContext()
 }
@@ -3373,7 +3513,7 @@ func (p *AlgorithmParser) Function() (localctx IFunctionContext) {
 		p.SetState(190)
 		_la = p.GetTokenStream().LA(1)
 
-		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<AlgorithmParserALL)|(1<<AlgorithmParserANY)|(1<<AlgorithmParserNONE))) != 0) {
+		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&518) != 0) {
 			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)
@@ -3390,6 +3530,13 @@ type IParameterContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	Piece() IPieceContext
+	Position() IPositionContext
+	Coord() ICoordContext
+	List() IListContext
+	QUESTIONMARK() antlr.TerminalNode
 
 	// IsParameterContext differentiates from other interfaces.
 	IsParameterContext()
@@ -3571,6 +3718,13 @@ type IPieceContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	LPAREN() antlr.TerminalNode
+	Sides() ISidesContext
+	RPAREN() antlr.TerminalNode
+	PIECE() antlr.TerminalNode
+	NUMBER() antlr.TerminalNode
+
 	// IsPieceContext differentiates from other interfaces.
 	IsPieceContext()
 }
@@ -3711,6 +3865,14 @@ type IPositionContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	LPAREN() antlr.TerminalNode
+	Sides() ISidesContext
+	RPAREN() antlr.TerminalNode
+	NUMBER() antlr.TerminalNode
+	POS() antlr.TerminalNode
+	POSITION() antlr.TerminalNode
 
 	// IsPositionContext differentiates from other interfaces.
 	IsPositionContext()
@@ -3876,6 +4038,11 @@ type ICoordContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	WORD() antlr.TerminalNode
+	AllNUMBER() []antlr.TerminalNode
+	NUMBER(i int) antlr.TerminalNode
+
 	// IsCoordContext differentiates from other interfaces.
 	IsCoordContext()
 }
@@ -3973,6 +4140,16 @@ type IListContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	LBRACKET() antlr.TerminalNode
+	RBRACKET() antlr.TerminalNode
+	AllPiece() []IPieceContext
+	Piece(i int) IPieceContext
+	AllPosition() []IPositionContext
+	Position(i int) IPositionContext
+	AllCoord() []ICoordContext
+	Coord(i int) ICoordContext
 
 	// IsListContext differentiates from other interfaces.
 	IsListContext()
@@ -4197,7 +4374,7 @@ func (p *AlgorithmParser) List() (localctx IListContext) {
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 
-		for ok := true; ok; ok = (((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<AlgorithmParserPOS)|(1<<AlgorithmParserPOSITION)|(1<<AlgorithmParserLPAREN))) != 0) {
+		for ok := true; ok; ok = ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&2103296) != 0) {
 			{
 				p.SetState(234)
 				p.Position()
@@ -4239,6 +4416,12 @@ type ISidesContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	AllSide() []ISideContext
+	Side(i int) ISideContext
+	AllCOMMA() []antlr.TerminalNode
+	COMMA(i int) antlr.TerminalNode
 
 	// IsSidesContext differentiates from other interfaces.
 	IsSidesContext()
@@ -4385,6 +4568,9 @@ type ISideContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	WORD() antlr.TerminalNode
 
 	// IsSideContext differentiates from other interfaces.
 	IsSideContext()

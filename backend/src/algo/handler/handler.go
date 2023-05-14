@@ -1,7 +1,7 @@
 package algohandler
 
 import (
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
 	ev "github.com/taskat/rubiks-cube/src/algo/errorvisitor"
 	al "github.com/taskat/rubiks-cube/src/algo/lexer"
 	ap "github.com/taskat/rubiks-cube/src/algo/parser"

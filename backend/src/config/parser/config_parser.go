@@ -1,4 +1,4 @@
-// Code generated from grammars/ConfigParser.g4 by ANTLR 4.10.1. DO NOT EDIT.
+// Code generated from grammars/ConfigParser.g4 by ANTLR 4.12.0. DO NOT EDIT.
 
 package configparser // ConfigParser
 import (
@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
 )
 
 // Suppress unused import errors
@@ -207,6 +207,11 @@ type IConfigFileContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	EOF() antlr.TerminalNode
+	AllConfigLine() []IConfigLineContext
+	ConfigLine(i int) IConfigLineContext
+
 	// IsConfigFileContext differentiates from other interfaces.
 	IsConfigFileContext()
 }
@@ -320,7 +325,7 @@ func (p *ConfigParser) ConfigFile() (localctx IConfigFileContext) {
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	for ((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<ConfigParserPUZZLE)|(1<<ConfigParserSIZE)|(1<<ConfigParserSTATE)|(1<<ConfigParserSTATE_DESCRIPTION))) != 0 {
+	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&116736) != 0 {
 		{
 			p.SetState(42)
 			p.ConfigLine()
@@ -344,6 +349,12 @@ type IConfigLineContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	PuzzleTypeDef() IPuzzleTypeDefContext
+	SizeDef() ISizeDefContext
+	StateDescriptionDef() IStateDescriptionDefContext
+	StateDef() IStateDefContext
 
 	// IsConfigLineContext differentiates from other interfaces.
 	IsConfigLineContext()
@@ -517,6 +528,11 @@ type IPuzzleTypeDefContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	PUZZLE() antlr.TerminalNode
+	COLON() antlr.TerminalNode
+	PuzzleType() IPuzzleTypeContext
+
 	// IsPuzzleTypeDefContext differentiates from other interfaces.
 	IsPuzzleTypeDefContext()
 }
@@ -627,6 +643,9 @@ type IPuzzleTypeContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	CUBE() antlr.TerminalNode
+
 	// IsPuzzleTypeContext differentiates from other interfaces.
 	IsPuzzleTypeContext()
 }
@@ -708,6 +727,11 @@ type ISizeDefContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	SIZE() antlr.TerminalNode
+	COLON() antlr.TerminalNode
+	NUMBER() antlr.TerminalNode
 
 	// IsSizeDefContext differentiates from other interfaces.
 	IsSizeDefContext()
@@ -806,6 +830,11 @@ type IStateDescriptionDefContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	STATE_DESCRIPTION() antlr.TerminalNode
+	COLON() antlr.TerminalNode
+	StateDescription() IStateDescriptionContext
 
 	// IsStateDescriptionDefContext differentiates from other interfaces.
 	IsStateDescriptionDefContext()
@@ -917,6 +946,10 @@ type IStateDescriptionContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	BEGINNER() antlr.TerminalNode
+	ADVANCED() antlr.TerminalNode
+
 	// IsStateDescriptionContext differentiates from other interfaces.
 	IsStateDescriptionContext()
 }
@@ -1010,6 +1043,11 @@ type IStateDefContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	STATE() antlr.TerminalNode
+	COLON() antlr.TerminalNode
+	State() IStateContext
 
 	// IsStateDefContext differentiates from other interfaces.
 	IsStateDefContext()
@@ -1120,6 +1158,11 @@ type IStateContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	RANDOM() antlr.TerminalNode
+	BeginnerState() IBeginnerStateContext
+	AdvancedState() IAdvancedStateContext
 
 	// IsStateContext differentiates from other interfaces.
 	IsStateContext()
@@ -1258,6 +1301,10 @@ type IBeginnerStateContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	AllSide() []ISideContext
+	Side(i int) ISideContext
+
 	// IsBeginnerStateContext differentiates from other interfaces.
 	IsBeginnerStateContext()
 }
@@ -1367,7 +1414,7 @@ func (p *ConfigParser) BeginnerState() (localctx IBeginnerStateContext) {
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	for ok := true; ok; ok = (((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<ConfigParserBACK)|(1<<ConfigParserDOWN)|(1<<ConfigParserFRONT)|(1<<ConfigParserLEFT)|(1<<ConfigParserRIGHT)|(1<<ConfigParserUP))) != 0) {
+	for ok := true; ok; ok = ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&140100) != 0) {
 		{
 			p.SetState(81)
 			p.Side()
@@ -1387,6 +1434,12 @@ type ISideContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	SideDef() ISideDefContext
+	COLON() antlr.TerminalNode
+	AllColor() []IColorContext
+	Color(i int) IColorContext
 
 	// IsSideContext differentiates from other interfaces.
 	IsSideContext()
@@ -1546,6 +1599,14 @@ type ISideDefContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	FRONT() antlr.TerminalNode
+	BACK() antlr.TerminalNode
+	LEFT() antlr.TerminalNode
+	RIGHT() antlr.TerminalNode
+	UP() antlr.TerminalNode
+	DOWN() antlr.TerminalNode
+
 	// IsSideDefContext differentiates from other interfaces.
 	IsSideDefContext()
 }
@@ -1638,7 +1699,7 @@ func (p *ConfigParser) SideDef() (localctx ISideDefContext) {
 		p.SetState(93)
 		_la = p.GetTokenStream().LA(1)
 
-		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<ConfigParserBACK)|(1<<ConfigParserDOWN)|(1<<ConfigParserFRONT)|(1<<ConfigParserLEFT)|(1<<ConfigParserRIGHT)|(1<<ConfigParserUP))) != 0) {
+		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&140100) != 0) {
 			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)
@@ -1655,6 +1716,9 @@ type IColorContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	WORD() antlr.TerminalNode
 
 	// IsColorContext differentiates from other interfaces.
 	IsColorContext()
@@ -1737,6 +1801,10 @@ type IAdvancedStateContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	Corners() ICornersContext
+	Edges() IEdgesContext
 
 	// IsAdvancedStateContext differentiates from other interfaces.
 	IsAdvancedStateContext()
@@ -1872,6 +1940,12 @@ type ICornersContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	CORNERS() antlr.TerminalNode
+	COLON() antlr.TerminalNode
+	AllCornerLayer() []ICornerLayerContext
+	CornerLayer(i int) ICornerLayerContext
+
 	// IsCornersContext differentiates from other interfaces.
 	IsCornersContext()
 }
@@ -1997,7 +2071,7 @@ func (p *ConfigParser) Corners() (localctx ICornersContext) {
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	for ok := true; ok; ok = (((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<ConfigParserDOWN)|(1<<ConfigParserMIDDLE)|(1<<ConfigParserUP))) != 0) {
+	for ok := true; ok; ok = ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&132160) != 0) {
 		{
 			p.SetState(107)
 			p.CornerLayer()
@@ -2017,6 +2091,12 @@ type ICornerLayerContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	LayerDef() ILayerDefContext
+	COLON() antlr.TerminalNode
+	AllCorner() []ICornerContext
+	Corner(i int) ICornerContext
 
 	// IsCornerLayerContext differentiates from other interfaces.
 	IsCornerLayerContext()
@@ -2176,6 +2256,11 @@ type ILayerDefContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	UP() antlr.TerminalNode
+	MIDDLE() antlr.TerminalNode
+	DOWN() antlr.TerminalNode
+
 	// IsLayerDefContext differentiates from other interfaces.
 	IsLayerDefContext()
 }
@@ -2256,7 +2341,7 @@ func (p *ConfigParser) LayerDef() (localctx ILayerDefContext) {
 		p.SetState(119)
 		_la = p.GetTokenStream().LA(1)
 
-		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<ConfigParserDOWN)|(1<<ConfigParserMIDDLE)|(1<<ConfigParserUP))) != 0) {
+		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&132160) != 0) {
 			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)
@@ -2273,6 +2358,9 @@ type ICornerContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	WORD() antlr.TerminalNode
 
 	// IsCornerContext differentiates from other interfaces.
 	IsCornerContext()
@@ -2355,6 +2443,12 @@ type IEdgesContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	EDGES() antlr.TerminalNode
+	COLON() antlr.TerminalNode
+	AllEdgeLayer() []IEdgeLayerContext
+	EdgeLayer(i int) IEdgeLayerContext
 
 	// IsEdgesContext differentiates from other interfaces.
 	IsEdgesContext()
@@ -2481,7 +2575,7 @@ func (p *ConfigParser) Edges() (localctx IEdgesContext) {
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	for ok := true; ok; ok = (((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<ConfigParserDOWN)|(1<<ConfigParserMIDDLE)|(1<<ConfigParserUP))) != 0) {
+	for ok := true; ok; ok = ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&132160) != 0) {
 		{
 			p.SetState(125)
 			p.EdgeLayer()
@@ -2501,6 +2595,12 @@ type IEdgeLayerContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	LayerDef() ILayerDefContext
+	COLON() antlr.TerminalNode
+	AllEdge() []IEdgeContext
+	Edge(i int) IEdgeContext
 
 	// IsEdgeLayerContext differentiates from other interfaces.
 	IsEdgeLayerContext()
@@ -2659,6 +2759,9 @@ type IEdgeContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Getter signatures
+	WORD() antlr.TerminalNode
 
 	// IsEdgeContext differentiates from other interfaces.
 	IsEdgeContext()

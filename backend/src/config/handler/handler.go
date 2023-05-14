@@ -1,7 +1,7 @@
 package confighandler
 
 import (
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
 	ev "github.com/taskat/rubiks-cube/src/config/errorvisitor"
 	gv "github.com/taskat/rubiks-cube/src/config/generatorvisitor"
 	cl "github.com/taskat/rubiks-cube/src/config/lexer"

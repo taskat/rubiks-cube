@@ -3,7 +3,7 @@ package generatorvisitor
 import (
 	"strconv"
 
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
 	cp "github.com/taskat/rubiks-cube/src/config/parser"
 	"github.com/taskat/rubiks-cube/src/models"
 )

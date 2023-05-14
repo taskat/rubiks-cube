@@ -20,7 +20,7 @@ prepareBranch: PREPARE COLON doDef consecutive?;
 consecutive: CONSECUTIVE COLON NUMBER;
 
 algorithm: turn+;
-turn: WORD PRIME?;
+turn: WORD (NUMBER | PRIME)?;
 
 boolExpr: unaryOp boolExpr | boolExpr binaryOp boolExpr | LPAREN boolExpr RPAREN | expr;
 unaryOp: NOT;

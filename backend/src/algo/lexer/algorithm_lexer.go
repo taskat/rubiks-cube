@@ -1,4 +1,4 @@
-// Code generated from grammars/AlgorithmLexer.g4 by ANTLR 4.10.1. DO NOT EDIT.
+// Code generated from grammars/AlgorithmLexer.g4 by ANTLR 4.12.0. DO NOT EDIT.
 
 package algolexer
 
@@ -7,7 +7,7 @@ import (
 	"sync"
 	"unicode"
 
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
 )
 
 // Suppress unused import error

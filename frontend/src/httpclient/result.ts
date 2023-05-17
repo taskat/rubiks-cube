@@ -4,10 +4,10 @@ import { Error } from "../error/error";
 export class Result {
     colorPalette: Map<Side, string[][]> = this.createEmptyPalette();
     errors: Error[] = [];
-    moves: string[] = [];
+    turns: string[] = [];
     constructor(data: any) {
         if (data.data) {
-            const stringToColors: Map<string, string[][]> = new Map(Object.entries(data.data.sides));
+            const stringToColors: Map<string, string[][]> = new Map(Object.entries(data.state.sides));
             stringToColors.forEach((colors, key) => {
                 const side = Side[key as unknown as keyof typeof Side];
                 this.colorPalette.set(side, colors);
@@ -16,8 +16,8 @@ export class Result {
         if (data.errors) {
             this.errors = data.errors.map((error: any) => new Error(error));
         }
-        if (data.moves) {
-            this.moves = data.moves;
+        if (data.turns) {
+            this.turns = data.turns;
         }
     }
 

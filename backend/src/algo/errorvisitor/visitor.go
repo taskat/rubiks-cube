@@ -7,10 +7,10 @@ import (
 
 type Visitor struct {
 	fileName string
-	eh       eh.Errorhandler
+	eh       *eh.Errorhandler
 }
 
-func NewVisitor(fileName string, eh eh.Errorhandler) *Visitor {
+func NewVisitor(fileName string, eh *eh.Errorhandler) *Visitor {
 	return &Visitor{fileName: fileName, eh: eh}
 }
 

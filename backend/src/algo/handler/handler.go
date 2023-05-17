@@ -7,16 +7,17 @@ import (
 	ap "github.com/taskat/rubiks-cube/src/algo/parser"
 	eh "github.com/taskat/rubiks-cube/src/errorhandler"
 	el "github.com/taskat/rubiks-cube/src/errorlistener"
+	"github.com/taskat/rubiks-cube/src/models"
 )
 
 type Handler struct {
 	fileName     string
 	content      string
 	tree         antlr.ParseTree
-	errorHandler eh.Errorhandler
+	errorHandler *eh.Errorhandler
 }
 
-func NewHandler(fileName, content string, errorHandler eh.Errorhandler) *Handler {
+func NewHandler(fileName, content string, errorHandler *eh.Errorhandler) *Handler {
 	return &Handler{fileName: fileName, content: content, errorHandler: errorHandler}
 }
 
@@ -42,9 +43,10 @@ func (h *Handler) getTokens(input *antlr.InputStream) *antlr.CommonTokenStream {
 	return antlr.NewCommonTokenStream(lexer, 0)
 }
 
-func Handle(fileName, content string, errorHandler eh.Errorhandler) {
+func Handle(fileName, content string, errorHandler *eh.Errorhandler) models.Algorithm {
 	handler := NewHandler(fileName, content, errorHandler)
 	handler.readConfig()
+	return nil
 }
 
 func (h *Handler) readConfig() {

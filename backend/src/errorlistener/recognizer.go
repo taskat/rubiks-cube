@@ -10,7 +10,7 @@ type Recognizer interface {
 	RemoveErrorListeners()
 }
 
-func AddCustomErrorListener(to Recognizer, fileName string, eh eh.Errorhandler) {
+func AddCustomErrorListener(to Recognizer, fileName string, eh *eh.Errorhandler) {
 	to.RemoveErrorListeners()
 	to.AddErrorListener(NewErrorCollector(fileName, eh))
 }

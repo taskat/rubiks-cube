@@ -9,6 +9,7 @@ import (
 	"github.com/taskat/rubiks-cube/src/algo/handler"
 	"github.com/taskat/rubiks-cube/src/config/handler"
 	eh "github.com/taskat/rubiks-cube/src/errorhandler"
+	"github.com/taskat/rubiks-cube/src/executor"
 )
 
 type Server struct {
@@ -20,7 +21,7 @@ func NewServer() *Server {
 	s := &Server{mux: mux}
 	s.mux.HandleFunc("/", s.check)
 	s.mux.HandleFunc("/config", s.configHandler)
-	s.mux.HandleFunc("/algo", s.algoHandler)
+	s.mux.HandleFunc("/all", s.allHandler)
 	return s
 }
 
@@ -37,7 +38,7 @@ func (s Server) addHeaders(response http.ResponseWriter, request *http.Request) 
 	s.mux.ServeHTTP(response, request)
 }
 
-func (s Server) algoHandler(response http.ResponseWriter, request *http.Request) {
+func (s Server) allHandler(response http.ResponseWriter, request *http.Request) {
 	if request.Method != "POST" {
 		response.Header().Set("Allow", "POST")
 		response.WriteHeader(http.StatusMethodNotAllowed)
@@ -55,10 +56,14 @@ func (s Server) algoHandler(response http.ResponseWriter, request *http.Request)
 		return
 	}
 	errorHandler := eh.NewHandler()
-	algohandler.Handle("algorithm.algo", string(content.Algo), errorHandler)
+	cube := confighandler.Handle("config.rubiks", string(content.Config), &errorHandler)
+	algo := algohandler.Handle("algorithm.algo", string(content.Algo), &errorHandler)
+	executor := executor.NewExecutor(&errorHandler)
+	turns := executor.Execute(cube, algo)
+	fmt.Println(turns)
 	messages := errorHandler.GetMessages()
 	fmt.Println(messages)
-	result := NewResult(0, messages)
+	result := NewResult(cube, messages, turns)
 	data, err := json.Marshal(result)
 	if err != nil {
 		s.writeError(response, http.StatusInternalServerError, err)
@@ -89,9 +94,9 @@ func (s Server) configHandler(response http.ResponseWriter, request *http.Reques
 		return
 	}
 	errorHandler := eh.NewHandler()
-	cube := confighandler.Handle("config.rubiks", string(content.Config), errorHandler)
+	cube := confighandler.Handle("config.rubiks", string(content.Config), &errorHandler)
 	messages := errorHandler.GetMessages()
-	result := NewResult(cube, messages)
+	result := NewResult(cube, messages, []string{})
 	data, err := json.Marshal(result)
 	if err != nil {
 		s.writeError(response, http.StatusInternalServerError, err)

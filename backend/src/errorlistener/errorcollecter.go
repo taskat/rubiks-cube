@@ -8,10 +8,10 @@ import (
 type ErrorCollector struct {
 	antlr.DefaultErrorListener
 	file string
-	eh   eh.Errorhandler
+	eh   *eh.Errorhandler
 }
 
-func NewErrorCollector(file string, errorHandler eh.Errorhandler) *ErrorCollector {
+func NewErrorCollector(file string, errorHandler *eh.Errorhandler) *ErrorCollector {
 	return &ErrorCollector{file: file, eh: errorHandler}
 }
 

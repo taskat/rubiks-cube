@@ -15,10 +15,10 @@ type Handler struct {
 	fileName     string
 	content      string
 	tree         antlr.ParseTree
-	errorHandler eh.Errorhandler
+	errorHandler *eh.Errorhandler
 }
 
-func NewHandler(fileName, content string, errorHandler eh.Errorhandler) *Handler {
+func NewHandler(fileName, content string, errorHandler *eh.Errorhandler) *Handler {
 	return &Handler{fileName: fileName, content: content, errorHandler: errorHandler}
 }
 
@@ -45,7 +45,7 @@ func (h *Handler) getTokens(input *antlr.InputStream) *antlr.CommonTokenStream {
 	return antlr.NewCommonTokenStream(lexer, 0)
 }
 
-func Handle(fileName, content string, errorHandler eh.Errorhandler) models.Puzzle {
+func Handle(fileName, content string, errorHandler *eh.Errorhandler) models.Puzzle {
 	handler := NewHandler(fileName, content, errorHandler)
 	handler.readConfig()
 	if handler.errorHandler.HasErrors() {

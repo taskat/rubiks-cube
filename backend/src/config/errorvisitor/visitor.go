@@ -12,10 +12,10 @@ type Visitor struct {
 	fileName            string
 	stateDescription    string
 	stateDescriptionCtx eh.IContext
-	eh                  eh.Errorhandler
+	eh                  *eh.Errorhandler
 }
 
-func NewVisitor(fileName string, errorHandler eh.Errorhandler) *Visitor {
+func NewVisitor(fileName string, errorHandler *eh.Errorhandler) *Visitor {
 	return &Visitor{fileName: fileName, eh: errorHandler}
 }
 
@@ -78,7 +78,7 @@ func (v *Visitor) visitState(ctx *cp.StateContext) {
 				v.eh.AddError(v.stateDescriptionCtx, errorMsg, v.fileName)
 			}
 		} else {
-			visitor := newBeginnerStateVisitor(v.fileName, &v.eh)
+			visitor := newBeginnerStateVisitor(v.fileName, v.eh)
 			visitor.visitBeginnerState(ctx.BeginnerState().(*cp.BeginnerStateContext))
 		}
 	}
@@ -89,7 +89,7 @@ func (v *Visitor) visitState(ctx *cp.StateContext) {
 				v.eh.AddError(v.stateDescriptionCtx, errorMsg, v.fileName)
 			}
 		} else {
-			visitor := newAdvancedStateVisitor(v.fileName, &v.eh)
+			visitor := newAdvancedStateVisitor(v.fileName, v.eh)
 			visitor.visitAdvancedState(ctx.AdvancedState().(*cp.AdvancedStateContext))
 		}
 	}

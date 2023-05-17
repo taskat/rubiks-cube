@@ -1,11 +1,11 @@
 import { Side } from "../cube/side";
 import { Error } from "../error/error";
 
-export class ConfigResult {
-    colorPalette: Map<Side, string[][]> = new Map();
+export class Result {
+    colorPalette: Map<Side, string[][]> = this.createEmptyPalette();
     errors: Error[] = [];
+    moves: string[] = [];
     constructor(data: any) {
-        this.createEmptyPalette();
         if (data.data) {
             const stringToColors: Map<string, string[][]> = new Map(Object.entries(data.data.sides));
             stringToColors.forEach((colors, key) => {
@@ -16,11 +16,14 @@ export class ConfigResult {
         if (data.errors) {
             this.errors = data.errors.map((error: any) => new Error(error));
         }
+        if (data.moves) {
+            this.moves = data.moves;
+        }
     }
 
-    createEmptyPalette() {
+    createEmptyPalette(): Map<Side, string[][]> {
         const sides = [Side.Front, Side.Back, Side.Left, Side.Right, Side.Up, Side.Down];
         const emptySide = Array(3).fill(Array(3).fill("-"));
-        this.colorPalette = new Map(sides.map(side => [side, emptySide]));
+        return new Map(sides.map(side => [side, emptySide]));
     }
 }

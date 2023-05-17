@@ -1,22 +1,23 @@
 import axios from 'axios';
-import { ConfigResult } from './configresult';
-import { AlgoResult } from './algoresult';
+import { Result } from './result';
 
 export default class Client {
     private baseUrl: string = "http://localhost:8080";
     constructor() {}
     
-    public async postConfig(content: string): Promise<ConfigResult> {
+    public async postConfig(content: string): Promise<Result> {
         let body = {config: content};
-        const response = await axios.post(this.baseUrl + "/config", JSON.stringify(body));
-        console.log(response.data);
-        return new ConfigResult(response.data);
+        return this.sendPostRequest("/config", body);
     }
 
-    public async postAlgo(content: string): Promise<AlgoResult> {
-        let body = {algo: content};
-        const response = await axios.post(this.baseUrl + "/algo", JSON.stringify(body));
+    public async postAll(config: string, algo: string): Promise<Result> {
+        let body = {config: config, algo: algo};
+        return this.sendPostRequest("/all", body);
+    }
+
+    private async sendPostRequest(endpoint: string, body: any): Promise<Result> {
+        const response = await axios.post(this.baseUrl + endpoint, JSON.stringify(body));
         console.log(response.data);
-        return new AlgoResult(response.data);
+        return new Result(response.data);
     }
 }

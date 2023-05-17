@@ -78,8 +78,9 @@ class App {
   }
 
   solve() {
-    let content = this.editor.getText("algo");
-    this.httpClient.postAll(content, "").then((response) => {
+    let config = this.editor.getText("config");
+    let algo = this.editor.getText("algo");
+    this.httpClient.postAll(config, algo).then((response) => {
       this.updateErrors(response.errors);
     });
   }

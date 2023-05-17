@@ -6,12 +6,13 @@ export class Result {
     errors: Error[] = [];
     turns: string[] = [];
     constructor(data: any) {
-        if (data.data) {
+        if (data.state) {
             const stringToColors: Map<string, string[][]> = new Map(Object.entries(data.state.sides));
             stringToColors.forEach((colors, key) => {
                 const side = Side[key as unknown as keyof typeof Side];
                 this.colorPalette.set(side, colors);
             });
+            console.log(this.colorPalette);
         }
         if (data.errors) {
             this.errors = data.errors.map((error: any) => new Error(error));

@@ -1,7 +1,7 @@
 import Tab from "./tab";
 import * as monaco from "monaco-editor";
 import { State } from "./state";
-import { advancedConfig } from "./defaulttext";
+import { advancedConfig, algorithm } from "./defaulttext";
 
 
 export default class Editor {
@@ -50,7 +50,7 @@ export default class Editor {
         if (tab === "config") {
             return advancedConfig;
         } else {
-            return "Hello from algo!";
+            return algorithm;
         }
     }
 }

@@ -57,6 +57,10 @@ func (s Server) allHandler(response http.ResponseWriter, request *http.Request) 
 	}
 	errorHandler := eh.NewHandler()
 	cube := confighandler.Handle("config.rubiks", string(content.Config), &errorHandler)
+	if len(errorHandler.GetErrors()) != 0 || len(errorHandler.GetWarnings()) != 0 {
+		msg := "There are errors/warnings in the configuration. Skipping algorithm checking and execution."
+		errorHandler.AddInfo(eh.NewContext(0, 0), msg, "algorithm.algo")
+	}
 	algo := algohandler.Handle("algorithm.algo", string(content.Algo), &errorHandler)
 	executor := executor.NewExecutor(&errorHandler)
 	turns := executor.Execute(cube, algo)

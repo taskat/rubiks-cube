@@ -81,7 +81,9 @@ class App {
     let config = this.editor.getText("config");
     let algo = this.editor.getText("algo");
     this.httpClient.postAll(config, algo).then((response) => {
+      this.simulator.colorPalette = response.colorPalette;
       this.updateErrors(response.errors);
+      this.simulator.recreateUiPieces();
     });
   }
 

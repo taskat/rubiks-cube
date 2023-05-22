@@ -49,10 +49,6 @@ body {
     flex-direction: row;
 }
 
-.moves {
-    background-color: blue;
-}
-
 .errorlist {
     overflow: auto;
 }

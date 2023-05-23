@@ -2,6 +2,7 @@ package errorvisitor
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
 	ap "github.com/taskat/rubiks-cube/src/algo/parser"
@@ -31,6 +32,11 @@ func (v *Visitor) Visit(tree antlr.Tree) {
 	v.visitAlgorithmFile(ctx)
 }
 
+func (v *Visitor) visitAlgorithm(ctx *ap.AlgorithmContext) {
+	visitor := newAlgorithmVisitor()
+	visitor.visitAlgorithm(ctx)
+}
+
 func (v *Visitor) visitAlgorithmFile(ctx *ap.AlgorithmFileContext) {
 	v.table.PushScope(scope.NewErrorScope())
 	defer v.table.PopScope()
@@ -41,9 +47,21 @@ func (v *Visitor) visitAlgorithmFile(ctx *ap.AlgorithmFileContext) {
 	v.visitSteps(ctx.Steps().(*ap.StepsContext))
 }
 
-func (v *Visitor) visitBranches(ctx *ap.BranchesContext) {}
+func (v *Visitor) visitBranches(ctx *ap.BranchesContext) {
+	for _, branch := range ctx.AllBranch() {
+		visitor := newBranchVisitor()
+		visitor.visitBranch(branch.(*ap.BranchContext))
+	}
+}
 
-func (v *Visitor) visitDoDef(ctx *ap.DoDefContext) {}
+func (v *Visitor) visitDoDef(ctx *ap.DoDefContext) {
+	v.visitAlgorithm(ctx.Algorithm().(*ap.AlgorithmContext))
+}
+
+func (v *Visitor) visitGoal(ctx *ap.GoalContext) {
+	visitor := newBoolExprVisitor()
+	visitor.visitBoolExpr(ctx.BoolExpr().(*ap.BoolExprContext))
+}
 
 func (v *Visitor) visitHelpers(ctx *ap.HelpersContext) {
 	for _, helper := range ctx.AllHelperLine() {
@@ -51,17 +69,19 @@ func (v *Visitor) visitHelpers(ctx *ap.HelpersContext) {
 	}
 }
 
-func (v *Visitor) visitGoal(ctx *ap.GoalContext) {
-}
-
 func (v *Visitor) visitHelperLine(ctx *ap.HelperLineContext) {
-	visitor := newAlgorithmVisitor()
-	visitor.visitAlgorithm(ctx.Algorithm().(*ap.AlgorithmContext))
+	v.visitAlgorithm(ctx.Algorithm().(*ap.AlgorithmContext))
 	helperName := ctx.WORD().GetText()
 	v.table.AddIdentifier(helperName, ctx)
 }
 
-func (v *Visitor) visitRuns(ctx *ap.RunsContext) {}
+func (v *Visitor) visitRuns(ctx *ap.RunsContext) {
+	runsString := ctx.NUMBER().GetText()
+	_, err := strconv.Atoi(runsString)
+	if err != nil {
+		v.eh.AddError(eh.NewContext(ctx.NUMBER().GetSymbol().GetLine(), ctx.NUMBER().GetSymbol().GetColumn()), "number of runs has to be an integer", v.fileName)
+	}
+}
 
 func (v *Visitor) visitStep(ctx *ap.StepContext) {
 	v.table.PushScope(scope.NewErrorScope())

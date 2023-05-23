@@ -2,7 +2,7 @@ parser grammar AlgorithmParser;
 
 options { tokenVocab=AlgorithmLexer; }
 
-algorithmFile: helpers steps EOF;
+algorithmFile: helpers? steps EOF;
 helpers: HELPERS COLON helperLine+;
 helperLine: WORD COLON algorithm;
 steps: STEPS COLON step*;
@@ -37,7 +37,7 @@ node: LPAREN singleNode RPAREN;
 piece: PIECE node;
 position: (POS | POSITION) node;
 coord: WORD NUMBER NUMBER;
-list: LBRACKET ((node (COMMA node)*) |(piece (COMMA piece)*) | (position (COMMA position)* | (coord (COMMA coord)*)) ) RBRACKET;
+list: LBRACKET ((node (COMMA node)*) | (piece (COMMA piece)*) | (position (COMMA position)* | (coord (COMMA coord)*)) ) RBRACKET;
 
 sides: side (COMMA side)*;
 side: WORD;

@@ -1,6 +1,8 @@
 package errorvisitor
 
 import (
+	"fmt"
+
 	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
 	ap "github.com/taskat/rubiks-cube/src/algo/parser"
 	eh "github.com/taskat/rubiks-cube/src/errorhandler"
@@ -31,12 +33,12 @@ func (v *Visitor) Visit(tree antlr.Tree) {
 
 func (v *Visitor) visitAlgorithmFile(ctx *ap.AlgorithmFileContext) {
 	v.table.PushScope(scope.NewErrorScope())
+	defer v.table.PopScope()
 	if ctx.Helpers() != nil {
 		v.visitHelpers(ctx.Helpers().(*ap.HelpersContext))
 	}
 	v.table.CheckForErrorsTop(v.eh, v.fileName)
 	v.visitSteps(ctx.Steps().(*ap.StepsContext))
-	v.table.PopScope()
 }
 
 func (v *Visitor) visitBranches(ctx *ap.BranchesContext) {}
@@ -63,38 +65,27 @@ func (v *Visitor) visitRuns(ctx *ap.RunsContext) {}
 
 func (v *Visitor) visitStep(ctx *ap.StepContext) {
 	v.table.PushScope(scope.NewErrorScope())
-	goalDefs := getLines[*ap.GoalContext](ctx.AllStepLine())
-	goalDef := checkOnlyOneDef(goalDefs, "goal definition", true, v)
-	if goalDef != nil {
-		v.visitGoal(*goalDef)
+	defer func() {
+		v.table.CheckForErrorsTop(v.eh, v.fileName)
+		v.table.PopScope()
+	}()
+	if len(ctx.AllStepLine()) == 1 {
+		visitDef(ctx, "do defintion", v, checkOneDef[*ap.DoDefContext], v.visitDoDef)
+		return
 	}
-	helpersDefs := getLines[*ap.HelperLineContext](ctx.AllStepLine())
-	helperDef := checkOnlyOneDef(helpersDefs, "helper definition", false, v)
-	if helperDef != nil {
-		v.visitHelperLine(*helperDef)
-	}
+	visitDef(ctx, "goal definition", v, checkOneDef[*ap.GoalContext], v.visitGoal)
+	visitDef(ctx, "runs definition", v, checkOneDef[*ap.RunsContext], v.visitRuns)
+	visitDef(ctx, "helpers definition", v, checkOptionalDef[*ap.HelpersContext], v.visitHelpers)
+	defs := make([]antlr.ParserRuleContext, 0)
 	doDefs := getLines[*ap.DoDefContext](ctx.AllStepLine())
-	doDef := checkOnlyOneDef(doDefs, "do definition", false, v)
-	if doDef != nil {
-		v.visitDoDef(*doDef)
-		runsDefs := getLines[*ap.RunsContext](ctx.AllStepLine())
-		checkZeroDef(runsDefs, "runs definition", v)
-		branchesDefs := getLines[*ap.BranchesContext](ctx.AllStepLine())
-		checkZeroDef(branchesDefs, "branches definition", v)
-	} else {
-		runsDefs := getLines[*ap.RunsContext](ctx.AllStepLine())
-		runsDef := checkOnlyOneDef(runsDefs, "runs definition", true, v)
-		if runsDef != nil {
-			v.visitRuns(*runsDef)
-		}
-		branchesDefs := getLines[*ap.BranchesContext](ctx.AllStepLine())
-		branchesDef := checkOnlyOneDef(branchesDefs, "branches definition", true, v)
-		if branchesDef != nil {
-			v.visitBranches(*branchesDef)
-		}
+	for _, doDef := range doDefs {
+		defs = append(defs, doDef)
 	}
-	v.table.CheckForErrorsTop(v.eh, v.fileName)
-	v.table.PopScope()
+	branchesDefs := getLines[*ap.BranchesContext](ctx.AllStepLine())
+	for _, branchesDef := range branchesDefs {
+		defs = append(defs, branchesDef)
+	}
+	visitOrDef(defs, ctx, "do/branches definition", v, v.visitDoDef, v.visitBranches)
 }
 
 func (v *Visitor) visitSteps(ctx *ap.StepsContext) {
@@ -106,7 +97,36 @@ func (v *Visitor) visitSteps(ctx *ap.StepsContext) {
 	}
 }
 
-func checkZeroDef[def antlr.ParserRuleContext](defs []def, defType string, v *Visitor) *def {
+func visitDef[defType antlr.ParserRuleContext](ctx *ap.StepContext, defName string, v *Visitor,
+	checkDefs func([]defType, string, *Visitor, eh.IContext) *defType, visitGoal func(defType)) *defType {
+	defs := getLines[defType](ctx.AllStepLine())
+	def := checkDefs(defs, defName, v, ctx)
+	if def != nil {
+		visitGoal(*def)
+		return def
+	}
+	return nil
+}
+
+func visitOrDef[defType1, defType2 antlr.ParserRuleContext](defs []antlr.ParserRuleContext, ctx *ap.StepContext, defName string, v *Visitor,
+	visitGoal1 func(defType1), visitGoal2 func(defType2)) antlr.ParserRuleContext {
+
+	def := checkOneDef(defs, defName, v, ctx)
+	if def == nil {
+		return nil
+	}
+	if type1, ok := (*def).(defType1); ok {
+		visitGoal1(type1)
+		return type1
+	}
+	if type2, ok := (*def).(defType2); ok {
+		visitGoal2(type2)
+		return type2
+	}
+	return nil
+}
+
+func checkZeroDef[def antlr.ParserRuleContext](defs []def, defType string, v *Visitor, parentCtx eh.IContext) *def {
 	if len(defs) != 0 {
 		for _, d := range defs {
 			v.eh.AddWarning(d, defType+" will be ignored", v.fileName)
@@ -115,18 +135,29 @@ func checkZeroDef[def antlr.ParserRuleContext](defs []def, defType string, v *Vi
 	return nil
 }
 
-func checkOnlyOneDef[def antlr.ParserRuleContext](defs []def, defType string, necessary bool, v *Visitor) *def {
+func checkOneDef[def antlr.ParserRuleContext](defs []def, defType string, v *Visitor, parentCtx eh.IContext) *def {
+	switch {
+	case len(defs) > 1:
+		for _, d := range defs {
+			v.eh.AddError(d, "Multiple "+defType+" found", v.fileName)
+		}
+		return nil
+	case len(defs) == 0:
+		v.eh.AddError(parentCtx, "No "+defType+" found", v.fileName)
+		return nil
+	}
+	return &defs[0]
+}
+
+func checkOptionalDef[def antlr.ParserRuleContext](defs []def, defType string, v *Visitor, parentCtx eh.IContext) *def {
+	fmt.Println(defs)
 	if len(defs) > 1 {
 		for _, d := range defs {
 			v.eh.AddError(d, "Multiple "+defType+" found", v.fileName)
 		}
 		return nil
-	} else if necessary && len(defs) == 0 {
-		ctx := eh.NewContext(-1, -1)
-		v.eh.AddError(ctx, "No "+defType+" found", v.fileName)
-		return nil
 	}
-	if necessary || len(defs) == 1 {
+	if len(defs) == 1 {
 		return &defs[0]
 	}
 	return nil

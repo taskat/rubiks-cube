@@ -53,12 +53,12 @@ func (v *advancedStateVisitor) visitCornerLayer(ctx *cp.CornerLayerContext) {
 	if len(corners) < 4 {
 		v.finished = false
 		warningMsg := fmt.Sprintf("layer should have 4 corners, has %d", len(corners))
-		v.eh.AddWarning(ctx, warningMsg, v.fileName)
+		v.Eh().AddWarning(ctx, warningMsg, v.FileName())
 	}
 	if len(corners) > 4 {
 		v.valid = false
 		errorMsg := fmt.Sprintf("invalid number of corners, wanted 4, has %d", len(corners))
-		v.eh.AddError(ctx, errorMsg, v.fileName)
+		v.Eh().AddError(ctx, errorMsg, v.FileName())
 	}
 }
 
@@ -74,20 +74,20 @@ func (v *advancedStateVisitor) visitCorners(ctx *cp.CornersContext) {
 			v.valid = false
 			errorMsg := layerDef + " layer is defined multiple times"
 			for _, layerCtx := range layerCtxs {
-				v.eh.AddError(layerCtx, errorMsg, v.fileName)
+				v.Eh().AddError(layerCtx, errorMsg, v.FileName())
 			}
 		}
 	}
 	if layerCtxs, ok := layerDefs["middle"]; ok {
 		for _, layerCtx := range layerCtxs {
-			v.eh.AddError(layerCtx, "middle layer is invalid for corner definitions", v.fileName)
+			v.Eh().AddError(layerCtx, "middle layer is invalid for corner definitions", v.FileName())
 		}
 	}
 	necessaryLayers := []string{"up", "down"}
 	for _, necessaryLayer := range necessaryLayers {
 		if _, ok := layerDefs[necessaryLayer]; !ok {
 			v.finished = false
-			v.eh.AddWarning(ctx, necessaryLayer+" layer is missing", v.fileName)
+			v.Eh().AddWarning(ctx, necessaryLayer+" layer is missing", v.FileName())
 		}
 	}
 	for _, layer := range ctx.AllCornerLayer() {
@@ -100,12 +100,12 @@ func (v *advancedStateVisitor) visitEdgeLayer(ctx *cp.EdgeLayerContext) {
 	if len(edges) < 4 {
 		v.finished = false
 		warningMsg := fmt.Sprintf("layer should have 4 edges, has %d", len(edges))
-		v.eh.AddWarning(ctx, warningMsg, v.fileName)
+		v.Eh().AddWarning(ctx, warningMsg, v.FileName())
 	}
 	if len(edges) > 4 {
 		v.valid = false
 		errorMsg := fmt.Sprintf("invalid number of edges, wanted 4, has %d", len(edges))
-		v.eh.AddError(ctx, errorMsg, v.fileName)
+		v.Eh().AddError(ctx, errorMsg, v.FileName())
 	}
 }
 
@@ -121,7 +121,7 @@ func (v *advancedStateVisitor) visitEdges(ctx *cp.EdgesContext) {
 			v.valid = false
 			errorMsg := layerDef + " layer is defined multiple times"
 			for _, layerCtx := range layerCtxs {
-				v.eh.AddError(layerCtx, errorMsg, v.fileName)
+				v.Eh().AddError(layerCtx, errorMsg, v.FileName())
 			}
 		}
 	}
@@ -129,7 +129,7 @@ func (v *advancedStateVisitor) visitEdges(ctx *cp.EdgesContext) {
 	for _, necessaryLayer := range necessaryLayers {
 		if _, ok := layerDefs[necessaryLayer]; !ok {
 			v.finished = false
-			v.eh.AddWarning(ctx, necessaryLayer+" layer is missing", v.fileName)
+			v.Eh().AddWarning(ctx, necessaryLayer+" layer is missing", v.FileName())
 		}
 	}
 	for _, layer := range ctx.AllEdgeLayer() {

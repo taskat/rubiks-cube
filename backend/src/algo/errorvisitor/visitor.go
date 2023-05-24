@@ -1,27 +1,26 @@
 package errorvisitor
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
 	ap "github.com/taskat/rubiks-cube/src/algo/parser"
+	"github.com/taskat/rubiks-cube/src/basevisitor"
+	"github.com/taskat/rubiks-cube/src/basevisitor/util"
 	eh "github.com/taskat/rubiks-cube/src/errorhandler"
 	"github.com/taskat/rubiks-cube/src/symboltable"
 	"github.com/taskat/rubiks-cube/src/symboltable/scope"
 )
 
 type Visitor struct {
-	fileName string
-	eh       *eh.Errorhandler
-	table    *symboltable.Table[eh.IContext]
+	basevisitor.ErrorVisitor
+	table *symboltable.Table[eh.IContext]
 }
 
 func NewVisitor(fileName string, errorHandler *eh.Errorhandler) *Visitor {
 	table := symboltable.NewTable[eh.IContext]()
 	table.PushScope(scope.NewErrorScope())
-	return &Visitor{fileName: fileName, eh: errorHandler,
-		table: table}
+	return &Visitor{ErrorVisitor: *basevisitor.NewErrorVisitor(errorHandler, fileName), table: table}
 }
 
 func (v *Visitor) Visit(tree antlr.Tree) {
@@ -43,7 +42,7 @@ func (v *Visitor) visitAlgorithmFile(ctx *ap.AlgorithmFileContext) {
 	if ctx.Helpers() != nil {
 		v.visitHelpers(ctx.Helpers().(*ap.HelpersContext))
 	}
-	v.table.CheckForErrorsTop(v.eh, v.fileName)
+	v.table.CheckForErrorsTop(v.Eh(), v.FileName())
 	v.visitSteps(ctx.Steps().(*ap.StepsContext))
 }
 
@@ -79,29 +78,29 @@ func (v *Visitor) visitRuns(ctx *ap.RunsContext) {
 	runsString := ctx.NUMBER().GetText()
 	_, err := strconv.Atoi(runsString)
 	if err != nil {
-		v.eh.AddError(eh.NewContext(ctx.NUMBER().GetSymbol().GetLine(), ctx.NUMBER().GetSymbol().GetColumn()), "number of runs has to be an integer", v.fileName)
+		v.Eh().AddError(eh.NewContext(ctx.NUMBER().GetSymbol().GetLine(), ctx.NUMBER().GetSymbol().GetColumn()), "number of runs has to be an integer", v.FileName())
 	}
 }
 
 func (v *Visitor) visitStep(ctx *ap.StepContext) {
 	v.table.PushScope(scope.NewErrorScope())
 	defer func() {
-		v.table.CheckForErrorsTop(v.eh, v.fileName)
+		v.table.CheckForErrorsTop(v.Eh(), v.FileName())
 		v.table.PopScope()
 	}()
 	if len(ctx.AllStepLine()) == 1 {
-		visitDef(ctx, "do defintion", v, checkOneDef[*ap.DoDefContext], v.visitDoDef)
+		visitDef(ctx, "do defintion", v, util.CheckOneDef[*ap.DoDefContext], v.visitDoDef)
 		return
 	}
-	visitDef(ctx, "goal definition", v, checkOneDef[*ap.GoalContext], v.visitGoal)
-	visitDef(ctx, "runs definition", v, checkOneDef[*ap.RunsContext], v.visitRuns)
-	visitDef(ctx, "helpers definition", v, checkOptionalDef[*ap.HelpersContext], v.visitHelpers)
+	visitDef(ctx, "goal definition", v, util.CheckOneDef[*ap.GoalContext], v.visitGoal)
+	visitDef(ctx, "runs definition", v, util.CheckOneDef[*ap.RunsContext], v.visitRuns)
+	visitDef(ctx, "helpers definition", v, util.CheckOptionalDef[*ap.HelpersContext], v.visitHelpers)
 	defs := make([]antlr.ParserRuleContext, 0)
-	doDefs := getLines[*ap.DoDefContext](ctx.AllStepLine())
+	doDefs := util.GetLines[*ap.DoDefContext](ctx.AllStepLine())
 	for _, doDef := range doDefs {
 		defs = append(defs, doDef)
 	}
-	branchesDefs := getLines[*ap.BranchesContext](ctx.AllStepLine())
+	branchesDefs := util.GetLines[*ap.BranchesContext](ctx.AllStepLine())
 	for _, branchesDef := range branchesDefs {
 		defs = append(defs, branchesDef)
 	}
@@ -113,13 +112,13 @@ func (v *Visitor) visitSteps(ctx *ap.StepsContext) {
 		v.visitStep(step.(*ap.StepContext))
 	}
 	if len(ctx.AllStep()) == 0 {
-		v.eh.AddError(ctx, "No steps defined", v.fileName)
+		v.Eh().AddError(ctx, "No steps defined", v.FileName())
 	}
 }
 
-func visitDef[defType antlr.ParserRuleContext](ctx *ap.StepContext, defName string, v *Visitor,
-	checkDefs func([]defType, string, *Visitor, eh.IContext) *defType, visitGoal func(defType)) *defType {
-	defs := getLines[defType](ctx.AllStepLine())
+func visitDef[defType antlr.ParserRuleContext](ctx *ap.StepContext, defName string, v util.Visitor,
+	checkDefs func([]defType, string, util.Visitor, eh.IContext) *defType, visitGoal func(defType)) *defType {
+	defs := util.GetLines[defType](ctx.AllStepLine())
 	def := checkDefs(defs, defName, v, ctx)
 	if def != nil {
 		visitGoal(*def)
@@ -128,10 +127,10 @@ func visitDef[defType antlr.ParserRuleContext](ctx *ap.StepContext, defName stri
 	return nil
 }
 
-func visitOrDef[defType1, defType2 antlr.ParserRuleContext](defs []antlr.ParserRuleContext, ctx *ap.StepContext, defName string, v *Visitor,
+func visitOrDef[defType1, defType2 antlr.ParserRuleContext](defs []antlr.ParserRuleContext, ctx *ap.StepContext, defName string, v util.Visitor,
 	visitGoal1 func(defType1), visitGoal2 func(defType2)) antlr.ParserRuleContext {
 
-	def := checkOneDef(defs, defName, v, ctx)
+	def := util.CheckOneDef(defs, defName, v, ctx)
 	if def == nil {
 		return nil
 	}
@@ -144,52 +143,4 @@ func visitOrDef[defType1, defType2 antlr.ParserRuleContext](defs []antlr.ParserR
 		return type2
 	}
 	return nil
-}
-
-func checkZeroDef[def antlr.ParserRuleContext](defs []def, defType string, v *Visitor, parentCtx eh.IContext) *def {
-	if len(defs) != 0 {
-		for _, d := range defs {
-			v.eh.AddWarning(d, defType+" will be ignored", v.fileName)
-		}
-	}
-	return nil
-}
-
-func checkOneDef[def antlr.ParserRuleContext](defs []def, defType string, v *Visitor, parentCtx eh.IContext) *def {
-	switch {
-	case len(defs) > 1:
-		for _, d := range defs {
-			v.eh.AddError(d, "Multiple "+defType+" found", v.fileName)
-		}
-		return nil
-	case len(defs) == 0:
-		v.eh.AddError(parentCtx, "No "+defType+" found", v.fileName)
-		return nil
-	}
-	return &defs[0]
-}
-
-func checkOptionalDef[def antlr.ParserRuleContext](defs []def, defType string, v *Visitor, parentCtx eh.IContext) *def {
-	fmt.Println(defs)
-	if len(defs) > 1 {
-		for _, d := range defs {
-			v.eh.AddError(d, "Multiple "+defType+" found", v.fileName)
-		}
-		return nil
-	}
-	if len(defs) == 1 {
-		return &defs[0]
-	}
-	return nil
-}
-
-func getLines[def any](lines []ap.IStepLineContext) []def {
-	result := make([]def, 0, 1)
-	for _, l := range lines {
-		line := l.(*ap.StepLineContext).GetChild(0)
-		if line, ok := line.(def); ok {
-			result = append(result, line)
-		}
-	}
-	return result
 }

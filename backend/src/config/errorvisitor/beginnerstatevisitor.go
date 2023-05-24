@@ -11,8 +11,8 @@ type beginnerStateVisitor struct {
 	baseVisitor
 }
 
-func newBeginnerStateVisitor(fileName string, errorHandler *eh.Errorhandler) *beginnerStateVisitor {
-	return &beginnerStateVisitor{baseVisitor: *newBaseVisitor(fileName, errorHandler)}
+func newBeginnerStateVisitor(filename string, errorHandler *eh.Errorhandler) *beginnerStateVisitor {
+	return &beginnerStateVisitor{baseVisitor: *newBaseVisitor(filename, errorHandler)}
 }
 
 func (v *beginnerStateVisitor) checkSideNames(sides []cp.ISideContext) {
@@ -26,7 +26,7 @@ func (v *beginnerStateVisitor) checkSideNames(sides []cp.ISideContext) {
 			v.valid = false
 			errorMsg := "side name " + sideName + " is defined multiple times"
 			for _, sideCtx := range sideCtxs {
-				v.eh.AddError(sideCtx, errorMsg, v.fileName)
+				v.Eh().AddError(sideCtx, errorMsg, v.FileName())
 			}
 		}
 	}
@@ -50,11 +50,11 @@ func (v *beginnerStateVisitor) visitBeginnerState(ctx *cp.BeginnerStateContext) 
 	sides := ctx.AllSide()
 	if len(sides) < 6 {
 		errorMsg := fmt.Sprintf("state should have 6 sides, have %d", len(sides))
-		v.eh.AddWarning(ctx, errorMsg, v.fileName)
+		v.Eh().AddWarning(ctx, errorMsg, v.FileName())
 		v.finished = false
 	} else if len(sides) > 6 {
 		errorMsg := fmt.Sprintf("state should have 6 sides, have %d", len(sides))
-		v.eh.AddError(ctx, errorMsg, v.fileName)
+		v.Eh().AddError(ctx, errorMsg, v.FileName())
 		v.valid = false
 	}
 	v.checkSideNames(sides)
@@ -68,11 +68,11 @@ func (v *beginnerStateVisitor) visitSide(ctx *cp.SideContext) {
 	colors := ctx.AllColor()
 	if len(colors) < 9 {
 		warningMsg := fmt.Sprintf("side state should have 9 cells, has %d", len(colors))
-		v.eh.AddWarning(ctx, warningMsg, v.fileName)
+		v.Eh().AddWarning(ctx, warningMsg, v.FileName())
 		v.finished = false
 	} else if len(colors) > 9 {
 		errorMsg := fmt.Sprintf("invalid number of cell, wanted 9, has %d", len(colors))
-		v.eh.AddError(ctx, errorMsg, v.fileName)
+		v.Eh().AddError(ctx, errorMsg, v.FileName())
 		v.valid = false
 	}
 }

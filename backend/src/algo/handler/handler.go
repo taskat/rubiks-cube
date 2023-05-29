@@ -15,10 +15,11 @@ type Handler struct {
 	content      string
 	tree         antlr.ParseTree
 	errorHandler *eh.Errorhandler
+	constraint   models.Constraint
 }
 
-func NewHandler(fileName, content string, errorHandler *eh.Errorhandler) *Handler {
-	return &Handler{fileName: fileName, content: content, errorHandler: errorHandler}
+func NewHandler(fileName, content string, errorHandler *eh.Errorhandler, constraint models.Constraint) *Handler {
+	return &Handler{fileName: fileName, content: content, errorHandler: errorHandler, constraint: constraint}
 }
 
 func (h *Handler) buildTree(stream *antlr.CommonTokenStream) antlr.ParseTree {
@@ -29,7 +30,7 @@ func (h *Handler) buildTree(stream *antlr.CommonTokenStream) antlr.ParseTree {
 }
 
 func (h *Handler) checkTree() {
-	visitor := ev.NewVisitor(h.fileName, h.errorHandler)
+	visitor := ev.NewVisitor(h.fileName, h.errorHandler, h.constraint)
 	visitor.Visit(h.tree)
 }
 
@@ -43,8 +44,8 @@ func (h *Handler) getTokens(input *antlr.InputStream) *antlr.CommonTokenStream {
 	return antlr.NewCommonTokenStream(lexer, 0)
 }
 
-func Handle(fileName, content string, errorHandler *eh.Errorhandler) models.Algorithm {
-	handler := NewHandler(fileName, content, errorHandler)
+func Handle(fileName, content string, errorHandler *eh.Errorhandler, cosntraint models.Constraint) models.Algorithm {
+	handler := NewHandler(fileName, content, errorHandler, cosntraint)
 	handler.readConfig()
 	return nil
 }

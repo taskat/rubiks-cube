@@ -61,7 +61,7 @@ func (s Server) allHandler(response http.ResponseWriter, request *http.Request) 
 		msg := "There are errors/warnings in the configuration. Skipping algorithm checking and execution."
 		errorHandler.AddInfo(eh.NewContext(0, 0), msg, "algorithm.algo")
 	}
-	algo := algohandler.Handle("algorithm.algo", string(content.Algo), &errorHandler)
+	algo := algohandler.Handle("algorithm.algo", string(content.Algo), &errorHandler, cube.GetConstraint())
 	executor := executor.NewExecutor(&errorHandler)
 	turns := executor.Execute(cube, algo)
 	fmt.Println("Turns: ", turns)

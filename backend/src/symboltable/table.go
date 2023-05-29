@@ -29,7 +29,8 @@ func (t *Table[T]) CheckForErrorsTop(eh *eh.Errorhandler, filename string) {
 func (t *Table[T]) GetIdentifier(name string) (T, error) {
 	var err error
 	for i := len(t.scopes) - 1; i >= 0; i-- {
-		found, err := t.scopes[i].GetIdentifier(name)
+		var found T
+		found, err = t.scopes[i].GetIdentifier(name)
 		if err == nil {
 			return found, nil
 		}

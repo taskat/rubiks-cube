@@ -8,19 +8,28 @@ import (
 	"github.com/taskat/rubiks-cube/src/basevisitor"
 	"github.com/taskat/rubiks-cube/src/basevisitor/util"
 	eh "github.com/taskat/rubiks-cube/src/errorhandler"
+	"github.com/taskat/rubiks-cube/src/models"
 	"github.com/taskat/rubiks-cube/src/symboltable"
 	"github.com/taskat/rubiks-cube/src/symboltable/scope"
 )
 
 type Visitor struct {
 	basevisitor.ErrorVisitor
-	table *symboltable.Table[eh.IContext]
+	turns *symboltable.Table[eh.IContext]
 }
 
-func NewVisitor(fileName string, errorHandler *eh.Errorhandler) *Visitor {
-	table := symboltable.NewTable[eh.IContext]()
-	table.PushScope(scope.NewErrorScope())
-	return &Visitor{ErrorVisitor: *basevisitor.NewErrorVisitor(errorHandler, fileName), table: table}
+func NewVisitor(fileName string, errorHandler *eh.Errorhandler, constraint models.Constraint) *Visitor {
+	v := Visitor{ErrorVisitor: *basevisitor.NewErrorVisitor(errorHandler, fileName)}
+	v.initTurns(constraint.Turns)
+	return &v
+}
+
+func (v *Visitor) initTurns(turns []string) {
+	v.turns = symboltable.NewTable[eh.IContext]()
+	v.turns.PushScope(scope.NewErrorScope())
+	for _, turn := range turns {
+		v.turns.AddIdentifier(turn, nil)
+	}
 }
 
 func (v *Visitor) Visit(tree antlr.Tree) {
@@ -32,17 +41,17 @@ func (v *Visitor) Visit(tree antlr.Tree) {
 }
 
 func (v *Visitor) visitAlgorithm(ctx *ap.AlgorithmContext) {
-	visitor := newAlgorithmVisitor()
+	visitor := newAlgorithmVisitor(v.ErrorVisitor, v.turns)
 	visitor.visitAlgorithm(ctx)
 }
 
 func (v *Visitor) visitAlgorithmFile(ctx *ap.AlgorithmFileContext) {
-	v.table.PushScope(scope.NewErrorScope())
-	defer v.table.PopScope()
+	v.turns.PushScope(scope.NewErrorScope())
+	defer v.turns.PopScope()
 	if ctx.Helpers() != nil {
 		v.visitHelpers(ctx.Helpers().(*ap.HelpersContext))
 	}
-	v.table.CheckForErrorsTop(v.Eh(), v.FileName())
+	v.turns.CheckForErrorsTop(v.Eh(), v.FileName())
 	v.visitSteps(ctx.Steps().(*ap.StepsContext))
 }
 
@@ -71,7 +80,7 @@ func (v *Visitor) visitHelpers(ctx *ap.HelpersContext) {
 func (v *Visitor) visitHelperLine(ctx *ap.HelperLineContext) {
 	v.visitAlgorithm(ctx.Algorithm().(*ap.AlgorithmContext))
 	helperName := ctx.WORD().GetText()
-	v.table.AddIdentifier(helperName, ctx)
+	v.turns.AddIdentifier(helperName, ctx)
 }
 
 func (v *Visitor) visitRuns(ctx *ap.RunsContext) {
@@ -83,10 +92,10 @@ func (v *Visitor) visitRuns(ctx *ap.RunsContext) {
 }
 
 func (v *Visitor) visitStep(ctx *ap.StepContext) {
-	v.table.PushScope(scope.NewErrorScope())
+	v.turns.PushScope(scope.NewErrorScope())
 	defer func() {
-		v.table.CheckForErrorsTop(v.Eh(), v.FileName())
-		v.table.PopScope()
+		v.turns.CheckForErrorsTop(v.Eh(), v.FileName())
+		v.turns.PopScope()
 	}()
 	if len(ctx.AllStepLine()) == 1 {
 		visitDef(ctx, "do defintion", v, util.CheckOneDef[*ap.DoDefContext], v.visitDoDef)

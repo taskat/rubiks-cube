@@ -1,7 +1,6 @@
 package errorvisitor
 
 import (
-	"fmt"
 	"strconv"
 
 	ap "github.com/taskat/rubiks-cube/src/algo/parser"
@@ -26,7 +25,6 @@ func (v *algorithmVisitor) visitAlgorithm(ctx *ap.AlgorithmContext) {
 }
 
 func (v *algorithmVisitor) visitTurn(ctx *ap.TurnContext) {
-	fmt.Println("a" + ctx.GetText())
 	if ctx.WORD() != nil {
 		turnName := ctx.WORD().GetText()
 		if ctx.PRIME() != nil {

@@ -15,11 +15,13 @@ import (
 
 type Visitor struct {
 	basevisitor.ErrorVisitor
-	turns *symboltable.Table[eh.IContext]
+	turns           *symboltable.Table[eh.IContext]
+	currentStepRuns int
 }
 
 func NewVisitor(fileName string, errorHandler *eh.Errorhandler, constraint models.Constraint) *Visitor {
-	v := Visitor{ErrorVisitor: *basevisitor.NewErrorVisitor(errorHandler, fileName)}
+	v := Visitor{ErrorVisitor: *basevisitor.NewErrorVisitor(errorHandler, fileName),
+		currentStepRuns: 0}
 	v.initTurns(constraint.Turns)
 	return &v
 }
@@ -55,11 +57,14 @@ func (v *Visitor) visitAlgorithmFile(ctx *ap.AlgorithmFileContext) {
 	v.visitSteps(ctx.Steps().(*ap.StepsContext))
 }
 
+func (v *Visitor) visitBoolExpr(ctx *ap.BoolExprContext) {
+	visitor := newBoolExprVisitor()
+	visitor.visitBoolExpr(ctx)
+}
+
 func (v *Visitor) visitBranches(ctx *ap.BranchesContext) {
-	for _, branch := range ctx.AllBranch() {
-		visitor := newBranchVisitor()
-		visitor.visitBranch(branch.(*ap.BranchContext))
-	}
+	visitor := newBranchVisitor(v)
+	visitor.visitBranches(ctx)
 }
 
 func (v *Visitor) visitDoDef(ctx *ap.DoDefContext) {
@@ -67,8 +72,7 @@ func (v *Visitor) visitDoDef(ctx *ap.DoDefContext) {
 }
 
 func (v *Visitor) visitGoal(ctx *ap.GoalContext) {
-	visitor := newBoolExprVisitor()
-	visitor.visitBoolExpr(ctx.BoolExpr().(*ap.BoolExprContext))
+	v.visitBoolExpr(ctx.BoolExpr().(*ap.BoolExprContext))
 }
 
 func (v *Visitor) visitHelpers(ctx *ap.HelpersContext) {
@@ -85,10 +89,11 @@ func (v *Visitor) visitHelperLine(ctx *ap.HelperLineContext) {
 
 func (v *Visitor) visitRuns(ctx *ap.RunsContext) {
 	runsString := ctx.NUMBER().GetText()
-	_, err := strconv.Atoi(runsString)
+	runs, err := strconv.Atoi(runsString)
 	if err != nil {
 		v.Eh().AddError(eh.NewContext(ctx.NUMBER().GetSymbol().GetLine(), ctx.NUMBER().GetSymbol().GetColumn()), "number of runs has to be an integer", v.FileName())
 	}
+	v.currentStepRuns = runs
 }
 
 func (v *Visitor) visitStep(ctx *ap.StepContext) {

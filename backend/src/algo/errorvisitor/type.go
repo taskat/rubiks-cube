@@ -7,42 +7,37 @@ type iType interface {
 	fmt.Stringer
 }
 
-type basicType int
+type basicType struct {
+	name    string
+	parents []iType
+}
 
-const (
-	node basicType = iota
-	piece
-	position
-	coord
-)
+func newBasicType(name string, parents ...iType) basicType {
+	return basicType{name: name, parents: parents}
+}
+
+func (t basicType) addParents(parents ...iType) {
+	t.parents = append(t.parents, parents...)
+}
 
 func (t basicType) canUseAs(other iType) bool {
 	otherBasicType, ok := other.(basicType)
 	if !ok {
 		return false
 	}
-	if t == otherBasicType {
+	if t.name == otherBasicType.name {
 		return true
 	}
-	if t == node && (otherBasicType == piece || otherBasicType == position) {
-		return true
+	for _, parent := range t.parents {
+		if parent.canUseAs(other) {
+			return true
+		}
 	}
 	return false
 }
 
 func (t basicType) String() string {
-	switch t {
-	case node:
-		return "node"
-	case piece:
-		return "piece"
-	case position:
-		return "position"
-	case coord:
-		return "coord"
-	default:
-		return "unknown"
-	}
+	return t.name
 }
 
 type listType struct {
@@ -62,5 +57,5 @@ func (t listType) canUseAs(other iType) bool {
 }
 
 func (t listType) String() string {
-	return fmt.Sprintf("list of %s", t.elemType)
+	return fmt.Sprintf("[%s]", t.elemType)
 }

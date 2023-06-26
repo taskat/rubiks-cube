@@ -19,14 +19,41 @@ type Visitor struct {
 	constraint      *models.Constraint
 	operators       *symboltable.Table[operator]
 	currentStepRuns int
+	ts              *typeSystem
 }
 
 func NewVisitor(fileName string, errorHandler *eh.Errorhandler, constraint models.Constraint) *Visitor {
 	v := Visitor{ErrorVisitor: *basevisitor.NewErrorVisitor(errorHandler, fileName),
-		currentStepRuns: 0, constraint: &constraint}
+		currentStepRuns: 0, constraint: &constraint, ts: newTypeSystem()}
 	v.initTurns(constraint.Turns)
-	v.operators = symboltable.NewTable[operator]()
+	v.initOperators()
 	return &v
+}
+
+func (v *Visitor) initOperators() {
+	v.operators = symboltable.NewTable[operator]()
+	scope := scope.NewScope[operator]()
+	whiteOp := newUnaryOperator("white", v.ts.getType("coord"))
+	scope.AddIdentifier(whiteOp.String(), &whiteOp)
+	redOp := newUnaryOperator("red", v.ts.getType("coord"))
+	scope.AddIdentifier(redOp.String(), &redOp)
+	orangeOp := newUnaryOperator("orange", v.ts.getType("coord"))
+	scope.AddIdentifier(orangeOp.String(), &orangeOp)
+	yellowOp := newUnaryOperator("yellow", v.ts.getType("coord"))
+	scope.AddIdentifier(yellowOp.String(), &yellowOp)
+	greenOp := newUnaryOperator("green", v.ts.getType("coord"))
+	scope.AddIdentifier(greenOp.String(), &greenOp)
+	blueOp := newUnaryOperator("blue", v.ts.getType("coord"))
+	scope.AddIdentifier(blueOp.String(), &blueOp)
+	orientationOp := newUnaryOperator("orientation", v.ts.getType("node"))
+	scope.AddIdentifier(orientationOp.String(), &orientationOp)
+	placeOp := newUnaryOperator("place", v.ts.getType("node"))
+	scope.AddIdentifier(placeOp.String(), &placeOp)
+	atOp := newBinaryOperator("at", v.ts.getType("piece"), v.ts.getType("position"))
+	scope.AddIdentifier(atOp.String(), &atOp)
+	likeOp := newBinaryOperator("like", v.ts.getType("piece"), v.ts.getType("position"))
+	scope.AddIdentifier(likeOp.String(), &likeOp)
+	v.operators.PushScope(scope)
 }
 
 func (v *Visitor) initTurns(turns []string) {
@@ -61,7 +88,7 @@ func (v *Visitor) visitAlgorithmFile(ctx *ap.AlgorithmFileContext) {
 }
 
 func (v *Visitor) visitBoolExpr(ctx *ap.BoolExprContext) {
-	visitor := newBoolExprVisitor(v.ErrorVisitor, v.operators, v.constraint.Sides, false)
+	visitor := newBoolExprVisitor(v.ErrorVisitor, v.operators, v.constraint.Sides, false, v.ts)
 	visitor.visitBoolExpr(ctx)
 }
 

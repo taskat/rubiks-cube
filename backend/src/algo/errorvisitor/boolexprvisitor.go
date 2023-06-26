@@ -13,12 +13,13 @@ type boolExprVisitor struct {
 	sides           []string
 	nested          bool
 	listElementType iType
+	ts              *typeSystem
 }
 
 func newBoolExprVisitor(errorVisitor basevisitor.ErrorVisitor, operators *symboltable.Table[operator],
-	sides []string, nested bool) *boolExprVisitor {
+	sides []string, nested bool, ts *typeSystem) *boolExprVisitor {
 	return &boolExprVisitor{ErrorVisitor: errorVisitor, operators: operators,
-		sides: sides, nested: nested}
+		sides: sides, nested: nested, ts: ts}
 }
 
 func (v *boolExprVisitor) visitBinaryExpr(ctx *ap.BinaryExprContext) {
@@ -80,9 +81,9 @@ func (v *boolExprVisitor) visitExpr(ctx *ap.ExprContext) {
 }
 
 func (v *boolExprVisitor) visitFunctionalExpr(ctx *ap.FunctionalExprContext) {
-	paramVisitor := newParamVisitor(v.ErrorVisitor, v.sides, nil)
-	v.listElementType = paramVisitor.visitList(ctx.List().(*ap.ListContext))
-	visitor := newBoolExprVisitor(v.ErrorVisitor, v.operators, v.sides, true)
+	paramVisitor := newParamVisitor(v.ErrorVisitor, v.sides, v.ts, nil)
+	visitor := newBoolExprVisitor(v.ErrorVisitor, v.operators, v.sides, true, v.ts)
+	visitor.listElementType = paramVisitor.visitList(ctx.List().(*ap.ListContext)).(listType).elemType
 	visitor.visitBoolExpr(ctx.BoolExpr().(*ap.BoolExprContext))
 
 }
@@ -90,9 +91,9 @@ func (v *boolExprVisitor) visitFunctionalExpr(ctx *ap.FunctionalExprContext) {
 func (v *boolExprVisitor) visitParameter(ctx *ap.ParameterContext) iType {
 	var visitor *paramVisitor
 	if v.nested {
-		visitor = newParamVisitor(v.ErrorVisitor, v.sides, v.listElementType)
+		visitor = newParamVisitor(v.ErrorVisitor, v.sides, v.ts, v.listElementType)
 	} else {
-		visitor = newParamVisitor(v.ErrorVisitor, v.sides, nil)
+		visitor = newParamVisitor(v.ErrorVisitor, v.sides, v.ts, nil)
 	}
 	return visitor.visitParameter(ctx)
 }

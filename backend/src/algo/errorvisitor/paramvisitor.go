@@ -12,13 +12,15 @@ type paramVisitor struct {
 	basevisitor.ErrorVisitor
 	sides       []string
 	elementType iType
+	ts          *typeSystem
 }
 
-func newParamVisitor(errorVisitor basevisitor.ErrorVisitor, sides []string, elementType iType) *paramVisitor {
+func newParamVisitor(errorVisitor basevisitor.ErrorVisitor, sides []string, ts *typeSystem, elementType iType) *paramVisitor {
 	return &paramVisitor{
 		ErrorVisitor: errorVisitor,
 		sides:        sides,
 		elementType:  elementType,
+		ts:           ts,
 	}
 }
 
@@ -34,41 +36,41 @@ func (v *paramVisitor) visitCoord(ctx *ap.CoordContext) iType {
 	if err != nil {
 		panic("Invalid col")
 	}
-	if row < 1 || row > 3 {
+	if row < 0 || row > 2 {
 		errCtx := eh.NewContext(ctx.NUMBER(0).GetSymbol().GetLine(), ctx.NUMBER(0).GetSymbol().GetColumn())
-		v.Eh().AddError(errCtx, "Row must be between 1 and 3", v.FileName())
+		v.Eh().AddError(errCtx, "Row must be between 0 and 2", v.FileName())
 	}
-	if col < 1 || col > 3 {
+	if col < 0 || col > 2 {
 		errCtx := eh.NewContext(ctx.NUMBER(1).GetSymbol().GetLine(), ctx.NUMBER(1).GetSymbol().GetColumn())
-		v.Eh().AddError(errCtx, "Col must be between 1 and 3", v.FileName())
+		v.Eh().AddError(errCtx, "Col must be between 0 and 2", v.FileName())
 	}
-	return coord
+	return v.ts.getType("coord")
 }
 
 func (v *paramVisitor) visitList(ctx *ap.ListContext) iType {
-	if ctx.AllNode() != nil {
+	if len(ctx.AllNode()) > 0 {
 		for _, node := range ctx.AllNode() {
 			v.visitNode(node.(*ap.NodeContext))
 		}
-		return newListType(node)
+		return v.ts.getType("[node]")
 	}
-	if ctx.AllPiece() != nil {
+	if len(ctx.AllPiece()) > 0 {
 		for _, piece := range ctx.AllPiece() {
 			v.visitPiece(piece.(*ap.PieceContext))
 		}
-		return newListType(piece)
+		return v.ts.getType("[piece]")
 	}
-	if ctx.AllPosition() != nil {
+	if len(ctx.AllPosition()) > 0 {
 		for _, position := range ctx.AllPosition() {
 			v.visitPosition(position.(*ap.PositionContext))
 		}
-		return newListType(position)
+		return v.ts.getType("[position]")
 	}
-	if ctx.AllCoord() != nil {
+	if len(ctx.AllCoord()) > 0 {
 		for _, coord := range ctx.AllCoord() {
 			v.visitCoord(coord.(*ap.CoordContext))
 		}
-		return newListType(coord)
+		return v.ts.getType("[coord]")
 	}
 	panic("Invalid list")
 }
@@ -94,20 +96,21 @@ func (v *paramVisitor) visitParameter(ctx *ap.ParameterContext) iType {
 	case ctx.QUESTIONMARK() != nil:
 		if v.elementType == nil {
 			v.Eh().AddError(ctx, "'?' can only appear in functional expression", v.FileName())
-			//todo return type
+			return v.ts.getType("error")
 		}
+		return v.elementType
 	}
 	panic("Invalid parameter")
 }
 
 func (v *paramVisitor) visitPiece(ctx *ap.PieceContext) iType {
 	v.visitNode(ctx.Node().(*ap.NodeContext))
-	return piece
+	return v.ts.getType("piece")
 }
 
 func (v *paramVisitor) visitPosition(ctx *ap.PositionContext) iType {
 	v.visitNode(ctx.Node().(*ap.NodeContext))
-	return position
+	return v.ts.getType("position")
 }
 
 func (v *paramVisitor) visitSide(ctx *ap.SideContext) {
@@ -130,5 +133,5 @@ func (v *paramVisitor) visitSingleNode(ctx *ap.SingleNodeContext) iType {
 	if ctx.NUMBER() != nil {
 		v.Eh().AddError(ctx, "Unexpected number", v.FileName())
 	}
-	return node
+	return v.ts.getType("node")
 }

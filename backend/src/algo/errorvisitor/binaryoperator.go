@@ -26,6 +26,10 @@ func (b *binaryOperator) acceptRightParam(param iType) error {
 	return fmt.Errorf("%s operator can only be used with %s as right parameter, got: %s", b.name, b.rightParam, param)
 }
 
+func (b *binaryOperator) String() string {
+	return b.name
+}
+
 func (b *binaryOperator) toBinary() *binaryOperator {
 	return b
 }

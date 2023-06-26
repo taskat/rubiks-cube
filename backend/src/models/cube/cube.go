@@ -49,7 +49,7 @@ func (c *Cube) GetConstraint() models.Constraint {
 	for name := range c.moves {
 		turns = append(turns, name)
 	}
-	return *models.NewConstraint(turns)
+	return *models.NewConstraint(turns, AllSides())
 }
 
 func (c *Cube) getCornerPieces() []cornerPiece {

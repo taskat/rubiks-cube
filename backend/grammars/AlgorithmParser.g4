@@ -28,7 +28,7 @@ binaryOp: AND | OR;
 expr: unaryExpr | binaryExpr | functionalExpr;
 unaryExpr: WORD LPAREN parameter RPAREN;
 binaryExpr: parameter WORD parameter;
-functionalExpr: function LPAREN expr COMMA list RPAREN;
+functionalExpr: function LPAREN boolExpr COMMA list RPAREN;
 function: ALL | ANY | NONE;
 parameter: singleNode | node | piece | position | coord | list | QUESTIONMARK;
 
@@ -36,7 +36,7 @@ singleNode: sides NUMBER?;
 node: LPAREN singleNode RPAREN;
 piece: PIECE node;
 position: (POS | POSITION) node;
-coord: WORD NUMBER NUMBER;
+coord: side NUMBER NUMBER;
 list: LBRACKET ((node (COMMA node)*) | (piece (COMMA piece)*) | (position (COMMA position)* | (coord (COMMA coord)*)) ) RBRACKET;
 
 sides: side (COMMA side)*;

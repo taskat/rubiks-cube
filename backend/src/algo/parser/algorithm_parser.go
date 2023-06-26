@@ -143,7 +143,7 @@ func algorithmparserParserInit() {
 		0, 193, 194, 5, 21, 0, 0, 194, 195, 3, 48, 24, 0, 195, 196, 5, 22, 0, 0,
 		196, 41, 1, 0, 0, 0, 197, 198, 3, 48, 24, 0, 198, 199, 5, 29, 0, 0, 199,
 		200, 3, 48, 24, 0, 200, 43, 1, 0, 0, 0, 201, 202, 3, 46, 23, 0, 202, 203,
-		5, 21, 0, 0, 203, 204, 3, 38, 19, 0, 204, 205, 5, 18, 0, 0, 205, 206, 3,
+		5, 21, 0, 0, 203, 204, 3, 32, 16, 0, 204, 205, 5, 18, 0, 0, 205, 206, 3,
 		60, 30, 0, 206, 207, 5, 22, 0, 0, 207, 45, 1, 0, 0, 0, 208, 209, 7, 2,
 		0, 0, 209, 47, 1, 0, 0, 0, 210, 218, 3, 50, 25, 0, 211, 218, 3, 52, 26,
 		0, 212, 218, 3, 54, 27, 0, 213, 218, 3, 56, 28, 0, 214, 218, 3, 58, 29,
@@ -154,28 +154,28 @@ func algorithmparserParserInit() {
 		0, 0, 221, 222, 1, 0, 0, 0, 222, 51, 1, 0, 0, 0, 223, 224, 5, 21, 0, 0,
 		224, 225, 3, 50, 25, 0, 225, 226, 5, 22, 0, 0, 226, 53, 1, 0, 0, 0, 227,
 		228, 5, 10, 0, 0, 228, 229, 3, 52, 26, 0, 229, 55, 1, 0, 0, 0, 230, 231,
-		7, 3, 0, 0, 231, 232, 3, 52, 26, 0, 232, 57, 1, 0, 0, 0, 233, 234, 5, 29,
-		0, 0, 234, 235, 5, 28, 0, 0, 235, 236, 5, 28, 0, 0, 236, 59, 1, 0, 0, 0,
-		237, 272, 5, 23, 0, 0, 238, 243, 3, 52, 26, 0, 239, 240, 5, 18, 0, 0, 240,
-		242, 3, 52, 26, 0, 241, 239, 1, 0, 0, 0, 242, 245, 1, 0, 0, 0, 243, 241,
-		1, 0, 0, 0, 243, 244, 1, 0, 0, 0, 244, 273, 1, 0, 0, 0, 245, 243, 1, 0,
-		0, 0, 246, 251, 3, 54, 27, 0, 247, 248, 5, 18, 0, 0, 248, 250, 3, 54, 27,
-		0, 249, 247, 1, 0, 0, 0, 250, 253, 1, 0, 0, 0, 251, 249, 1, 0, 0, 0, 251,
-		252, 1, 0, 0, 0, 252, 273, 1, 0, 0, 0, 253, 251, 1, 0, 0, 0, 254, 259,
-		3, 56, 28, 0, 255, 256, 5, 18, 0, 0, 256, 258, 3, 56, 28, 0, 257, 255,
-		1, 0, 0, 0, 258, 261, 1, 0, 0, 0, 259, 257, 1, 0, 0, 0, 259, 260, 1, 0,
-		0, 0, 260, 271, 1, 0, 0, 0, 261, 259, 1, 0, 0, 0, 262, 267, 3, 58, 29,
-		0, 263, 264, 5, 18, 0, 0, 264, 266, 3, 58, 29, 0, 265, 263, 1, 0, 0, 0,
-		266, 269, 1, 0, 0, 0, 267, 265, 1, 0, 0, 0, 267, 268, 1, 0, 0, 0, 268,
-		271, 1, 0, 0, 0, 269, 267, 1, 0, 0, 0, 270, 254, 1, 0, 0, 0, 270, 262,
-		1, 0, 0, 0, 271, 273, 1, 0, 0, 0, 272, 238, 1, 0, 0, 0, 272, 246, 1, 0,
-		0, 0, 272, 270, 1, 0, 0, 0, 273, 274, 1, 0, 0, 0, 274, 275, 5, 24, 0, 0,
-		275, 61, 1, 0, 0, 0, 276, 281, 3, 64, 32, 0, 277, 278, 5, 18, 0, 0, 278,
-		280, 3, 64, 32, 0, 279, 277, 1, 0, 0, 0, 280, 283, 1, 0, 0, 0, 281, 279,
-		1, 0, 0, 0, 281, 282, 1, 0, 0, 0, 282, 63, 1, 0, 0, 0, 283, 281, 1, 0,
-		0, 0, 284, 285, 5, 29, 0, 0, 285, 65, 1, 0, 0, 0, 23, 67, 77, 88, 97, 105,
-		120, 128, 141, 150, 154, 161, 172, 180, 190, 217, 221, 243, 251, 259, 267,
-		270, 272, 281,
+		7, 3, 0, 0, 231, 232, 3, 52, 26, 0, 232, 57, 1, 0, 0, 0, 233, 234, 3, 64,
+		32, 0, 234, 235, 5, 28, 0, 0, 235, 236, 5, 28, 0, 0, 236, 59, 1, 0, 0,
+		0, 237, 272, 5, 23, 0, 0, 238, 243, 3, 52, 26, 0, 239, 240, 5, 18, 0, 0,
+		240, 242, 3, 52, 26, 0, 241, 239, 1, 0, 0, 0, 242, 245, 1, 0, 0, 0, 243,
+		241, 1, 0, 0, 0, 243, 244, 1, 0, 0, 0, 244, 273, 1, 0, 0, 0, 245, 243,
+		1, 0, 0, 0, 246, 251, 3, 54, 27, 0, 247, 248, 5, 18, 0, 0, 248, 250, 3,
+		54, 27, 0, 249, 247, 1, 0, 0, 0, 250, 253, 1, 0, 0, 0, 251, 249, 1, 0,
+		0, 0, 251, 252, 1, 0, 0, 0, 252, 273, 1, 0, 0, 0, 253, 251, 1, 0, 0, 0,
+		254, 259, 3, 56, 28, 0, 255, 256, 5, 18, 0, 0, 256, 258, 3, 56, 28, 0,
+		257, 255, 1, 0, 0, 0, 258, 261, 1, 0, 0, 0, 259, 257, 1, 0, 0, 0, 259,
+		260, 1, 0, 0, 0, 260, 271, 1, 0, 0, 0, 261, 259, 1, 0, 0, 0, 262, 267,
+		3, 58, 29, 0, 263, 264, 5, 18, 0, 0, 264, 266, 3, 58, 29, 0, 265, 263,
+		1, 0, 0, 0, 266, 269, 1, 0, 0, 0, 267, 265, 1, 0, 0, 0, 267, 268, 1, 0,
+		0, 0, 268, 271, 1, 0, 0, 0, 269, 267, 1, 0, 0, 0, 270, 254, 1, 0, 0, 0,
+		270, 262, 1, 0, 0, 0, 271, 273, 1, 0, 0, 0, 272, 238, 1, 0, 0, 0, 272,
+		246, 1, 0, 0, 0, 272, 270, 1, 0, 0, 0, 273, 274, 1, 0, 0, 0, 274, 275,
+		5, 24, 0, 0, 275, 61, 1, 0, 0, 0, 276, 281, 3, 64, 32, 0, 277, 278, 5,
+		18, 0, 0, 278, 280, 3, 64, 32, 0, 279, 277, 1, 0, 0, 0, 280, 283, 1, 0,
+		0, 0, 281, 279, 1, 0, 0, 0, 281, 282, 1, 0, 0, 0, 282, 63, 1, 0, 0, 0,
+		283, 281, 1, 0, 0, 0, 284, 285, 5, 29, 0, 0, 285, 65, 1, 0, 0, 0, 23, 67,
+		77, 88, 97, 105, 120, 128, 141, 150, 154, 161, 172, 180, 190, 217, 221,
+		243, 251, 259, 267, 270, 272, 281,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -3393,7 +3393,7 @@ type IFunctionalExprContext interface {
 	// Getter signatures
 	Function() IFunctionContext
 	LPAREN() antlr.TerminalNode
-	Expr() IExprContext
+	BoolExpr() IBoolExprContext
 	COMMA() antlr.TerminalNode
 	List() IListContext
 	RPAREN() antlr.TerminalNode
@@ -3449,10 +3449,10 @@ func (s *FunctionalExprContext) LPAREN() antlr.TerminalNode {
 	return s.GetToken(AlgorithmParserLPAREN, 0)
 }
 
-func (s *FunctionalExprContext) Expr() IExprContext {
+func (s *FunctionalExprContext) BoolExpr() IBoolExprContext {
 	var t antlr.RuleContext
 	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(IExprContext); ok {
+		if _, ok := ctx.(IBoolExprContext); ok {
 			t = ctx.(antlr.RuleContext)
 			break
 		}
@@ -3462,7 +3462,7 @@ func (s *FunctionalExprContext) Expr() IExprContext {
 		return nil
 	}
 
-	return t.(IExprContext)
+	return t.(IBoolExprContext)
 }
 
 func (s *FunctionalExprContext) COMMA() antlr.TerminalNode {
@@ -3531,7 +3531,7 @@ func (p *AlgorithmParser) FunctionalExpr() (localctx IFunctionalExprContext) {
 	}
 	{
 		p.SetState(203)
-		p.Expr()
+		p.boolExpr(0)
 	}
 	{
 		p.SetState(204)
@@ -4347,7 +4347,7 @@ type ICoordContext interface {
 	GetParser() antlr.Parser
 
 	// Getter signatures
-	WORD() antlr.TerminalNode
+	Side() ISideContext
 	AllNUMBER() []antlr.TerminalNode
 	NUMBER(i int) antlr.TerminalNode
 
@@ -4382,8 +4382,20 @@ func NewCoordContext(parser antlr.Parser, parent antlr.ParserRuleContext, invoki
 
 func (s *CoordContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *CoordContext) WORD() antlr.TerminalNode {
-	return s.GetToken(AlgorithmParserWORD, 0)
+func (s *CoordContext) Side() ISideContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ISideContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ISideContext)
 }
 
 func (s *CoordContext) AllNUMBER() []antlr.TerminalNode {
@@ -4428,7 +4440,7 @@ func (p *AlgorithmParser) Coord() (localctx ICoordContext) {
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(233)
-		p.Match(AlgorithmParserWORD)
+		p.Side()
 	}
 	{
 		p.SetState(234)

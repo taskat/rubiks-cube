@@ -41,3 +41,8 @@ func (c CubeSide) isOpposite(other CubeSide) bool {
 	opposite := c.getOpposite()
 	return opposite == other
 }
+
+func AllSides() []string {
+	return []string{Front.String(), Back.String(), Left.String(),
+		Right.String(), Up.String(), Down.String()}
+}

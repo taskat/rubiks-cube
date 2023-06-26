@@ -16,13 +16,16 @@ import (
 type Visitor struct {
 	basevisitor.ErrorVisitor
 	turns           *symboltable.Table[eh.IContext]
+	constraint      *models.Constraint
+	operators       *symboltable.Table[operator]
 	currentStepRuns int
 }
 
 func NewVisitor(fileName string, errorHandler *eh.Errorhandler, constraint models.Constraint) *Visitor {
 	v := Visitor{ErrorVisitor: *basevisitor.NewErrorVisitor(errorHandler, fileName),
-		currentStepRuns: 0}
+		currentStepRuns: 0, constraint: &constraint}
 	v.initTurns(constraint.Turns)
+	v.operators = symboltable.NewTable[operator]()
 	return &v
 }
 
@@ -58,7 +61,7 @@ func (v *Visitor) visitAlgorithmFile(ctx *ap.AlgorithmFileContext) {
 }
 
 func (v *Visitor) visitBoolExpr(ctx *ap.BoolExprContext) {
-	visitor := newBoolExprVisitor()
+	visitor := newBoolExprVisitor(v.ErrorVisitor, v.operators, v.constraint.Sides, false)
 	visitor.visitBoolExpr(ctx)
 }
 
@@ -91,7 +94,8 @@ func (v *Visitor) visitRuns(ctx *ap.RunsContext) {
 	runsString := ctx.NUMBER().GetText()
 	runs, err := strconv.Atoi(runsString)
 	if err != nil {
-		v.Eh().AddError(eh.NewContext(ctx.NUMBER().GetSymbol().GetLine(), ctx.NUMBER().GetSymbol().GetColumn()), "number of runs has to be an integer", v.FileName())
+		errCtx := eh.NewContext(ctx.NUMBER().GetSymbol().GetLine(), ctx.NUMBER().GetSymbol().GetColumn())
+		v.Eh().AddError(errCtx, "number of runs has to be an integer", v.FileName())
 	}
 	v.currentStepRuns = runs
 }

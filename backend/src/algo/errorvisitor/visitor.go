@@ -93,7 +93,7 @@ func (v *Visitor) visitRuns(ctx *ap.RunsContext) {
 	runsString := ctx.NUMBER().GetText()
 	runs, err := strconv.Atoi(runsString)
 	if err != nil {
-		errCtx := eh.NewContext(ctx.NUMBER().GetSymbol().GetLine(), ctx.NUMBER().GetSymbol().GetColumn())
+		errCtx := eh.NewContextFromTerminal(ctx.NUMBER())
 		v.Eh().AddError(errCtx, "number of runs has to be an integer", v.FileName())
 	}
 	v.currentStepRuns = runs

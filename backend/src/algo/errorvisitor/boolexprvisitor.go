@@ -45,7 +45,7 @@ func (v *boolExprVisitor) initOperators() {
 
 func (v *boolExprVisitor) visitBinaryExpr(ctx *ap.BinaryExprContext) {
 	name := ctx.WORD().GetText()
-	errCtx := eh.NewContext(ctx.WORD().GetSymbol().GetLine(), ctx.WORD().GetSymbol().GetColumn())
+	errCtx := eh.NewContextFromTerminal(ctx.WORD())
 	operator, err := v.operators.GetIdentifier(name)
 	if err != nil {
 		v.Eh().AddError(errCtx, "Unknown operator: "+name, v.FileName())
@@ -124,7 +124,7 @@ func (v *boolExprVisitor) visitParameter(ctx *ap.ParameterContext) iType {
 
 func (v *boolExprVisitor) visitUnaryExpr(ctx *ap.UnaryExprContext) {
 	name := ctx.WORD().GetText()
-	errCtx := eh.NewContext(ctx.WORD().GetSymbol().GetLine(), ctx.WORD().GetSymbol().GetColumn())
+	errCtx := eh.NewContextFromTerminal(ctx.WORD())
 	operator, err := v.operators.GetIdentifier(name)
 	if err != nil {
 		v.Eh().AddError(errCtx, "Unknown operator: "+name, v.FileName())

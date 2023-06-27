@@ -37,11 +37,11 @@ func (v *paramVisitor) visitCoord(ctx *ap.CoordContext) iType {
 		panic("Invalid col")
 	}
 	if row < 0 || row > 2 {
-		errCtx := eh.NewContext(ctx.NUMBER(0).GetSymbol().GetLine(), ctx.NUMBER(0).GetSymbol().GetColumn())
+		errCtx := eh.NewContextFromTerminal(ctx.NUMBER(0))
 		v.Eh().AddError(errCtx, "Row must be between 0 and 2", v.FileName())
 	}
 	if col < 0 || col > 2 {
-		errCtx := eh.NewContext(ctx.NUMBER(1).GetSymbol().GetLine(), ctx.NUMBER(1).GetSymbol().GetColumn())
+		errCtx := eh.NewContextFromTerminal(ctx.NUMBER(1))
 		v.Eh().AddError(errCtx, "Col must be between 0 and 2", v.FileName())
 	}
 	return v.ts.getType("coord")

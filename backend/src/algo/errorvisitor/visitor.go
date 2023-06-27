@@ -17,7 +17,6 @@ type Visitor struct {
 	basevisitor.ErrorVisitor
 	turns           *symboltable.Table[eh.IContext]
 	constraint      *models.Constraint
-	operators       *symboltable.Table[operator]
 	currentStepRuns int
 	ts              *typeSystem
 }
@@ -26,26 +25,7 @@ func NewVisitor(fileName string, errorHandler *eh.Errorhandler, constraint model
 	v := Visitor{ErrorVisitor: *basevisitor.NewErrorVisitor(errorHandler, fileName),
 		currentStepRuns: 0, constraint: &constraint, ts: newTypeSystem()}
 	v.initTurns(constraint.Turns)
-	v.initOperators()
 	return &v
-}
-
-func (v *Visitor) initOperators() {
-	v.operators = symboltable.NewTable[operator]()
-	scope := scope.NewScope[operator]()
-	for _, color := range v.constraint.Colors {
-		colorOp := newUnaryOperator(color, v.ts.getType("coord"))
-		scope.AddIdentifier(colorOp.String(), &colorOp)
-	}
-	orientationOp := newUnaryOperator("orientation", v.ts.getType("node"))
-	scope.AddIdentifier(orientationOp.String(), &orientationOp)
-	placeOp := newUnaryOperator("place", v.ts.getType("node"))
-	scope.AddIdentifier(placeOp.String(), &placeOp)
-	atOp := newBinaryOperator("at", v.ts.getType("piece"), v.ts.getType("position"))
-	scope.AddIdentifier(atOp.String(), &atOp)
-	likeOp := newBinaryOperator("like", v.ts.getType("piece"), v.ts.getType("position"))
-	scope.AddIdentifier(likeOp.String(), &likeOp)
-	v.operators.PushScope(scope)
 }
 
 func (v *Visitor) initTurns(turns []string) {
@@ -80,7 +60,7 @@ func (v *Visitor) visitAlgorithmFile(ctx *ap.AlgorithmFileContext) {
 }
 
 func (v *Visitor) visitBoolExpr(ctx *ap.BoolExprContext) {
-	visitor := newBoolExprVisitor(v.ErrorVisitor, v.operators, v.constraint.Sides, false, v.ts)
+	visitor := newBoolExprVisitor(v, false)
 	visitor.visitBoolExpr(ctx)
 }
 

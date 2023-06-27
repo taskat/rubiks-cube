@@ -4,22 +4,43 @@ import (
 	ap "github.com/taskat/rubiks-cube/src/algo/parser"
 	"github.com/taskat/rubiks-cube/src/basevisitor"
 	eh "github.com/taskat/rubiks-cube/src/errorhandler"
+	"github.com/taskat/rubiks-cube/src/models"
 	"github.com/taskat/rubiks-cube/src/symboltable"
+	"github.com/taskat/rubiks-cube/src/symboltable/scope"
 )
 
 type boolExprVisitor struct {
 	basevisitor.ErrorVisitor
 	operators       *symboltable.Table[operator]
-	sides           []string
+	constraint      *models.Constraint
 	nested          bool
 	listElementType iType
 	ts              *typeSystem
 }
 
-func newBoolExprVisitor(errorVisitor basevisitor.ErrorVisitor, operators *symboltable.Table[operator],
-	sides []string, nested bool, ts *typeSystem) *boolExprVisitor {
-	return &boolExprVisitor{ErrorVisitor: errorVisitor, operators: operators,
-		sides: sides, nested: nested, ts: ts}
+func newBoolExprVisitor(parentVisitor *Visitor, nested bool) *boolExprVisitor {
+	bev := boolExprVisitor{ErrorVisitor: parentVisitor.ErrorVisitor, constraint: parentVisitor.constraint,
+		nested: nested, ts: parentVisitor.ts}
+	bev.initOperators()
+	return &bev
+}
+
+func (v *boolExprVisitor) initOperators() {
+	v.operators = symboltable.NewTable[operator]()
+	scope := scope.NewScope[operator]()
+	for _, color := range v.constraint.Colors {
+		colorOp := newUnaryOperator(color, v.ts.getType("coord"))
+		scope.AddIdentifier(colorOp.String(), &colorOp)
+	}
+	orientationOp := newUnaryOperator("orientation", v.ts.getType("node"))
+	scope.AddIdentifier(orientationOp.String(), &orientationOp)
+	placeOp := newUnaryOperator("place", v.ts.getType("node"))
+	scope.AddIdentifier(placeOp.String(), &placeOp)
+	atOp := newBinaryOperator("at", v.ts.getType("piece"), v.ts.getType("position"))
+	scope.AddIdentifier(atOp.String(), &atOp)
+	likeOp := newBinaryOperator("like", v.ts.getType("piece"), v.ts.getType("position"))
+	scope.AddIdentifier(likeOp.String(), &likeOp)
+	v.operators.PushScope(scope)
 }
 
 func (v *boolExprVisitor) visitBinaryExpr(ctx *ap.BinaryExprContext) {
@@ -81,19 +102,22 @@ func (v *boolExprVisitor) visitExpr(ctx *ap.ExprContext) {
 }
 
 func (v *boolExprVisitor) visitFunctionalExpr(ctx *ap.FunctionalExprContext) {
-	paramVisitor := newParamVisitor(v.ErrorVisitor, v.sides, v.ts, nil)
-	visitor := newBoolExprVisitor(v.ErrorVisitor, v.operators, v.sides, true, v.ts)
-	visitor.listElementType = paramVisitor.visitList(ctx.List().(*ap.ListContext)).(listType).elemType
-	visitor.visitBoolExpr(ctx.BoolExpr().(*ap.BoolExprContext))
-
+	paramVisitor := newParamVisitor(v.ErrorVisitor, v.constraint.Sides, v.ts, nil)
+	v.nested = true
+	v.listElementType = paramVisitor.visitList(ctx.List().(*ap.ListContext)).(listType).elemType
+	defer func() {
+		v.nested = false
+		v.listElementType = nil
+	}()
+	v.visitBoolExpr(ctx.BoolExpr().(*ap.BoolExprContext))
 }
 
 func (v *boolExprVisitor) visitParameter(ctx *ap.ParameterContext) iType {
 	var visitor *paramVisitor
 	if v.nested {
-		visitor = newParamVisitor(v.ErrorVisitor, v.sides, v.ts, v.listElementType)
+		visitor = newParamVisitor(v.ErrorVisitor, v.constraint.Sides, v.ts, v.listElementType)
 	} else {
-		visitor = newParamVisitor(v.ErrorVisitor, v.sides, v.ts, nil)
+		visitor = newParamVisitor(v.ErrorVisitor, v.constraint.Sides, v.ts, nil)
 	}
 	return visitor.visitParameter(ctx)
 }

@@ -10,17 +10,17 @@ import (
 
 type paramVisitor struct {
 	basevisitor.ErrorVisitor
-	sides       []string
-	elementType iType
-	ts          *typeSystem
+	sides           []string
+	placeholderType iType
+	ts              *typeSystem
 }
 
-func newParamVisitor(errorVisitor basevisitor.ErrorVisitor, sides []string, ts *typeSystem, elementType iType) *paramVisitor {
+func newParamVisitor(errorVisitor basevisitor.ErrorVisitor, sides []string, ts *typeSystem, placeholderType iType) *paramVisitor {
 	return &paramVisitor{
-		ErrorVisitor: errorVisitor,
-		sides:        sides,
-		elementType:  elementType,
-		ts:           ts,
+		ErrorVisitor:    errorVisitor,
+		sides:           sides,
+		placeholderType: placeholderType,
+		ts:              ts,
 	}
 }
 
@@ -94,11 +94,11 @@ func (v *paramVisitor) visitParameter(ctx *ap.ParameterContext) iType {
 	case ctx.List() != nil:
 		return v.visitList(ctx.List().(*ap.ListContext))
 	case ctx.QUESTIONMARK() != nil:
-		if v.elementType == nil {
+		if v.placeholderType == nil {
 			v.Eh().AddError(ctx, "'?' can only appear in functional expression", v.FileName())
 			return v.ts.getType("error")
 		}
-		return v.elementType
+		return v.placeholderType
 	}
 	panic("Invalid parameter")
 }

@@ -33,18 +33,10 @@ func NewVisitor(fileName string, errorHandler *eh.Errorhandler, constraint model
 func (v *Visitor) initOperators() {
 	v.operators = symboltable.NewTable[operator]()
 	scope := scope.NewScope[operator]()
-	whiteOp := newUnaryOperator("white", v.ts.getType("coord"))
-	scope.AddIdentifier(whiteOp.String(), &whiteOp)
-	redOp := newUnaryOperator("red", v.ts.getType("coord"))
-	scope.AddIdentifier(redOp.String(), &redOp)
-	orangeOp := newUnaryOperator("orange", v.ts.getType("coord"))
-	scope.AddIdentifier(orangeOp.String(), &orangeOp)
-	yellowOp := newUnaryOperator("yellow", v.ts.getType("coord"))
-	scope.AddIdentifier(yellowOp.String(), &yellowOp)
-	greenOp := newUnaryOperator("green", v.ts.getType("coord"))
-	scope.AddIdentifier(greenOp.String(), &greenOp)
-	blueOp := newUnaryOperator("blue", v.ts.getType("coord"))
-	scope.AddIdentifier(blueOp.String(), &blueOp)
+	for _, color := range v.constraint.Colors {
+		colorOp := newUnaryOperator(color, v.ts.getType("coord"))
+		scope.AddIdentifier(colorOp.String(), &colorOp)
+	}
 	orientationOp := newUnaryOperator("orientation", v.ts.getType("node"))
 	scope.AddIdentifier(orientationOp.String(), &orientationOp)
 	placeOp := newUnaryOperator("place", v.ts.getType("node"))

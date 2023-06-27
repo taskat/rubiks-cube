@@ -49,7 +49,8 @@ func (c *Cube) GetConstraint() models.Constraint {
 	for name := range c.moves {
 		turns = append(turns, name)
 	}
-	return *models.NewConstraint(turns, AllSides())
+	colors := []string{"white", "red", "orange", "yellow", "green", "blue"}
+	return *models.NewConstraint(turns, AllSides(), colors)
 }
 
 func (c *Cube) getCornerPieces() []cornerPiece {

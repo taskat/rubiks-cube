@@ -96,6 +96,14 @@ func (c *Cube) String() string {
 	return s
 }
 
+func (c *Cube) Turn(name string) {
+	_, ok := c.moves[name]
+	if !ok {
+		panic(fmt.Sprintf("Undefined move %s", name))
+	}
+	c.turn(name)
+}
+
 func (c *Cube) turn(name string) {
 	move := c.moves[name]
 	for _, cycle := range move.cycles {

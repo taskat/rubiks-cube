@@ -10,6 +10,7 @@ type Puzzle interface {
 	fmt.Stringer
 	GetValidator() Validator
 	GetConstraint() Constraint
+	Turn(name string)
 }
 
 type Validator interface {

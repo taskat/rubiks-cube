@@ -1,3 +1,3 @@
-package models
+package algorithm
 
 type Algorithm interface{}

@@ -8,6 +8,7 @@ import (
 	eh "github.com/taskat/rubiks-cube/src/errorhandler"
 	el "github.com/taskat/rubiks-cube/src/errorlistener"
 	"github.com/taskat/rubiks-cube/src/models"
+	"github.com/taskat/rubiks-cube/src/models/algorithm"
 )
 
 type Handler struct {
@@ -44,7 +45,7 @@ func (h *Handler) getTokens(input *antlr.InputStream) *antlr.CommonTokenStream {
 	return antlr.NewCommonTokenStream(lexer, 0)
 }
 
-func Handle(fileName, content string, errorHandler *eh.Errorhandler, cosntraint models.Constraint) models.Algorithm {
+func Handle(fileName, content string, errorHandler *eh.Errorhandler, cosntraint models.Constraint) algorithm.Algorithm {
 	handler := NewHandler(fileName, content, errorHandler, cosntraint)
 	handler.readConfig()
 	return nil

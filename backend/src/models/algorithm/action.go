@@ -2,19 +2,24 @@ package algorithm
 
 import "github.com/taskat/rubiks-cube/src/models"
 
-type action struct {
-	puzzle models.Puzzle
-	next   Block
-	moves  []string
+type Action struct {
+	next  Block
+	moves []string
 }
 
-func newAction(puzzle models.Puzzle, next Block, moves []string) Block {
-	return &action{puzzle: puzzle, next: next, moves: moves}
+func NewAction(moves []string) *Action {
+	return &Action{next: nil, moves: moves}
 }
 
-func (a *action) Execute() Block {
+func (a *Action) Execute(p models.Puzzle) Block {
 	for _, move := range a.moves {
-		a.puzzle.Turn(move)
+		p.Turn(move)
 	}
 	return a.next
+}
+
+func (a *Action) NextSetter() Setter {
+	return func(block Block) {
+		a.next = block
+	}
 }

@@ -3,21 +3,19 @@ package algorithm
 import "github.com/taskat/rubiks-cube/src/models"
 
 type Block interface {
-	Execute() Block
+	Execute(p models.Puzzle) Block
 }
 
-type BlockGenerator struct {
-	puzzle models.Puzzle
+type BlockGenerator struct{}
+
+func NewBlockGenerator() *BlockGenerator {
+	return &BlockGenerator{}
 }
 
-func NewBlockGenerator(puzzle models.Puzzle) *BlockGenerator {
-	return &BlockGenerator{puzzle: puzzle}
+func (g *BlockGenerator) Action(moves []string) Block {
+	return NewAction(moves)
 }
 
-func (g *BlockGenerator) Action(next Block, moves []string) Block {
-	return newAction(g.puzzle, next, moves)
-}
-
-func (g *BlockGenerator) Condition(trueBlock, falseBlock Block, condFunc ConditionFunc) Block {
-	return newCondition(g.puzzle, trueBlock, falseBlock, condFunc)
+func (g *BlockGenerator) Condition(condFunc ConditionFunc) Block {
+	return NewCondition(condFunc)
 }

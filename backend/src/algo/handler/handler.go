@@ -3,6 +3,7 @@ package algohandler
 import (
 	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
 	ev "github.com/taskat/rubiks-cube/src/algo/errorvisitor"
+	"github.com/taskat/rubiks-cube/src/algo/generatorvisitor"
 	al "github.com/taskat/rubiks-cube/src/algo/lexer"
 	ap "github.com/taskat/rubiks-cube/src/algo/parser"
 	eh "github.com/taskat/rubiks-cube/src/errorhandler"
@@ -16,11 +17,11 @@ type Handler struct {
 	content      string
 	tree         antlr.ParseTree
 	errorHandler *eh.Errorhandler
-	constraint   models.Constraint
+	puzzle       models.Puzzle
 }
 
-func NewHandler(fileName, content string, errorHandler *eh.Errorhandler, constraint models.Constraint) *Handler {
-	return &Handler{fileName: fileName, content: content, errorHandler: errorHandler, constraint: constraint}
+func NewHandler(fileName, content string, errorHandler *eh.Errorhandler, puzzle models.Puzzle) *Handler {
+	return &Handler{fileName: fileName, content: content, errorHandler: errorHandler, puzzle: puzzle}
 }
 
 func (h *Handler) buildTree(stream *antlr.CommonTokenStream) antlr.ParseTree {
@@ -31,7 +32,7 @@ func (h *Handler) buildTree(stream *antlr.CommonTokenStream) antlr.ParseTree {
 }
 
 func (h *Handler) checkTree() {
-	visitor := ev.NewVisitor(h.fileName, h.errorHandler, h.constraint)
+	visitor := ev.NewVisitor(h.fileName, h.errorHandler, h.puzzle.GetConstraint())
 	visitor.Visit(h.tree)
 }
 
@@ -45,10 +46,11 @@ func (h *Handler) getTokens(input *antlr.InputStream) *antlr.CommonTokenStream {
 	return antlr.NewCommonTokenStream(lexer, 0)
 }
 
-func Handle(fileName, content string, errorHandler *eh.Errorhandler, cosntraint models.Constraint) algorithm.Algorithm {
-	handler := NewHandler(fileName, content, errorHandler, cosntraint)
+func Handle(fileName, content string, errorHandler *eh.Errorhandler, puzzle models.Puzzle) algorithm.Algorithm {
+	handler := NewHandler(fileName, content, errorHandler, puzzle)
 	handler.readConfig()
-	return nil
+	v := generatorvisitor.NewVisitor(puzzle)
+	return v.Visit(handler.tree)
 }
 
 func (h *Handler) readConfig() {

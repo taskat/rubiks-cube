@@ -32,15 +32,12 @@ func (v *algorithmBlockVisitor) visitAlgorithmMoves(ctx *ap.AlgorithmContext) []
 
 func (v *algorithmBlockVisitor) visitTurn(ctx *ap.TurnContext) []string {
 	if ctx.WORD() != nil {
-		name := ctx.WORD().GetText()
+		name := ctx.GetText()
 		moves, err := v.turns.GetIdentifier(name)
 		if err != nil {
 			panic(fmt.Errorf("Turn %s not found", name))
 		}
-		if len(moves) > 1 {
-			return moves
-		}
-		return []string{ctx.GetText()}
+		return moves
 	}
 	repeat, _ := strconv.Atoi(ctx.NUMBER().GetText())
 	moves := v.visitAlgorithmMoves(ctx.Algorithm().(*ap.AlgorithmContext))

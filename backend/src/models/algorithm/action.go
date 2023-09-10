@@ -1,6 +1,10 @@
 package algorithm
 
-import "github.com/taskat/rubiks-cube/src/models"
+import (
+	"fmt"
+
+	"github.com/taskat/rubiks-cube/src/models"
+)
 
 type Action struct {
 	next  Block
@@ -12,10 +16,15 @@ func NewAction(moves []string) *Action {
 }
 
 func (a *Action) Execute(p models.Puzzle) Block {
+	fmt.Println("Action", a.moves)
 	for _, move := range a.moves {
 		p.Turn(move)
 	}
 	return a.next
+}
+
+func (a *Action) Finished() bool {
+	return false
 }
 
 func (a *Action) NextSetter() Setter {

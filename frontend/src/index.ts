@@ -36,6 +36,18 @@ class App {
     errorList?.appendChild(errorItem);
   }
 
+  addMoves(moves: string[]) {
+    const moveList = document.getElementById("moves");
+    if (moveList) {
+      moveList.innerHTML = "";
+    }
+    moves.forEach((move: string) => {
+      let element = document.createElement("p");
+      element.innerHTML = move;
+      moveList?.appendChild(element)
+    });
+  }
+
   keyboardShortcuts(e: KeyboardEvent) {
     if (e.ctrlKey && e.key === "Enter") {
       this.solve();
@@ -84,6 +96,8 @@ class App {
       this.simulator.colorPalette = response.colorPalette;
       this.updateErrors(response.errors);
       this.simulator.recreateUiPieces();
+      this.addMoves(response.turns);
+      this.simulator.addMoves(response.turns);
     });
   }
 

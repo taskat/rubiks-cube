@@ -50,6 +50,9 @@ func (v *Visitor) visitAlgoFile(ctx *ap.AlgorithmFileContext) algorithm.Algorith
 		v.visitHelpers(ctx.Helpers().(*ap.HelpersContext))
 	}
 	v.visitSteps(ctx.Steps().(*ap.StepsContext))
+	if v.nextSetter != nil {
+		v.nextSetter(algorithm.NewFinish())
+	}
 	return algorithm.NewAlgorithm(v.startBlock)
 }
 
@@ -66,7 +69,8 @@ func (v *Visitor) visitAlgorithmBlock(ctx *ap.AlgorithmContext, setter algorithm
 }
 
 func (v *Visitor) visitBoolExpr(ctx *ap.BoolExprContext) algorithm.ConditionFunc {
-	return nil
+	visitor := newBoolExprVisitor(v.puzzle.GetConstraint())
+	return visitor.visitBoolExpr(ctx)
 }
 
 func (v *Visitor) visitDoDef(ctx *ap.DoDefContext, setter algorithm.Setter) *algorithm.Action {
@@ -98,8 +102,71 @@ func (v *Visitor) visitRuns(ctx *ap.RunsContext) int {
 func (v *Visitor) visitStep(ctx *ap.StepContext) {
 	v.turns.PushScope(scope.NewScope[[]string]())
 	defer v.turns.PopScope()
+	//helpers
 	for _, stepLine := range ctx.AllStepLine() {
-		v.visitStepLine(stepLine.(*ap.StepLineContext))
+		if stepLine.Helpers() != nil {
+			v.visitHelpers(stepLine.Helpers().(*ap.HelpersContext))
+		}
+	}
+	//runs
+	runs := -1
+	for _, stepLine := range ctx.AllStepLine() {
+		if stepLine.Runs() != nil {
+			runs = v.visitRuns(stepLine.Runs().(*ap.RunsContext))
+			break
+		}
+	}
+	//goal
+	goal := false
+	for _, stepLine := range ctx.AllStepLine() {
+		if stepLine.Goal() != nil {
+			v.visitGoal(stepLine.Goal().(*ap.GoalContext), runs)
+			goal = true
+			if v.startBlock == nil {
+				v.startBlock = v.currentGoal
+			} else {
+				v.nextSetter(v.currentGoal)
+			}
+			v.nextSetter = v.currentGoal.FalseSetter()
+			defer func() {
+				v.nextSetter = v.currentGoal.TrueSetter()
+			}()
+			if v.previousBlock != nil {
+				v.nextSetter(v.currentGoal)
+			} else {
+				v.previousBlock = v.currentGoal
+			}
+			break
+		}
+	}
+	//dodef
+	for _, stepLine := range ctx.AllStepLine() {
+		if stepLine.DoDef() != nil && !goal {
+			var setter algorithm.Setter
+			if v.currentGoal != nil {
+				setter = v.currentGoal.FalseSetter()
+			} else {
+				setter = v.nextSetter
+			}
+			action := v.visitDoDef(stepLine.DoDef().(*ap.DoDefContext), setter)
+			if v.currentGoal == nil {
+				v.startBlock = action
+			}
+			v.previousBlock = action
+			v.nextSetter = action.NextSetter()
+			return
+		}
+		if stepLine.DoDef() != nil {
+			action := v.visitDoDef(stepLine.DoDef().(*ap.DoDefContext), v.currentGoal.FalseSetter())
+			action.NextSetter()(v.currentGoal)
+			return
+		}
+	}
+	//branches
+	for _, stepLine := range ctx.AllStepLine() {
+		if stepLine.Branches() != nil {
+			v.visitBranches(stepLine.Branches().(*ap.BranchesContext))
+		}
 	}
 }
 

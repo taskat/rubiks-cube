@@ -1,6 +1,10 @@
 package algorithm
 
-import "github.com/taskat/rubiks-cube/src/models"
+import (
+	"fmt"
+
+	"github.com/taskat/rubiks-cube/src/models"
+)
 
 type Goal struct {
 	*Condition
@@ -9,12 +13,12 @@ type Goal struct {
 }
 
 func NewGoal(condFunc ConditionFunc, runs int) *Goal {
-	return &Goal{Condition: NewCondition(condFunc), runs: runs, maxRuns: 0}
+	return &Goal{Condition: NewCondition(condFunc), runs: 0, maxRuns: runs}
 }
 
 func (g *Goal) Execute(p models.Puzzle) Block {
-	if g.runs >= g.maxRuns {
-		panic("Goal reached max runs")
+	if g.runs > g.maxRuns {
+		panic("Goal reached max runs" + fmt.Sprintf(" (%d)", g.maxRuns))
 	}
 	g.runs++
 	return g.Condition.Execute(p)

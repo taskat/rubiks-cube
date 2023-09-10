@@ -6,6 +6,7 @@ import (
 
 	"github.com/taskat/rubiks-cube/src/color"
 	"github.com/taskat/rubiks-cube/src/models"
+	"github.com/taskat/rubiks-cube/src/models/parameters"
 )
 
 type Cube struct {
@@ -29,15 +30,28 @@ func NewWithSides(sides map[CubeSide]Side) *Cube {
 		size:  len(sides[Front]),
 	}
 	c.generateMoves()
-	c.turn("S2")
-	c.turn("E2")
-	c.turn("M2")
 	return &c
+}
+
+func (c *Cube) Clone() models.Puzzle {
+	sides := make(map[CubeSide]Side, 6)
+	for sideName, side := range c.sides {
+		sides[sideName] = side.clone()
+	}
+	moves := make(map[string]move, len(c.moves))
+	for name, move := range c.moves {
+		moves[name] = move
+	}
+	return &Cube{sides: sides, size: c.size, moves: moves}
 }
 
 func (c *Cube) generateMoves() {
 	mg := newMoveGenerator(c.size)
 	c.moves = mg.generateAllMoves()
+}
+
+func (c *Cube) GetColor(coord parameters.Coord) color.Color {
+	return c.sides[CubeSide(coord.Side)][coord.Row][coord.Col]
 }
 
 func (c *Cube) getColor(coord sideCoord) color.Color {

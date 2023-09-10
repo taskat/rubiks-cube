@@ -27,6 +27,10 @@ func (c *Condition) FalseSetter() Setter {
 	}
 }
 
+func (c *Condition) Finished() bool {
+	return false
+}
+
 func (c *Condition) TrueSetter() Setter {
 	return func(block Block) {
 		c.trueBlock = block

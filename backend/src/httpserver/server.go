@@ -63,7 +63,7 @@ func (s Server) allHandler(response http.ResponseWriter, request *http.Request) 
 	}
 	algo := algohandler.Handle("algorithm.algo", string(content.Algo), &errorHandler, cube)
 	executor := executor.NewExecutor(&errorHandler)
-	turns := executor.Execute(cube, algo)
+	turns := executor.Execute(cube.Clone(), algo)
 	fmt.Println("Turns: ", turns)
 	messages := errorHandler.GetMessages()
 	fmt.Println("Messages: ", messages)

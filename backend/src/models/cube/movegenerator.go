@@ -30,7 +30,7 @@ func (mg *moveGenerator) generateXMoves() {
 		for i := 0; i < mg.size; i++ {
 			slices[0] = append(slices[0], newSideCoord(Front, i, col))
 			slices[1] = append(slices[1], newSideCoord(Up, i, col))
-			slices[2] = append(slices[2], newSideCoord(Back, i, mg.size-col-1))
+			slices[2] = append(slices[2], newSideCoord(Back, mg.size-i-1, mg.size-col-1))
 			slices[3] = append(slices[3], newSideCoord(Down, i, col))
 		}
 		return slices
@@ -54,7 +54,7 @@ func (mg *moveGenerator) generateXMoves() {
 	for i := 0; i < mg.size; i++ {
 		fullCubeCycles = append(fullCubeCycles, mg.getSliceCycles(getSlices(i))...)
 	}
-	fullCubeCycles = append(fullCubeCycles, mg.getSideCycles(Left)...)
+	fullCubeCycles = append(fullCubeCycles, mg.inverseCycles(mg.getSideCycles(Left))...)
 	fullCubeCycles = append(fullCubeCycles, mg.getSideCycles(Right)...)
 	mg.addMove(move{cycles: fullCubeCycles, steps: 1}, "x")
 }
@@ -90,7 +90,7 @@ func (mg *moveGenerator) generateYMoves() {
 		fullCubeCycles = append(fullCubeCycles, mg.getSliceCycles(getSlices(i))...)
 	}
 	fullCubeCycles = append(fullCubeCycles, mg.getSideCycles(Up)...)
-	fullCubeCycles = append(fullCubeCycles, mg.getSideCycles(Down)...)
+	fullCubeCycles = append(fullCubeCycles, mg.inverseCycles(mg.getSideCycles(Down))...)
 	mg.addMove(move{cycles: fullCubeCycles, steps: 1}, "y")
 }
 
@@ -125,7 +125,7 @@ func (mg *moveGenerator) generateZMoves() {
 		fullCubeCycles = append(fullCubeCycles, mg.getSliceCycles(getSlices(i))...)
 	}
 	fullCubeCycles = append(fullCubeCycles, mg.getSideCycles(Front)...)
-	fullCubeCycles = append(fullCubeCycles, mg.getSideCycles(Back)...)
+	fullCubeCycles = append(fullCubeCycles, mg.inverseCycles(mg.getSideCycles(Back))...)
 	mg.addMove(move{cycles: fullCubeCycles, steps: 1}, "z")
 }
 

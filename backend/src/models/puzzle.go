@@ -16,6 +16,8 @@ type Puzzle interface {
 	GetConstraint() Constraint
 	Turn(name string)
 	GetColor(coord parameters.Coord) color.Color
+	PieceLike(piece parameters.Piece, pos parameters.Position) bool
+	PieceAt(piece parameters.Piece, pos parameters.Position) bool
 }
 
 type Validator interface {

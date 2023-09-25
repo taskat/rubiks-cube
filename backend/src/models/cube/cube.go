@@ -92,8 +92,249 @@ func (c *Cube) getGoalSide(color color.Color) CubeSide {
 	panic(fmt.Sprintf("No side with color %s", color.String()))
 }
 
+func (c *Cube) getCornerCoords() [][]parameters.Coord {
+	coords := make([][]parameters.Coord, 8)
+	coords[0] = []parameters.Coord{
+		parameters.NewCoord("Up", 0, 0),
+		parameters.NewCoord("Left", 0, 0),
+		parameters.NewCoord("Back", 0, 2),
+	}
+	coords[1] = []parameters.Coord{
+		parameters.NewCoord("Up", 0, 2),
+		parameters.NewCoord("Back", 0, 0),
+		parameters.NewCoord("Right", 0, 2),
+	}
+	coords[2] = []parameters.Coord{
+		parameters.NewCoord("Up", 2, 2),
+		parameters.NewCoord("Right", 0, 0),
+		parameters.NewCoord("Front", 0, 2),
+	}
+	coords[3] = []parameters.Coord{
+		parameters.NewCoord("Up", 2, 0),
+		parameters.NewCoord("Front", 0, 0),
+		parameters.NewCoord("Left", 0, 2),
+	}
+	coords[4] = []parameters.Coord{
+		parameters.NewCoord("Down", 0, 0),
+		parameters.NewCoord("Left", 2, 2),
+		parameters.NewCoord("Front", 2, 0),
+	}
+	coords[5] = []parameters.Coord{
+		parameters.NewCoord("Down", 0, 2),
+		parameters.NewCoord("Front", 2, 2),
+		parameters.NewCoord("Right", 2, 0),
+	}
+	coords[6] = []parameters.Coord{
+		parameters.NewCoord("Down", 2, 2),
+		parameters.NewCoord("Right", 2, 2),
+		parameters.NewCoord("Back", 2, 0),
+	}
+	coords[7] = []parameters.Coord{
+		parameters.NewCoord("Down", 2, 0),
+		parameters.NewCoord("Back", 2, 2),
+		parameters.NewCoord("Left", 2, 0),
+	}
+	return coords
+}
+
+func (c *Cube) getEdgeCoords() [][]parameters.Coord {
+	coords := make([][]parameters.Coord, 12)
+	coords[0] = []parameters.Coord{
+		parameters.NewCoord("Up", 0, 1),
+		parameters.NewCoord("Back", 0, 1),
+	}
+	coords[1] = []parameters.Coord{
+		parameters.NewCoord("Up", 1, 2),
+		parameters.NewCoord("Right", 0, 1),
+	}
+	coords[2] = []parameters.Coord{
+		parameters.NewCoord("Up", 2, 1),
+		parameters.NewCoord("Front", 0, 1),
+	}
+	coords[3] = []parameters.Coord{
+		parameters.NewCoord("Up", 1, 0),
+		parameters.NewCoord("Left", 0, 1),
+	}
+	coords[4] = []parameters.Coord{
+		parameters.NewCoord("Down", 0, 1),
+		parameters.NewCoord("Front", 2, 1),
+	}
+	coords[5] = []parameters.Coord{
+		parameters.NewCoord("Down", 1, 2),
+		parameters.NewCoord("Right", 2, 1),
+	}
+	coords[6] = []parameters.Coord{
+		parameters.NewCoord("Down", 2, 1),
+		parameters.NewCoord("Back", 2, 1),
+	}
+	coords[7] = []parameters.Coord{
+		parameters.NewCoord("Down", 1, 0),
+		parameters.NewCoord("Left", 2, 1),
+	}
+	coords[8] = []parameters.Coord{
+		parameters.NewCoord("Left", 1, 0),
+		parameters.NewCoord("Back", 1, 2),
+	}
+	coords[9] = []parameters.Coord{
+		parameters.NewCoord("Left", 1, 2),
+		parameters.NewCoord("Front", 1, 0),
+	}
+	coords[10] = []parameters.Coord{
+		parameters.NewCoord("Right", 1, 0),
+		parameters.NewCoord("Front", 1, 2),
+	}
+	coords[11] = []parameters.Coord{
+		parameters.NewCoord("Right", 1, 2),
+		parameters.NewCoord("Back", 1, 0),
+	}
+	return coords
+}
+
+func (c *Cube) getPieceCoords(piece parameters.Piece) []parameters.Coord {
+	colors := make([]color.Color, 0, len(piece.Sides))
+	for _, sideName := range piece.Sides {
+		colors = append(colors, c.sides[CubeSide(sideName)][1][1])
+	}
+	var possibleCoords [][]parameters.Coord
+	switch len(piece.Sides) {
+	case 3:
+		possibleCoords = c.getCornerCoords()
+	case 2:
+		possibleCoords = c.getEdgeCoords()
+	}
+	for _, coords := range possibleCoords {
+		if c.checkCoords(coords, colors) {
+			return coords
+		}
+	}
+	panic("No coords found")
+}
+
+func (c *Cube) getPosCoords(pos parameters.Position) []parameters.Coord {
+	var possibleCoords [][]parameters.Coord
+	switch len(pos.Sides) {
+	case 3:
+		possibleCoords = c.getCornerCoords()
+	case 2:
+		possibleCoords = c.getEdgeCoords()
+	}
+	for _, coords := range possibleCoords {
+		if checkPos(coords, pos) {
+			return coords
+		}
+	}
+	panic("No coords found")
+}
+
+func checkPos(coords []parameters.Coord, pos parameters.Position) bool {
+	for _, coord := range coords {
+		if !containsCoord(pos, coord) {
+			return false
+		}
+	}
+	return true
+}
+
+func containsCoord(pos parameters.Position, coord parameters.Coord) bool {
+	for _, posSide := range pos.Sides {
+		if posSide == coord.Side {
+			return true
+		}
+	}
+	return false
+}
+
+func containsCoordCoord(coords []parameters.Coord, elem parameters.Coord) bool {
+	for _, coord := range coords {
+		if coord == elem {
+			return true
+		}
+	}
+	return false
+}
+
+func (c *Cube) checkCoords(coords []parameters.Coord, colors []color.Color) bool {
+	for _, coord := range coords {
+		color := c.GetColor(coord)
+		if !contain(colors, color) {
+			return false
+		}
+	}
+	return true
+}
+
+func contain(arr []color.Color, elem color.Color) bool {
+	for _, e := range arr {
+		if e[0] == elem[0] {
+			return true
+		}
+	}
+	return false
+}
+
 func (c *Cube) GetValidator() models.Validator {
 	return newValidator(c)
+}
+
+func (c *Cube) PieceAt(piece parameters.Piece, pos parameters.Position) bool {
+	colors := make([]color.Color, 0, len(pos.Sides))
+	for _, sideName := range pos.Sides {
+		colors = append(colors, c.sides[CubeSide(sideName)][1][1])
+	}
+	fmt.Println("Colors in pieceat", colors)
+	pieceCoords := c.getPieceCoords(piece)
+	fmt.Println("piece Coords in pieceat", pieceCoords)
+	posCoords := c.getPosCoords(pos)
+	fmt.Println("Pos coord in pieceat", posCoords)
+	for _, coord := range pieceCoords {
+		if !containsCoordCoord(posCoords, coord) {
+			return false
+		}
+	}
+	return true
+}
+
+func (c *Cube) PieceLike(piece parameters.Piece, pos parameters.Position) bool {
+	fmt.Println("Sides in piecelike piece", piece.Sides)
+	fmt.Println("Sides in piecelike pos", pos.Sides)
+	pieceCoords := c.getPieceCoords(piece)
+	pieceCoords = c.sortByPiece(pieceCoords, piece)
+	fmt.Println("Piece coords in piecelike", pieceCoords)
+	posCoords := c.getPosCoords(pos)
+	posCoords = sortByPos(posCoords, pos)
+	fmt.Println("Pos coords in piecelike", posCoords)
+	for i, coord := range pieceCoords {
+		if coord != posCoords[i] {
+			return false
+		}
+	}
+	return true
+}
+
+func sortByPos(coords []parameters.Coord, pos parameters.Position) []parameters.Coord {
+	sorted := make([]parameters.Coord, len(coords))
+	for i, side := range pos.Sides {
+		for _, coord := range coords {
+			if coord.Side == side {
+				sorted[i] = coord
+				break
+			}
+		}
+	}
+	return sorted
+}
+
+func (c *Cube) sortByPiece(coords []parameters.Coord, piece parameters.Piece) []parameters.Coord {
+	sorted := make([]parameters.Coord, len(coords))
+	for i, side := range piece.Sides {
+		for _, coord := range coords {
+			if c.GetColor(coord)[0] == c.GetColor(parameters.NewCoord(side, 1, 1))[0] {
+				sorted[i] = coord
+				break
+			}
+		}
+	}
+	return sorted
 }
 
 func (c *Cube) String() string {

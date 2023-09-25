@@ -1,8 +1,6 @@
 package generatorvisitor
 
 import (
-	"fmt"
-
 	ap "github.com/taskat/rubiks-cube/src/algo/parser"
 	"github.com/taskat/rubiks-cube/src/color"
 	"github.com/taskat/rubiks-cube/src/models"
@@ -18,12 +16,66 @@ func newBoolExprVisitor(c models.Constraint) *boolExprVisitor {
 	return &boolExprVisitor{constraint: c}
 }
 
-func (v *boolExprVisitor) buildBinaryFunc(left, right parameters.Parameter, op string) algorithm.ConditionFunc {
-	return nil
+func (v *boolExprVisitor) buildAtFunc(leftParam, rightParam parameters.Parameter) algorithm.ConditionFunc {
+	var left parameters.Piece
+	var right parameters.Position
+	switch typedLeftParam := leftParam.(type) {
+	case parameters.Piece:
+		left = typedLeftParam
+	case parameters.Node:
+		left = *parameters.NewPiece(typedLeftParam)
+	}
+	switch typedRightParam := rightParam.(type) {
+	case parameters.Position:
+		right = typedRightParam
+	case parameters.Node:
+		right = *parameters.NewPosition(typedRightParam)
+	}
+	return at(left, right)
+}
+
+func (v *boolExprVisitor) buildBinaryFuncFromUnary(param parameters.Parameter, builder func(leftParam, rightParam parameters.Parameter) algorithm.ConditionFunc) algorithm.ConditionFunc {
+	if list, ok := param.(parameters.List[parameters.Parameter]); ok {
+		return func(p models.Puzzle) bool {
+			for _, param := range list {
+				if !builder(param, param)(p) {
+					return false
+				}
+			}
+			return true
+		}
+	}
+	return builder(param, param)
+}
+
+func (v *boolExprVisitor) buildLikeFunc(leftParam, rightParam parameters.Parameter) algorithm.ConditionFunc {
+	var left parameters.Piece
+	var right parameters.Position
+	switch typedLeftParam := leftParam.(type) {
+	case parameters.Piece:
+		left = typedLeftParam
+	case parameters.Node:
+		left = *parameters.NewPiece(typedLeftParam)
+	}
+	switch typedRightParam := rightParam.(type) {
+	case parameters.Position:
+		right = typedRightParam
+	case parameters.Node:
+		right = *parameters.NewPosition(typedRightParam)
+	}
+	return like(left, right)
 }
 
 func (v *boolExprVisitor) visitBinaryExpr(ctx *ap.BinaryExprContext) algorithm.ConditionFunc {
-	return nil
+	left := v.visitParameter(ctx.Parameter(0).(*ap.ParameterContext))
+	right := v.visitParameter(ctx.Parameter(1).(*ap.ParameterContext))
+	switch ctx.WORD().GetText() {
+	case "at":
+		return v.buildAtFunc(left, right)
+	case "like":
+		return v.buildLikeFunc(left, right)
+	}
+	panic("Unknown binary expression")
 }
 
 func (v *boolExprVisitor) visitBinaryOp(ctx *ap.BinaryOpContext, left, right algorithm.ConditionFunc) algorithm.ConditionFunc {
@@ -85,27 +137,16 @@ func (v *boolExprVisitor) visitUnaryExpr(ctx *ap.UnaryExprContext) algorithm.Con
 	param := v.visitParameter(ctx.Parameter().(*ap.ParameterContext))
 	switch ctx.WORD().GetText() {
 	case "place":
-		return v.buildBinaryFunc(param, param, "at")
+		return v.buildBinaryFuncFromUnary(param, v.buildAtFunc)
 	case "orientation":
-		return v.buildBinaryFunc(param, param, "like")
+		return v.buildBinaryFuncFromUnary(param, v.buildLikeFunc)
 	}
 	expectedColor := color.Color(ctx.WORD().GetText())
 	switch typedParam := param.(type) {
 	case parameters.Coord:
-		return func(p models.Puzzle) bool {
-			fmt.Println("Expected color", expectedColor)
-			fmt.Println("Actual color", p.GetColor(typedParam))
-			return p.GetColor(typedParam)[0] == expectedColor[0]
-		}
+		return singleColorMatch(expectedColor, typedParam)
 	case parameters.List[parameters.Coord]:
-		return func(p models.Puzzle) bool {
-			for _, coord := range typedParam {
-				if p.GetColor(coord) != expectedColor {
-					return false
-				}
-			}
-			return true
-		}
+		return colorListMatch(expectedColor, typedParam)
 	}
 	panic("Unknown unary expression")
 }

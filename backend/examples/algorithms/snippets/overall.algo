@@ -31,9 +31,9 @@ steps:
             if piece(Up, Front) at (Front, Left):
                 do: F'
             if piece(Up, Front) at (Left, Back):
-                do: L'
+                do: L' D L
             if piece(Up, Front) at (Back, Right):
-                do: R
+                do: R D' R'
             prepare: D
     step white_side:
         goal: orientation([(Up, Front, Right), (Up, Right, Back), (Up, Back, Left), (Up, Left, Front)])

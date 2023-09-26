@@ -8,10 +8,12 @@ import (
 	"github.com/taskat/rubiks-cube/src/models/parameters"
 )
 
-type parameterVisitor struct{}
+type parameterVisitor struct {
+	functionalEnabled bool
+}
 
-func newParameterVisitor() *parameterVisitor {
-	return &parameterVisitor{}
+func newParameterVisitor(functionalEnabled bool) *parameterVisitor {
+	return &parameterVisitor{functionalEnabled: functionalEnabled}
 }
 
 func (v *parameterVisitor) visitCoord(ctx *ap.CoordContext) parameters.Coord {
@@ -75,6 +77,9 @@ func (v *parameterVisitor) visitParameter(ctx *ap.ParameterContext) parameters.P
 	}
 	if ctx.List() != nil {
 		return v.visitList(ctx.List().(*ap.ListContext))
+	}
+	if v.functionalEnabled && ctx.QUESTIONMARK() != nil {
+		return parameters.PlaceHolder{}
 	}
 	panic(fmt.Sprintf("Unknown parameter type: %v", ctx.GetText()))
 }

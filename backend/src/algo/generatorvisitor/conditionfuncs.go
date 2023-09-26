@@ -7,6 +7,28 @@ import (
 	"github.com/taskat/rubiks-cube/src/models/parameters"
 )
 
+func all(builder conditionBuilderFunc, list parameters.List[parameters.Parameter]) algorithm.ConditionFunc {
+	return func(p models.Puzzle) bool {
+		for _, param := range list {
+			if !builder(param)(p) {
+				return false
+			}
+		}
+		return true
+	}
+}
+
+func any(builder conditionBuilderFunc, list parameters.List[parameters.Parameter]) algorithm.ConditionFunc {
+	return func(p models.Puzzle) bool {
+		for _, param := range list {
+			if builder(param)(p) {
+				return true
+			}
+		}
+		return false
+	}
+}
+
 func at(piece parameters.Piece, pos parameters.Position) algorithm.ConditionFunc {
 	return func(p models.Puzzle) bool {
 		return p.PieceAt(piece, pos)
@@ -27,6 +49,17 @@ func colorListMatch(expectedColor color.Color, coords parameters.List[parameters
 func like(piece parameters.Piece, pos parameters.Position) algorithm.ConditionFunc {
 	return func(p models.Puzzle) bool {
 		return p.PieceLike(piece, pos)
+	}
+}
+
+func none(builder conditionBuilderFunc, list parameters.List[parameters.Parameter]) algorithm.ConditionFunc {
+	return func(p models.Puzzle) bool {
+		for _, param := range list {
+			if builder(param)(p) {
+				return false
+			}
+		}
+		return true
 	}
 }
 

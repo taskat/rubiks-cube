@@ -120,8 +120,6 @@ steps:
             if piece(Front, Right) at (Back, Right):
                 do: y right y' D
             prepare: D
-    step yellow_up:
-        do: upsideDown
     `
 
 export const beginnerConfig = beginnerWithParenthesis;

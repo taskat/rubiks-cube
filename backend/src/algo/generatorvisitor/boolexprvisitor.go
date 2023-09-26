@@ -8,12 +8,16 @@ import (
 	"github.com/taskat/rubiks-cube/src/models/parameters"
 )
 
+type conditionBuilderFunc func(param parameters.Parameter) algorithm.ConditionFunc
+
 type boolExprVisitor struct {
-	constraint models.Constraint
+	constraint        models.Constraint
+	functionalEnabled bool
+	conditionBuilder  conditionBuilderFunc
 }
 
 func newBoolExprVisitor(c models.Constraint) *boolExprVisitor {
-	return &boolExprVisitor{constraint: c}
+	return &boolExprVisitor{constraint: c, functionalEnabled: false}
 }
 
 func (v *boolExprVisitor) buildAtFunc(leftParam, rightParam parameters.Parameter) algorithm.ConditionFunc {
@@ -69,13 +73,32 @@ func (v *boolExprVisitor) buildLikeFunc(leftParam, rightParam parameters.Paramet
 func (v *boolExprVisitor) visitBinaryExpr(ctx *ap.BinaryExprContext) algorithm.ConditionFunc {
 	left := v.visitParameter(ctx.Parameter(0).(*ap.ParameterContext))
 	right := v.visitParameter(ctx.Parameter(1).(*ap.ParameterContext))
+	var conditionBuilder func(left, right parameters.Parameter) algorithm.ConditionFunc
 	switch ctx.WORD().GetText() {
 	case "at":
-		return v.buildAtFunc(left, right)
+		conditionBuilder = v.buildAtFunc
 	case "like":
-		return v.buildLikeFunc(left, right)
+		conditionBuilder = v.buildLikeFunc
+	default:
+		panic("Unknown binary expression")
 	}
-	panic("Unknown binary expression")
+	switch {
+	case left == parameters.PlaceHolder{} && right == parameters.PlaceHolder{}:
+		v.conditionBuilder = func(param parameters.Parameter) algorithm.ConditionFunc {
+			return conditionBuilder(param, param)
+		}
+	case left == parameters.PlaceHolder{}:
+		v.conditionBuilder = func(param parameters.Parameter) algorithm.ConditionFunc {
+			return conditionBuilder(param, right)
+		}
+	case right == parameters.PlaceHolder{}:
+		v.conditionBuilder = func(param parameters.Parameter) algorithm.ConditionFunc {
+			return conditionBuilder(left, param)
+		}
+	default:
+		return conditionBuilder(left, right)
+	}
+	return nil
 }
 
 func (v *boolExprVisitor) visitBinaryOp(ctx *ap.BinaryOpContext, left, right algorithm.ConditionFunc) algorithm.ConditionFunc {
@@ -124,12 +147,31 @@ func (v *boolExprVisitor) visitExpr(ctx *ap.ExprContext) algorithm.ConditionFunc
 	panic("Unknown expression")
 }
 
+func (v *boolExprVisitor) visitFunction(ctx *ap.FunctionContext) func(builder conditionBuilderFunc, list parameters.List[parameters.Parameter]) algorithm.ConditionFunc {
+	switch {
+	case ctx.ALL() != nil:
+		return all
+	case ctx.ANY() != nil:
+		return any
+	case ctx.NONE() != nil:
+		return none
+	default:
+		panic("Unknown function")
+	}
+}
+
 func (v *boolExprVisitor) visitFunctionalExpr(ctx *ap.FunctionalExprContext) algorithm.ConditionFunc {
-	return nil
+	paramVisitor := newParameterVisitor(false)
+	list := paramVisitor.visitList(ctx.List().(*ap.ListContext))
+	v.functionalEnabled = true
+	v.visitBoolExpr(ctx.BoolExpr().(*ap.BoolExprContext))
+	v.functionalEnabled = false
+	builder := v.visitFunction(ctx.Function().(*ap.FunctionContext))
+	return builder(v.conditionBuilder, list)
 }
 
 func (v *boolExprVisitor) visitParameter(ctx *ap.ParameterContext) parameters.Parameter {
-	visitor := newParameterVisitor()
+	visitor := newParameterVisitor(v.functionalEnabled)
 	return visitor.visitParameter(ctx)
 }
 
@@ -147,6 +189,11 @@ func (v *boolExprVisitor) visitUnaryExpr(ctx *ap.UnaryExprContext) algorithm.Con
 		return singleColorMatch(expectedColor, typedParam)
 	case parameters.List[parameters.Coord]:
 		return colorListMatch(expectedColor, typedParam)
+	case parameters.PlaceHolder:
+		v.conditionBuilder = func(param parameters.Parameter) algorithm.ConditionFunc {
+			return singleColorMatch(expectedColor, param.(parameters.Coord))
+		}
+		return nil
 	}
 	panic("Unknown unary expression")
 }

@@ -38,7 +38,7 @@ func at(piece parameters.Piece, pos parameters.Position) algorithm.ConditionFunc
 func colorListMatch(expectedColor color.Color, coords parameters.List[parameters.Coord]) algorithm.ConditionFunc {
 	return func(p models.Puzzle) bool {
 		for _, coord := range coords {
-			if p.GetColor(coord) != expectedColor {
+			if p.GetColor(coord)[0] != expectedColor[0] {
 				return false
 			}
 		}

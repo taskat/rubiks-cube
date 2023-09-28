@@ -25,7 +25,7 @@ turn: WORD (NUMBER | PRIME)? | NUMBER LPAREN algorithm RPAREN;
 boolExpr: unaryOp boolExpr | boolExpr binaryOp boolExpr | LPAREN boolExpr RPAREN | expr;
 unaryOp: NOT;
 binaryOp: AND | OR;
-expr: unaryExpr | binaryExpr | functionalExpr;
+expr: functionalExpr | unaryExpr | binaryExpr;
 unaryExpr: WORD LPAREN parameter RPAREN;
 binaryExpr: parameter WORD parameter;
 functionalExpr: function LPAREN boolExpr COMMA list RPAREN;

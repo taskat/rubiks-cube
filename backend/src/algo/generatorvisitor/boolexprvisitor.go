@@ -187,15 +187,19 @@ func (v *boolExprVisitor) visitUnaryExpr(ctx *ap.UnaryExprContext) algorithm.Con
 	switch typedParam := param.(type) {
 	case parameters.Coord:
 		return singleColorMatch(expectedColor, typedParam)
-	case parameters.List[parameters.Coord]:
-		return colorListMatch(expectedColor, typedParam)
+	case parameters.List[parameters.Parameter]:
+		var list parameters.List[parameters.Coord]
+		for _, param := range typedParam {
+			list = append(list, param.(parameters.Coord))
+		}
+		return colorListMatch(expectedColor, list)
 	case parameters.PlaceHolder:
 		v.conditionBuilder = func(param parameters.Parameter) algorithm.ConditionFunc {
 			return singleColorMatch(expectedColor, param.(parameters.Coord))
 		}
 		return nil
 	}
-	panic("Unknown unary expression")
+	panic("Unknown unary expression: " + ctx.GetText())
 }
 
 func (v *boolExprVisitor) visitUnaryOp(ctx *ap.UnaryOpContext, condFunc algorithm.ConditionFunc) algorithm.ConditionFunc {

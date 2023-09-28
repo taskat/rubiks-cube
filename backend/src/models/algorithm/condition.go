@@ -23,6 +23,9 @@ func (c *Condition) Execute(p models.Puzzle) Block {
 
 func (c *Condition) FalseSetter() Setter {
 	return func(block Block) {
+		if c.falseBlock != nil {
+			panic("False block already set")
+		}
 		c.falseBlock = block
 	}
 }
@@ -33,6 +36,9 @@ func (c *Condition) Finished() bool {
 
 func (c *Condition) TrueSetter() Setter {
 	return func(block Block) {
+		if c.trueBlock != nil {
+			panic("True block already set")
+		}
 		c.trueBlock = block
 	}
 }

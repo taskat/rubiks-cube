@@ -120,6 +120,66 @@ steps:
             if piece(Front, Right) at (Back, Right):
                 do: y right y' D
             prepare: D
+    step yellow_up:
+        do: upsideDown
+    step yellow_cross:
+        goal: yellow([Up 0 1, Up 1 0, Up 1 2, Up 2 1])
+        helpers:
+            fromL: F U R U' R' F'
+            fromDash: F R U R' U' F'
+        runs: 4
+        branches:
+            if yellow([Up 0 1, Up 1 0]):
+                do: fromL
+            if yellow([Up 1 0, Up 1 2]):
+                do: fromDash
+            if none(yellow(?), [Up 0 1, Up 1 0, Up 1 2, Up 2 1]):
+                do: fromDash U2 fromL
+            prepare: U
+    step yellow_edges:
+        goal: orientation([(Up, Front), (Up, Right), (Up, Back), (Up, Left)])
+        helpers:
+            swapTwo: R U R' U R U2 R' U
+        runs: 8
+        branches:
+            if orientation([(Up, Back), (Up, Right)]):
+                do: swapTwo
+            if orientation([(Up, Back), (Up, Left)]):
+                do: y
+            if orientation([(Up, Front), (Up, Right)]):
+                do: y'
+            if orientation([(Up, Front), (Up, Left)]):
+                do: y2
+            prepare:
+                do: U
+                consecutive: 3
+            prepare: swapTwo
+    step yellow_corners:
+        goal: place([(Up, Front, Right), (Up, Right, Back), (Up, Back, Left), (Up, Left, Front)])
+        helpers:
+            cycleCorners: U R U' L' U R' U' L
+        runs: 9
+        branches:
+            if place(Up, Front, Right):
+                do: cycleCorners
+            prepare: 
+                do: y
+                consecutive: 3
+            prepare: cycleCorners
+    step yellow_corners_orient:
+        goal: orientation([(Up, Front, Right), (Up, Right, Back), (Up, Back, Left), (Up, Left, Front)])
+        runs: 4
+        branches:
+            if yellow(Up 2 2):
+                do: U
+            if yellow(Front 0 2):
+                do: 4(R' D' R D) U
+            if yellow(Right 0 0):
+                do: 2(R' D' R D) U
+    step orient_top_layer:
+        goal: orientation(Up, Front, Right)
+        runs: 3
+        do: U      
     `
 
 export const beginnerConfig = beginnerWithParenthesis;

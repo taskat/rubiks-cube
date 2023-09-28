@@ -137,8 +137,8 @@ func algorithmparserParserInit() {
 		32, 16, 4, 177, 179, 1, 0, 0, 0, 178, 174, 1, 0, 0, 0, 179, 182, 1, 0,
 		0, 0, 180, 178, 1, 0, 0, 0, 180, 181, 1, 0, 0, 0, 181, 33, 1, 0, 0, 0,
 		182, 180, 1, 0, 0, 0, 183, 184, 5, 27, 0, 0, 184, 35, 1, 0, 0, 0, 185,
-		186, 7, 1, 0, 0, 186, 37, 1, 0, 0, 0, 187, 191, 3, 40, 20, 0, 188, 191,
-		3, 42, 21, 0, 189, 191, 3, 44, 22, 0, 190, 187, 1, 0, 0, 0, 190, 188, 1,
+		186, 7, 1, 0, 0, 186, 37, 1, 0, 0, 0, 187, 191, 3, 44, 22, 0, 188, 191,
+		3, 40, 20, 0, 189, 191, 3, 42, 21, 0, 190, 187, 1, 0, 0, 0, 190, 188, 1,
 		0, 0, 0, 190, 189, 1, 0, 0, 0, 191, 39, 1, 0, 0, 0, 192, 193, 5, 29, 0,
 		0, 193, 194, 5, 21, 0, 0, 194, 195, 3, 48, 24, 0, 195, 196, 5, 22, 0, 0,
 		196, 41, 1, 0, 0, 0, 197, 198, 3, 48, 24, 0, 198, 199, 5, 29, 0, 0, 199,
@@ -2980,9 +2980,9 @@ type IExprContext interface {
 	GetParser() antlr.Parser
 
 	// Getter signatures
+	FunctionalExpr() IFunctionalExprContext
 	UnaryExpr() IUnaryExprContext
 	BinaryExpr() IBinaryExprContext
-	FunctionalExpr() IFunctionalExprContext
 
 	// IsExprContext differentiates from other interfaces.
 	IsExprContext()
@@ -3015,6 +3015,22 @@ func NewExprContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokin
 
 func (s *ExprContext) GetParser() antlr.Parser { return s.parser }
 
+func (s *ExprContext) FunctionalExpr() IFunctionalExprContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IFunctionalExprContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IFunctionalExprContext)
+}
+
 func (s *ExprContext) UnaryExpr() IUnaryExprContext {
 	var t antlr.RuleContext
 	for _, ctx := range s.GetChildren() {
@@ -3045,22 +3061,6 @@ func (s *ExprContext) BinaryExpr() IBinaryExprContext {
 	}
 
 	return t.(IBinaryExprContext)
-}
-
-func (s *ExprContext) FunctionalExpr() IFunctionalExprContext {
-	var t antlr.RuleContext
-	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(IFunctionalExprContext); ok {
-			t = ctx.(antlr.RuleContext)
-			break
-		}
-	}
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(IFunctionalExprContext)
 }
 
 func (s *ExprContext) GetRuleContext() antlr.RuleContext {
@@ -3101,21 +3101,21 @@ func (p *AlgorithmParser) Expr() (localctx IExprContext) {
 		p.EnterOuterAlt(localctx, 1)
 		{
 			p.SetState(187)
-			p.UnaryExpr()
+			p.FunctionalExpr()
 		}
 
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
 			p.SetState(188)
-			p.BinaryExpr()
+			p.UnaryExpr()
 		}
 
 	case 3:
 		p.EnterOuterAlt(localctx, 3)
 		{
 			p.SetState(189)
-			p.FunctionalExpr()
+			p.BinaryExpr()
 		}
 
 	}

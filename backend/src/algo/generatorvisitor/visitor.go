@@ -131,9 +131,7 @@ func (v *Visitor) visitStep(ctx *ap.StepContext) {
 			defer func() {
 				v.nextSetter = v.currentGoal.TrueSetter()
 			}()
-			if v.previousBlock != nil {
-				v.nextSetter(v.currentGoal)
-			} else {
+			if v.previousBlock == nil {
 				v.previousBlock = v.currentGoal
 			}
 			break
@@ -143,10 +141,10 @@ func (v *Visitor) visitStep(ctx *ap.StepContext) {
 	for _, stepLine := range ctx.AllStepLine() {
 		if stepLine.DoDef() != nil && !goal {
 			var setter algorithm.Setter
-			if v.currentGoal != nil {
-				setter = v.currentGoal.FalseSetter()
-			} else {
+			if v.nextSetter != nil {
 				setter = v.nextSetter
+			} else {
+				setter = func(block algorithm.Block) {}
 			}
 			action := v.visitDoDef(stepLine.DoDef().(*ap.DoDefContext), setter)
 			if v.currentGoal == nil {
@@ -168,40 +166,6 @@ func (v *Visitor) visitStep(ctx *ap.StepContext) {
 			v.visitBranches(stepLine.Branches().(*ap.BranchesContext))
 		}
 	}
-}
-
-func (v *Visitor) visitStepLine(ctx *ap.StepLineContext) {
-	if ctx.DoDef() != nil && ctx.Goal() == nil {
-		var setter algorithm.Setter
-		if v.currentGoal != nil {
-			setter = v.currentGoal.FalseSetter()
-		} else {
-			setter = v.nextSetter
-		}
-		action := v.visitDoDef(ctx.DoDef().(*ap.DoDefContext), setter)
-		if v.currentGoal == nil {
-			v.startBlock = action
-		}
-		v.previousBlock = action
-		v.nextSetter = action.NextSetter()
-		return
-	}
-	runs := v.visitRuns(ctx.Runs().(*ap.RunsContext))
-	v.visitGoal(ctx.Goal().(*ap.GoalContext), runs)
-	if v.startBlock == nil {
-		v.startBlock = v.currentGoal
-	}
-	if v.previousBlock != nil {
-		v.nextSetter(v.currentGoal)
-	} else {
-		v.previousBlock = v.currentGoal
-	}
-	if ctx.DoDef() != nil {
-		action := v.visitDoDef(ctx.DoDef().(*ap.DoDefContext), v.currentGoal.FalseSetter())
-		action.NextSetter()(v.currentGoal)
-		return
-	}
-	v.visitBranches(ctx.Branches().(*ap.BranchesContext))
 }
 
 func (v *Visitor) visitSteps(ctx *ap.StepsContext) {

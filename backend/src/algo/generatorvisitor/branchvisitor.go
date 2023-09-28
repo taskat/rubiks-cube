@@ -43,8 +43,10 @@ func (v *Visitor) visitPrepareBranch(ctx *ap.PrepareBranchContext) {
 		return
 	}
 	action := v.visitDoDef(ctx.DoDef().(*ap.DoDefContext), func(block algorithm.Block) {})
+	action.NextSetter()(v.currentGoal)
 	consec := v.visitConsecutive(ctx.Consecutive().(*ap.ConsecutiveContext))
 	prep := algorithm.NewPrepare(action, consec)
+	v.currentGoal.AddPrepare(prep)
 	v.nextSetter(prep)
 	v.nextSetter = prep.NextSetter()
 }

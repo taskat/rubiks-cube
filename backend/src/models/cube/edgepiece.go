@@ -13,10 +13,10 @@ type edgePiece struct {
 }
 
 func newEdgePiece(c *Cube, coords []parameters.Coord) edgePiece {
-	location := newEdgeLocation(cubeSide(coords[0].Side), cubeSide(coords[1].Side))
+	location := newEdgeLocation(coords[0].Side, coords[1].Side)
 	colors := [2]color.Color{c.sides[cubeSide(coords[0].Side)][coords[0].Row][coords[0].Col],
 		c.sides[cubeSide(coords[1].Side)][coords[1].Row][coords[1].Col]}
-	goalLocation := newEdgeLocation(c.getGoalSide(colors[0]), c.getGoalSide(colors[1]))
+	goalLocation := newEdgeLocationFromCubeSides(c.getGoalSide(colors[0]), c.getGoalSide(colors[1]))
 	return edgePiece{location, colors, goalLocation, c}
 }
 

@@ -3,6 +3,8 @@ package cube
 import (
 	"sort"
 	"strings"
+
+	"github.com/taskat/rubiks-cube/src/models/parameters"
 )
 
 type edgeLocation struct {
@@ -10,7 +12,11 @@ type edgeLocation struct {
 	hash  string
 }
 
-func newEdgeLocation(s1, s2 cubeSide) edgeLocation {
+func newEdgeLocation(s1, s2 parameters.Side) edgeLocation {
+	return edgeLocation{sides: [2]cubeSide{cubeSide(s1), cubeSide(s2)}, hash: ""}
+}
+
+func newEdgeLocationFromCubeSides(s1, s2 cubeSide) edgeLocation {
 	return edgeLocation{sides: [2]cubeSide{s1, s2}, hash: ""}
 }
 
@@ -57,7 +63,7 @@ func (e edgeLocation) getSameSide(other edgeLocation) cubeSide {
 }
 
 func (e edgeLocation) getMiddleLocation(other edgeLocation) edgeLocation {
-	newLocation := newEdgeLocation(e.sides[0], e.sides[1])
+	newLocation := newEdgeLocationFromCubeSides(e.sides[0], e.sides[1])
 	newLocation.sides[0] = newLocation.sides[0].getOpposite()
 	if newLocation.hasSameSide(other) {
 		return newLocation

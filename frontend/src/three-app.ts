@@ -20,7 +20,7 @@ const BEFORE_DELAY = 2000;
 const AFTER_DELAY = 2000;
 
 export default class Simulator{
-  animationSpeed: number = 750;
+  animationSpeed: number = 100;
   model: THREE.BufferGeometry = new THREE.BufferGeometry();
   modelName: string = "/cube-bevelled.glb";
   cubeSize: number = 3;

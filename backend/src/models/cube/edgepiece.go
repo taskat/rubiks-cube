@@ -2,6 +2,7 @@ package cube
 
 import (
 	"github.com/taskat/rubiks-cube/src/color"
+	"github.com/taskat/rubiks-cube/src/models/parameters"
 )
 
 type edgePiece struct {
@@ -58,4 +59,57 @@ var edgeCoords = [][]sideCoord{
 	{newSideCoord(Down, 1, 2), newSideCoord(Right, 2, 1)},
 	{newSideCoord(Down, 2, 1), newSideCoord(Back, 2, 1)},
 	{newSideCoord(Down, 1, 0), newSideCoord(Left, 2, 1)},
+}
+
+func getEdgeCoords() [][]parameters.Coord {
+	coords := make([][]parameters.Coord, 12)
+	coords[0] = []parameters.Coord{
+		parameters.NewCoord("Up", 0, 1),
+		parameters.NewCoord("Back", 0, 1),
+	}
+	coords[1] = []parameters.Coord{
+		parameters.NewCoord("Up", 1, 2),
+		parameters.NewCoord("Right", 0, 1),
+	}
+	coords[2] = []parameters.Coord{
+		parameters.NewCoord("Up", 2, 1),
+		parameters.NewCoord("Front", 0, 1),
+	}
+	coords[3] = []parameters.Coord{
+		parameters.NewCoord("Up", 1, 0),
+		parameters.NewCoord("Left", 0, 1),
+	}
+	coords[4] = []parameters.Coord{
+		parameters.NewCoord("Down", 0, 1),
+		parameters.NewCoord("Front", 2, 1),
+	}
+	coords[5] = []parameters.Coord{
+		parameters.NewCoord("Down", 1, 2),
+		parameters.NewCoord("Right", 2, 1),
+	}
+	coords[6] = []parameters.Coord{
+		parameters.NewCoord("Down", 2, 1),
+		parameters.NewCoord("Back", 2, 1),
+	}
+	coords[7] = []parameters.Coord{
+		parameters.NewCoord("Down", 1, 0),
+		parameters.NewCoord("Left", 2, 1),
+	}
+	coords[8] = []parameters.Coord{
+		parameters.NewCoord("Left", 1, 0),
+		parameters.NewCoord("Back", 1, 2),
+	}
+	coords[9] = []parameters.Coord{
+		parameters.NewCoord("Left", 1, 2),
+		parameters.NewCoord("Front", 1, 0),
+	}
+	coords[10] = []parameters.Coord{
+		parameters.NewCoord("Right", 1, 0),
+		parameters.NewCoord("Front", 1, 2),
+	}
+	coords[11] = []parameters.Coord{
+		parameters.NewCoord("Right", 1, 2),
+		parameters.NewCoord("Back", 1, 0),
+	}
+	return coords
 }

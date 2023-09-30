@@ -12,10 +12,10 @@ type edgePiece struct {
 	c            *Cube
 }
 
-func newEdgePiece(c *Cube, coords []sideCoord) edgePiece {
-	location := newEdgeLocation(coords[0].side, coords[1].side)
-	colors := [2]color.Color{c.sides[coords[0].side][coords[0].Row][coords[0].Col],
-		c.sides[coords[1].side][coords[1].Row][coords[1].Col]}
+func newEdgePiece(c *Cube, coords []parameters.Coord) edgePiece {
+	location := newEdgeLocation(CubeSide(coords[0].Side), CubeSide(coords[1].Side))
+	colors := [2]color.Color{c.sides[CubeSide(coords[0].Side)][coords[0].Row][coords[0].Col],
+		c.sides[CubeSide(coords[1].Side)][coords[1].Row][coords[1].Col]}
 	goalLocation := newEdgeLocation(c.getGoalSide(colors[0]), c.getGoalSide(colors[1]))
 	return edgePiece{location, colors, goalLocation, c}
 }
@@ -44,21 +44,6 @@ func (e edgePiece) isFlipped() bool {
 		return e.c.getGoalSide(e.colors[0]) != sameSide
 	}
 	return e.c.getGoalSide(e.colors[1]) != sameSide
-}
-
-var edgeCoords = [][]sideCoord{
-	{newSideCoord(Up, 0, 1), newSideCoord(Back, 0, 1)},
-	{newSideCoord(Up, 1, 2), newSideCoord(Right, 0, 1)},
-	{newSideCoord(Up, 2, 1), newSideCoord(Front, 0, 1)},
-	{newSideCoord(Up, 1, 0), newSideCoord(Left, 0, 1)},
-	{newSideCoord(Front, 1, 2), newSideCoord(Right, 1, 0)},
-	{newSideCoord(Right, 1, 2), newSideCoord(Back, 1, 0)},
-	{newSideCoord(Back, 1, 2), newSideCoord(Left, 1, 0)},
-	{newSideCoord(Left, 1, 2), newSideCoord(Front, 1, 0)},
-	{newSideCoord(Down, 0, 1), newSideCoord(Front, 2, 1)},
-	{newSideCoord(Down, 1, 2), newSideCoord(Right, 2, 1)},
-	{newSideCoord(Down, 2, 1), newSideCoord(Back, 2, 1)},
-	{newSideCoord(Down, 1, 0), newSideCoord(Left, 2, 1)},
 }
 
 func getEdgeCoords() [][]parameters.Coord {

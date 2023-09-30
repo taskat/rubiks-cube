@@ -1,11 +1,15 @@
 package parameters
 
 type Coord struct {
-	Side string
+	Side Side
 	Row  int
 	Col  int
 }
 
-func NewCoord(side string, row int, col int) Coord {
+func NewCoord(side Side, row int, col int) Coord {
 	return Coord{side, row, col}
+}
+
+func NewCoordFromString(side string, row int, col int) Coord {
+	return Coord{NewSide(side), row, col}
 }

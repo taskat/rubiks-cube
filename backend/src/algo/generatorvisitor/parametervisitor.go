@@ -20,7 +20,7 @@ func (v *parameterVisitor) visitCoord(ctx *ap.CoordContext) parameters.Coord {
 	side := ctx.Side().GetText()
 	row, _ := strconv.Atoi(ctx.NUMBER(0).GetText())
 	col, _ := strconv.Atoi(ctx.NUMBER(1).GetText())
-	return parameters.NewCoord(side, row, col)
+	return parameters.NewCoordFromString(side, row, col)
 }
 
 func (v *parameterVisitor) visitList(ctx *ap.ListContext) parameters.List[parameters.Parameter] {

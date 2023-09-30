@@ -1,9 +1,13 @@
 package parameters
 
 type Node struct {
-	Sides []string
+	Sides []Side
 }
 
 func NewNode(sides []string) *Node {
-	return &Node{Sides: sides}
+	typedSides := make([]Side, len(sides))
+	for i, side := range sides {
+		typedSides[i] = NewSide(side)
+	}
+	return &Node{Sides: typedSides}
 }

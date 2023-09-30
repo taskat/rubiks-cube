@@ -66,7 +66,7 @@ func (c *Cube) GetConstraint() models.Constraint {
 
 func (c *Cube) getCornerPieces() []cornerPiece {
 	cornerPieces := make([]cornerPiece, 0, 8)
-	for _, corner := range cornerCoords {
+	for _, corner := range getCornerCoords() {
 		cornerPieces = append(cornerPieces, newCornerPiece(c, corner))
 	}
 	return cornerPieces
@@ -74,7 +74,7 @@ func (c *Cube) getCornerPieces() []cornerPiece {
 
 func (c *Cube) getEdgePieces() []edgePiece {
 	edgePieces := make([]edgePiece, 0, 12)
-	for _, edge := range edgeCoords {
+	for _, edge := range getEdgeCoords() {
 		edgePieces = append(edgePieces, newEdgePiece(c, edge))
 	}
 	return edgePieces
@@ -203,10 +203,10 @@ func (c *Cube) turn(name string) {
 			if color, ok := moved[coord]; ok {
 				currentColor = color
 			} else {
-				currentColor = c.GetColor(parameters.NewCoord(coord.side.String(), coord.Row, coord.Col))
+				currentColor = c.GetColor(parameters.NewCoordFromString(coord.side.String(), coord.Row, coord.Col))
 			}
 			nextCoord := cycle[(i+move.steps)%len(cycle)]
-			nextColor := c.GetColor(parameters.NewCoord(nextCoord.side.String(), nextCoord.Row, nextCoord.Col))
+			nextColor := c.GetColor(parameters.NewCoordFromString(nextCoord.side.String(), nextCoord.Row, nextCoord.Col))
 			moved[nextCoord] = nextColor
 			c.sides[nextCoord.side][nextCoord.Row][nextCoord.Col] = currentColor
 		}

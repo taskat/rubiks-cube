@@ -1,6 +1,8 @@
 package cube
 
-type cycle []sideCoord
+import "github.com/taskat/rubiks-cube/src/models/parameters"
+
+type cycle []parameters.Coord
 
 func (c cycle) inverse() cycle {
 	inversed := make(cycle, len(c))

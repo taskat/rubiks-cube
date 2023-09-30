@@ -201,18 +201,18 @@ func (c *Cube) Turn(name string) {
 func (c *Cube) turn(name string) {
 	move := c.moves[name]
 	for _, cycle := range move.cycles {
-		moved := make(map[sideCoord]color.Color)
+		moved := make(map[parameters.Coord]color.Color)
 		for i, coord := range cycle {
 			var currentColor color.Color
 			if color, ok := moved[coord]; ok {
 				currentColor = color
 			} else {
-				currentColor = c.GetColor(parameters.NewCoordFromString(coord.side.String(), coord.Row, coord.Col))
+				currentColor = c.GetColor(coord)
 			}
 			nextCoord := cycle[(i+move.steps)%len(cycle)]
-			nextColor := c.GetColor(parameters.NewCoordFromString(nextCoord.side.String(), nextCoord.Row, nextCoord.Col))
+			nextColor := c.GetColor(nextCoord)
 			moved[nextCoord] = nextColor
-			c.sides[nextCoord.side][nextCoord.Row][nextCoord.Col] = currentColor
+			c.sides[cubeSide(nextCoord.Side.String())][nextCoord.Row][nextCoord.Col] = currentColor
 		}
 	}
 }

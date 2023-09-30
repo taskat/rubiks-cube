@@ -1,5 +1,7 @@
 package cube
 
+import "github.com/taskat/rubiks-cube/src/models/parameters"
+
 type moveGenerator struct {
 	size  int
 	moves map[string]move
@@ -25,13 +27,13 @@ func (mg *moveGenerator) generateAllMoves() map[string]move {
 }
 
 func (mg *moveGenerator) generateXMoves() {
-	getSlices := func(col int) [4][]sideCoord {
-		slices := [4][]sideCoord{}
+	getSlices := func(col int) [4][]parameters.Coord {
+		slices := [4][]parameters.Coord{}
 		for i := 0; i < mg.size; i++ {
-			slices[0] = append(slices[0], newSideCoord(Front, i, col))
-			slices[1] = append(slices[1], newSideCoord(Up, i, col))
-			slices[2] = append(slices[2], newSideCoord(Back, mg.size-i-1, mg.size-col-1))
-			slices[3] = append(slices[3], newSideCoord(Down, i, col))
+			slices[0] = append(slices[0], parameters.NewCoord("Front", i, col))
+			slices[1] = append(slices[1], parameters.NewCoord("Up", i, col))
+			slices[2] = append(slices[2], parameters.NewCoord("Back", mg.size-i-1, mg.size-col-1))
+			slices[3] = append(slices[3], parameters.NewCoord("Down", i, col))
 		}
 		return slices
 	}
@@ -60,13 +62,13 @@ func (mg *moveGenerator) generateXMoves() {
 }
 
 func (mg *moveGenerator) generateYMoves() {
-	getSlices := func(row int) [4][]sideCoord {
-		slices := [4][]sideCoord{}
+	getSlices := func(row int) [4][]parameters.Coord {
+		slices := [4][]parameters.Coord{}
 		for i := 0; i < mg.size; i++ {
-			slices[0] = append(slices[0], newSideCoord(Front, row, i))
-			slices[1] = append(slices[1], newSideCoord(Left, row, i))
-			slices[2] = append(slices[2], newSideCoord(Back, row, i))
-			slices[3] = append(slices[3], newSideCoord(Right, row, i))
+			slices[0] = append(slices[0], parameters.NewCoord("Front", row, i))
+			slices[1] = append(slices[1], parameters.NewCoord("Left", row, i))
+			slices[2] = append(slices[2], parameters.NewCoord("Back", row, i))
+			slices[3] = append(slices[3], parameters.NewCoord("Right", row, i))
 		}
 		return slices
 	}
@@ -95,13 +97,13 @@ func (mg *moveGenerator) generateYMoves() {
 }
 
 func (mg *moveGenerator) generateZMoves() {
-	getSlices := func(diffFromFront int) [4][]sideCoord {
-		slices := [4][]sideCoord{}
+	getSlices := func(diffFromFront int) [4][]parameters.Coord {
+		slices := [4][]parameters.Coord{}
 		for i := 0; i < mg.size; i++ {
-			slices[0] = append(slices[0], newSideCoord(Up, mg.size-diffFromFront-1, i))
-			slices[1] = append(slices[1], newSideCoord(Right, i, diffFromFront))
-			slices[2] = append(slices[2], newSideCoord(Down, diffFromFront, mg.size-i-1))
-			slices[3] = append(slices[3], newSideCoord(Left, mg.size-i-1, mg.size-diffFromFront-1))
+			slices[0] = append(slices[0], parameters.NewCoord("Up", mg.size-diffFromFront-1, i))
+			slices[1] = append(slices[1], parameters.NewCoord("Right", i, diffFromFront))
+			slices[2] = append(slices[2], parameters.NewCoord("Down", diffFromFront, mg.size-i-1))
+			slices[3] = append(slices[3], parameters.NewCoord("Left", mg.size-i-1, mg.size-diffFromFront-1))
 		}
 		return slices
 	}
@@ -132,18 +134,18 @@ func (mg *moveGenerator) generateZMoves() {
 func (mg *moveGenerator) getSideCycles(side cubeSide) []cycle {
 	cycles := make([]cycle, 3)
 	cycles[0] = cycle{
-		newSideCoord(side, 0, 0), newSideCoord(side, 0, 2),
-		newSideCoord(side, 2, 2), newSideCoord(side, 2, 0),
+		parameters.NewCoord(side.toSide(), 0, 0), parameters.NewCoord(side.toSide(), 0, 2),
+		parameters.NewCoord(side.toSide(), 2, 2), parameters.NewCoord(side.toSide(), 2, 0),
 	}
 	cycles[1] = cycle{
-		newSideCoord(side, 0, 1), newSideCoord(side, 1, 2),
-		newSideCoord(side, 2, 1), newSideCoord(side, 1, 0),
+		parameters.NewCoord(side.toSide(), 0, 1), parameters.NewCoord(side.toSide(), 1, 2),
+		parameters.NewCoord(side.toSide(), 2, 1), parameters.NewCoord(side.toSide(), 1, 0),
 	}
-	cycles[2] = cycle{newSideCoord(side, 1, 1)}
+	cycles[2] = cycle{parameters.NewCoord(side.toSide(), 1, 1)}
 	return cycles
 }
 
-func (mg *moveGenerator) getSliceCycles(slices [4][]sideCoord) []cycle {
+func (mg *moveGenerator) getSliceCycles(slices [4][]parameters.Coord) []cycle {
 	cycles := make([]cycle, len(slices[0]))
 	for i := range slices[0] {
 		cycles[i] = cycle{

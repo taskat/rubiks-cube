@@ -3,7 +3,7 @@ package cube
 import "encoding/json"
 
 type CubeJSON struct {
-	Sides map[CubeSide]Side `json:"sides"`
+	Sides map[cubeSide]Side `json:"sides"`
 	Size  int               `json:"size"`
 }
 

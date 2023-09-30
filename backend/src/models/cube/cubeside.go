@@ -1,21 +1,23 @@
 package cube
 
-type CubeSide string
+import "github.com/taskat/rubiks-cube/src/models/parameters"
+
+type cubeSide parameters.Side
 
 const (
-	Front CubeSide = "Front"
-	Back  CubeSide = "Back"
-	Left  CubeSide = "Left"
-	Right CubeSide = "Right"
-	Up    CubeSide = "Up"
-	Down  CubeSide = "Down"
+	Front cubeSide = "Front"
+	Back  cubeSide = "Back"
+	Left  cubeSide = "Left"
+	Right cubeSide = "Right"
+	Up    cubeSide = "Up"
+	Down  cubeSide = "Down"
 )
 
-func (c CubeSide) String() string {
+func (c cubeSide) String() string {
 	return string(c)
 }
 
-func (c CubeSide) getOpposite() CubeSide {
+func (c cubeSide) getOpposite() cubeSide {
 	switch c {
 	case Front:
 		return Back
@@ -33,11 +35,11 @@ func (c CubeSide) getOpposite() CubeSide {
 	panic("Invalid side")
 }
 
-func (c CubeSide) getHash() string {
+func (c cubeSide) getHash() string {
 	return string(c[0])
 }
 
-func (c CubeSide) isOpposite(other CubeSide) bool {
+func (c cubeSide) isOpposite(other cubeSide) bool {
 	opposite := c.getOpposite()
 	return opposite == other
 }

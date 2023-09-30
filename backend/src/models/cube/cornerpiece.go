@@ -12,12 +12,12 @@ type cornerPiece struct {
 }
 
 func newCornerPiece(c *Cube, coords []parameters.Coord) cornerPiece {
-	location := newCornerLocation(CubeSide(coords[0].Side), CubeSide(coords[1].Side), CubeSide(coords[2].Side))
+	location := newCornerLocation(cubeSide(coords[0].Side), cubeSide(coords[1].Side), cubeSide(coords[2].Side))
 	colors := [3]color.Color{}
 	for i, coord := range coords {
-		colors[i] = c.sides[CubeSide(coord.Side)][coord.Row][coord.Col]
+		colors[i] = c.sides[cubeSide(coord.Side)][coord.Row][coord.Col]
 	}
-	goalSides := [3]CubeSide{}
+	goalSides := [3]cubeSide{}
 	for i, color := range colors {
 		goalSides[i] = c.getGoalSide(color)
 	}

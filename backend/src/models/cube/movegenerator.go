@@ -129,7 +129,7 @@ func (mg *moveGenerator) generateZMoves() {
 	mg.addMove(move{cycles: fullCubeCycles, steps: 1}, "z")
 }
 
-func (mg *moveGenerator) getSideCycles(side CubeSide) []cycle {
+func (mg *moveGenerator) getSideCycles(side cubeSide) []cycle {
 	cycles := make([]cycle, 3)
 	cycles[0] = cycle{
 		newSideCoord(side, 0, 0), newSideCoord(side, 0, 2),

@@ -5,6 +5,7 @@ import (
 	cp "github.com/taskat/rubiks-cube/src/config/parser"
 	"github.com/taskat/rubiks-cube/src/models"
 	"github.com/taskat/rubiks-cube/src/models/cube"
+	"github.com/taskat/rubiks-cube/src/models/parameters"
 )
 
 type beginnerStateVisitor struct {
@@ -16,7 +17,7 @@ func newBeginnerStateVisitor(size int) *beginnerStateVisitor {
 }
 
 func (v *beginnerStateVisitor) visitBeginnerState(ctx *cp.BeginnerStateContext) models.Puzzle {
-	sides := make(map[cube.CubeSide]cube.Side, 6)
+	sides := make(map[parameters.Side]cube.Side, 6)
 	for _, side := range ctx.AllSide() {
 		cubeSide, sideState := v.visitSide(side.(*cp.SideContext))
 		sides[cubeSide] = sideState
@@ -28,7 +29,7 @@ func (v *beginnerStateVisitor) visitColor(ctx *cp.ColorContext) color.Color {
 	return color.Color(ctx.GetText())
 }
 
-func (v *beginnerStateVisitor) visitSide(ctx *cp.SideContext) (cube.CubeSide, cube.Side) {
+func (v *beginnerStateVisitor) visitSide(ctx *cp.SideContext) (parameters.Side, cube.Side) {
 	cubeSide := v.visitSideDef(ctx.SideDef().(*cp.SideDefContext))
 	side := make(cube.Side, v.size)
 	for i := range side {
@@ -43,21 +44,6 @@ func (v *beginnerStateVisitor) visitSide(ctx *cp.SideContext) (cube.CubeSide, cu
 	return cubeSide, side
 }
 
-func (v *beginnerStateVisitor) visitSideDef(ctx *cp.SideDefContext) cube.CubeSide {
-	switch ctx.GetText() {
-	case "front":
-		return cube.Front
-	case "back":
-		return cube.Back
-	case "up":
-		return cube.Up
-	case "down":
-		return cube.Down
-	case "left":
-		return cube.Left
-	case "right":
-		return cube.Right
-	default:
-		panic("invalid side")
-	}
+func (v *beginnerStateVisitor) visitSideDef(ctx *cp.SideDefContext) parameters.Side {
+	return parameters.Side(ctx.GetText())
 }

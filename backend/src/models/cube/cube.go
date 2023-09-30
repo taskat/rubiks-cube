@@ -11,31 +11,35 @@ import (
 )
 
 type Cube struct {
-	sides map[CubeSide]Side
+	sides map[cubeSide]Side
 	size  int
 	moves map[string]move
 }
 
 func NewCube(size int) *Cube {
 	c := Cube{
-		sides: make(map[CubeSide]Side, 6),
+		sides: make(map[cubeSide]Side, 6),
 		size:  size,
 	}
 	c.generateMoves()
 	return &c
 }
 
-func NewWithSides(sides map[CubeSide]Side) *Cube {
+func NewWithSides(sides map[parameters.Side]Side) *Cube {
+	cubeSides := make(map[cubeSide]Side, 6)
+	for sideName, side := range sides {
+		cubeSides[cubeSide(sideName)] = side
+	}
 	c := Cube{
-		sides: sides,
-		size:  len(sides[Front]),
+		sides: cubeSides,
+		size:  len(sides["Front"]),
 	}
 	c.generateMoves()
 	return &c
 }
 
 func (c *Cube) Clone() models.Puzzle {
-	sides := make(map[CubeSide]Side, 6)
+	sides := make(map[cubeSide]Side, 6)
 	for sideName, side := range c.sides {
 		sides[sideName] = side.clone()
 	}
@@ -52,7 +56,7 @@ func (c *Cube) generateMoves() {
 }
 
 func (c *Cube) GetColor(coord parameters.Coord) color.Color {
-	return c.sides[CubeSide(coord.Side)][coord.Row][coord.Col]
+	return c.sides[cubeSide(coord.Side)][coord.Row][coord.Col]
 }
 
 func (c *Cube) GetConstraint() models.Constraint {
@@ -80,7 +84,7 @@ func (c *Cube) getEdgePieces() []edgePiece {
 	return edgePieces
 }
 
-func (c *Cube) getGoalSide(color color.Color) CubeSide {
+func (c *Cube) getGoalSide(color color.Color) cubeSide {
 	for sideName, side := range c.sides {
 		if side[1][1] == color {
 			return sideName

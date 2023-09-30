@@ -190,7 +190,7 @@ func (c *Cube) getEdgeCoords() [][]parameters.Coord {
 	return coords
 }
 
-func (c *Cube) getPieceCoords(piece parameters.Piece) []parameters.Coord {
+func (c *Cube) GetPieceCoords(piece parameters.Piece) []parameters.Coord {
 	colors := make([]color.Color, 0, len(piece.Sides))
 	for _, sideName := range piece.Sides {
 		colors = append(colors, c.sides[CubeSide(sideName)][1][1])
@@ -204,13 +204,13 @@ func (c *Cube) getPieceCoords(piece parameters.Piece) []parameters.Coord {
 	}
 	for _, coords := range possibleCoords {
 		if c.checkCoords(coords, colors) {
-			return coords
+			return c.sortByPiece(coords, piece)
 		}
 	}
 	panic("No coords found")
 }
 
-func (c *Cube) getPosCoords(pos parameters.Position) []parameters.Coord {
+func (c *Cube) GetPosCoords(pos parameters.Position) []parameters.Coord {
 	var possibleCoords [][]parameters.Coord
 	switch len(pos.Sides) {
 	case 3:
@@ -220,7 +220,7 @@ func (c *Cube) getPosCoords(pos parameters.Position) []parameters.Coord {
 	}
 	for _, coords := range possibleCoords {
 		if checkPos(coords, pos) {
-			return coords
+			return sortByPos(coords, pos)
 		}
 	}
 	panic("No coords found")
@@ -274,41 +274,6 @@ func contain(arr []color.Color, elem color.Color) bool {
 
 func (c *Cube) GetValidator() models.Validator {
 	return newValidator(c)
-}
-
-func (c *Cube) PieceAt(piece parameters.Piece, pos parameters.Position) bool {
-	colors := make([]color.Color, 0, len(pos.Sides))
-	for _, sideName := range pos.Sides {
-		colors = append(colors, c.sides[CubeSide(sideName)][1][1])
-	}
-	fmt.Println("Colors in pieceat", colors)
-	pieceCoords := c.getPieceCoords(piece)
-	fmt.Println("piece Coords in pieceat", pieceCoords)
-	posCoords := c.getPosCoords(pos)
-	fmt.Println("Pos coord in pieceat", posCoords)
-	for _, coord := range pieceCoords {
-		if !containsCoordCoord(posCoords, coord) {
-			return false
-		}
-	}
-	return true
-}
-
-func (c *Cube) PieceLike(piece parameters.Piece, pos parameters.Position) bool {
-	fmt.Println("Sides in piecelike piece", piece.Sides)
-	fmt.Println("Sides in piecelike pos", pos.Sides)
-	pieceCoords := c.getPieceCoords(piece)
-	pieceCoords = c.sortByPiece(pieceCoords, piece)
-	fmt.Println("Piece coords in piecelike", pieceCoords)
-	posCoords := c.getPosCoords(pos)
-	posCoords = sortByPos(posCoords, pos)
-	fmt.Println("Pos coords in piecelike", posCoords)
-	for i, coord := range pieceCoords {
-		if coord != posCoords[i] {
-			return false
-		}
-	}
-	return true
 }
 
 func sortByPos(coords []parameters.Coord, pos parameters.Position) []parameters.Coord {

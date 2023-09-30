@@ -5,6 +5,7 @@ import (
 	"github.com/taskat/rubiks-cube/src/models"
 	"github.com/taskat/rubiks-cube/src/models/algorithm"
 	"github.com/taskat/rubiks-cube/src/models/parameters"
+	"github.com/taskat/rubiks-cube/src/utils"
 )
 
 func all(builder conditionBuilderFunc, list parameters.List[parameters.Parameter]) algorithm.ConditionFunc {
@@ -31,7 +32,18 @@ func any(builder conditionBuilderFunc, list parameters.List[parameters.Parameter
 
 func at(piece parameters.Piece, pos parameters.Position) algorithm.ConditionFunc {
 	return func(p models.Puzzle) bool {
-		return p.PieceAt(piece, pos)
+		colors := make([]color.Color, 0, len(pos.Sides))
+		for _, sideName := range pos.Sides {
+			colors = append(colors, p.GetColor(parameters.NewCoord(sideName, 1, 1)))
+		}
+		pieceCoords := p.GetPieceCoords(piece)
+		posCoords := p.GetPosCoords(pos)
+		for _, coord := range pieceCoords {
+			if !utils.Contains(posCoords, coord) {
+				return false
+			}
+		}
+		return true
 	}
 }
 
@@ -48,7 +60,14 @@ func colorListMatch(expectedColor color.Color, coords parameters.List[parameters
 
 func like(piece parameters.Piece, pos parameters.Position) algorithm.ConditionFunc {
 	return func(p models.Puzzle) bool {
-		return p.PieceLike(piece, pos)
+		pieceCoords := p.GetPieceCoords(piece)
+		posCoords := p.GetPosCoords(pos)
+		for i, coord := range pieceCoords {
+			if coord != posCoords[i] {
+				return false
+			}
+		}
+		return true
 	}
 }
 

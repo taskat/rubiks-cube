@@ -134,14 +134,14 @@ func (mg *moveGenerator) generateZMoves() {
 func (mg *moveGenerator) getSideCycles(side cubeSide) []cycle {
 	cycles := make([]cycle, 3)
 	cycles[0] = cycle{
-		parameters.NewCoord(side.toSide(), 0, 0), parameters.NewCoord(side.toSide(), 0, 2),
-		parameters.NewCoord(side.toSide(), 2, 2), parameters.NewCoord(side.toSide(), 2, 0),
+		parameters.NewCoord(side, 0, 0), parameters.NewCoord(side, 0, 2),
+		parameters.NewCoord(side, 2, 2), parameters.NewCoord(side, 2, 0),
 	}
 	cycles[1] = cycle{
-		parameters.NewCoord(side.toSide(), 0, 1), parameters.NewCoord(side.toSide(), 1, 2),
-		parameters.NewCoord(side.toSide(), 2, 1), parameters.NewCoord(side.toSide(), 1, 0),
+		parameters.NewCoord(side, 0, 1), parameters.NewCoord(side, 1, 2),
+		parameters.NewCoord(side, 2, 1), parameters.NewCoord(side, 1, 0),
 	}
-	cycles[2] = cycle{parameters.NewCoord(side.toSide(), 1, 1)}
+	cycles[2] = cycle{parameters.NewCoord(side, 1, 1)}
 	return cycles
 }
 

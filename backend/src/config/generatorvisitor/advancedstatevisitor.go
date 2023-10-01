@@ -50,18 +50,18 @@ func (v *advancedStateVisitor) visitAdvancedState(ctx *cp.AdvancedStateContext) 
 }
 
 func (v *advancedStateVisitor) visitCornerLayer(ctx *cp.CornerLayerContext) {
-	layerToSideCoords := map[string][][]sideCoord{
+	layerToSideCoords := map[string][][]parameters.Coord{
 		"up": {
-			{newSideCoord(v.sideConstructor("Up"), 0, 0), newSideCoord(v.sideConstructor("Left"), 0, 0), newSideCoord(v.sideConstructor("Back"), 0, 2)},
-			{newSideCoord(v.sideConstructor("Up"), 0, 2), newSideCoord(v.sideConstructor("Back"), 0, 0), newSideCoord(v.sideConstructor("Right"), 0, 2)},
-			{newSideCoord(v.sideConstructor("Up"), 2, 2), newSideCoord(v.sideConstructor("Right"), 0, 0), newSideCoord(v.sideConstructor("Front"), 0, 2)},
-			{newSideCoord(v.sideConstructor("Up"), 2, 0), newSideCoord(v.sideConstructor("Front"), 0, 0), newSideCoord(v.sideConstructor("Left"), 0, 2)},
+			{parameters.NewCoord(v.sideConstructor("Up"), 0, 0), parameters.NewCoord(v.sideConstructor("Left"), 0, 0), parameters.NewCoord(v.sideConstructor("Back"), 0, 2)},
+			{parameters.NewCoord(v.sideConstructor("Up"), 0, 2), parameters.NewCoord(v.sideConstructor("Back"), 0, 0), parameters.NewCoord(v.sideConstructor("Right"), 0, 2)},
+			{parameters.NewCoord(v.sideConstructor("Up"), 2, 2), parameters.NewCoord(v.sideConstructor("Right"), 0, 0), parameters.NewCoord(v.sideConstructor("Front"), 0, 2)},
+			{parameters.NewCoord(v.sideConstructor("Up"), 2, 0), parameters.NewCoord(v.sideConstructor("Front"), 0, 0), parameters.NewCoord(v.sideConstructor("Left"), 0, 2)},
 		},
 		"down": {
-			{newSideCoord(v.sideConstructor("Down"), 0, 0), newSideCoord(v.sideConstructor("Left"), 2, 2), newSideCoord(v.sideConstructor("Front"), 2, 0)},
-			{newSideCoord(v.sideConstructor("Down"), 0, 2), newSideCoord(v.sideConstructor("Front"), 2, 2), newSideCoord(v.sideConstructor("Right"), 2, 0)},
-			{newSideCoord(v.sideConstructor("Down"), 2, 2), newSideCoord(v.sideConstructor("Right"), 2, 2), newSideCoord(v.sideConstructor("Back"), 2, 0)},
-			{newSideCoord(v.sideConstructor("Down"), 2, 0), newSideCoord(v.sideConstructor("Back"), 2, 2), newSideCoord(v.sideConstructor("Left"), 2, 0)},
+			{parameters.NewCoord(v.sideConstructor("Down"), 0, 0), parameters.NewCoord(v.sideConstructor("Left"), 2, 2), parameters.NewCoord(v.sideConstructor("Front"), 2, 0)},
+			{parameters.NewCoord(v.sideConstructor("Down"), 0, 2), parameters.NewCoord(v.sideConstructor("Front"), 2, 2), parameters.NewCoord(v.sideConstructor("Right"), 2, 0)},
+			{parameters.NewCoord(v.sideConstructor("Down"), 2, 2), parameters.NewCoord(v.sideConstructor("Right"), 2, 2), parameters.NewCoord(v.sideConstructor("Back"), 2, 0)},
+			{parameters.NewCoord(v.sideConstructor("Down"), 2, 0), parameters.NewCoord(v.sideConstructor("Back"), 2, 2), parameters.NewCoord(v.sideConstructor("Left"), 2, 0)},
 		},
 	}
 	layer := ctx.LayerDef().GetText()
@@ -69,7 +69,7 @@ func (v *advancedStateVisitor) visitCornerLayer(ctx *cp.CornerLayerContext) {
 		colors := strings.Split(corner.(*cp.CornerContext).GetText(), "")
 		for j, c := range colors {
 			sc := layerToSideCoords[layer][i][j]
-			v.sides[sc.side][sc.Row][sc.Col] = color.Color(c)
+			v.sides[sc.Side][sc.Row][sc.Col] = color.Color(c)
 		}
 	}
 }
@@ -81,24 +81,24 @@ func (v *advancedStateVisitor) visitCorners(ctx *cp.CornersContext) {
 }
 
 func (v *advancedStateVisitor) visitEdgeLayer(ctx *cp.EdgeLayerContext) {
-	layerToSideCoords := map[string][][]sideCoord{
+	layerToSideCoords := map[string][][]parameters.Coord{
 		"up": {
-			{newSideCoord(v.sideConstructor("Up"), 0, 1), newSideCoord(v.sideConstructor("Back"), 0, 1)},
-			{newSideCoord(v.sideConstructor("Up"), 1, 2), newSideCoord(v.sideConstructor("Right"), 0, 1)},
-			{newSideCoord(v.sideConstructor("Up"), 2, 1), newSideCoord(v.sideConstructor("Front"), 0, 1)},
-			{newSideCoord(v.sideConstructor("Up"), 1, 0), newSideCoord(v.sideConstructor("Left"), 0, 1)},
+			{parameters.NewCoord(v.sideConstructor("Up"), 0, 1), parameters.NewCoord(v.sideConstructor("Back"), 0, 1)},
+			{parameters.NewCoord(v.sideConstructor("Up"), 1, 2), parameters.NewCoord(v.sideConstructor("Right"), 0, 1)},
+			{parameters.NewCoord(v.sideConstructor("Up"), 2, 1), parameters.NewCoord(v.sideConstructor("Front"), 0, 1)},
+			{parameters.NewCoord(v.sideConstructor("Up"), 1, 0), parameters.NewCoord(v.sideConstructor("Left"), 0, 1)},
 		},
 		"middle": {
-			{newSideCoord(v.sideConstructor("Left"), 1, 0), newSideCoord(v.sideConstructor("Back"), 1, 2)},
-			{newSideCoord(v.sideConstructor("Back"), 1, 0), newSideCoord(v.sideConstructor("Right"), 1, 2)},
-			{newSideCoord(v.sideConstructor("Right"), 1, 0), newSideCoord(v.sideConstructor("Front"), 1, 2)},
-			{newSideCoord(v.sideConstructor("Front"), 1, 0), newSideCoord(v.sideConstructor("Left"), 1, 2)},
+			{parameters.NewCoord(v.sideConstructor("Left"), 1, 0), parameters.NewCoord(v.sideConstructor("Back"), 1, 2)},
+			{parameters.NewCoord(v.sideConstructor("Back"), 1, 0), parameters.NewCoord(v.sideConstructor("Right"), 1, 2)},
+			{parameters.NewCoord(v.sideConstructor("Right"), 1, 0), parameters.NewCoord(v.sideConstructor("Front"), 1, 2)},
+			{parameters.NewCoord(v.sideConstructor("Front"), 1, 0), parameters.NewCoord(v.sideConstructor("Left"), 1, 2)},
 		},
 		"down": {
-			{newSideCoord(v.sideConstructor("Down"), 0, 1), newSideCoord(v.sideConstructor("Front"), 2, 1)},
-			{newSideCoord(v.sideConstructor("Down"), 1, 2), newSideCoord(v.sideConstructor("Right"), 2, 1)},
-			{newSideCoord(v.sideConstructor("Down"), 2, 1), newSideCoord(v.sideConstructor("Back"), 2, 1)},
-			{newSideCoord(v.sideConstructor("Down"), 1, 0), newSideCoord(v.sideConstructor("Left"), 2, 1)},
+			{parameters.NewCoord(v.sideConstructor("Down"), 0, 1), parameters.NewCoord(v.sideConstructor("Front"), 2, 1)},
+			{parameters.NewCoord(v.sideConstructor("Down"), 1, 2), parameters.NewCoord(v.sideConstructor("Right"), 2, 1)},
+			{parameters.NewCoord(v.sideConstructor("Down"), 2, 1), parameters.NewCoord(v.sideConstructor("Back"), 2, 1)},
+			{parameters.NewCoord(v.sideConstructor("Down"), 1, 0), parameters.NewCoord(v.sideConstructor("Left"), 2, 1)},
 		},
 	}
 	layer := ctx.LayerDef().GetText()
@@ -106,7 +106,7 @@ func (v *advancedStateVisitor) visitEdgeLayer(ctx *cp.EdgeLayerContext) {
 		colors := strings.Split(edge.(*cp.EdgeContext).GetText(), "")
 		for j, c := range colors {
 			sc := layerToSideCoords[layer][i][j]
-			v.sides[sc.side][sc.Row][sc.Col] = color.Color(c)
+			v.sides[sc.Side][sc.Row][sc.Col] = color.Color(c)
 		}
 	}
 }

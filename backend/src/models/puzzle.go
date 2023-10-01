@@ -18,6 +18,7 @@ type Puzzle interface {
 	GetColor(coord parameters.Coord) color.Color
 	GetPieceCoords(piece parameters.Piece) []parameters.Coord
 	GetPosCoords(pos parameters.Position) []parameters.Coord
+	SideConstructor() func(s string) parameters.Side
 }
 
 type Validator interface {

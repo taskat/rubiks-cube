@@ -9,11 +9,12 @@ import (
 )
 
 type beginnerStateVisitor struct {
-	size int
+	size            int
+	sideConstructor func(string) parameters.Side
 }
 
-func newBeginnerStateVisitor(size int) *beginnerStateVisitor {
-	return &beginnerStateVisitor{size: size}
+func newBeginnerStateVisitor(size int, sideConstructor func(string) parameters.Side) *beginnerStateVisitor {
+	return &beginnerStateVisitor{size: size, sideConstructor: sideConstructor}
 }
 
 func (v *beginnerStateVisitor) visitBeginnerState(ctx *cp.BeginnerStateContext) models.Puzzle {
@@ -45,5 +46,5 @@ func (v *beginnerStateVisitor) visitSide(ctx *cp.SideContext) (parameters.Side, 
 }
 
 func (v *beginnerStateVisitor) visitSideDef(ctx *cp.SideDefContext) parameters.Side {
-	return parameters.Side(ctx.GetText())
+	return v.sideConstructor(ctx.GetText())
 }

@@ -28,11 +28,11 @@ func NewCube(size int) *Cube {
 func NewWithSides(sides map[parameters.Side]Side) *Cube {
 	cubeSides := make(map[cubeSide]Side, 6)
 	for sideName, side := range sides {
-		cubeSides[cubeSide(sideName)] = side
+		cubeSides[newCubeSide(sideName)] = side
 	}
 	c := Cube{
 		sides: cubeSides,
-		size:  len(sides["Front"]),
+		size:  len(cubeSides["Front"]),
 	}
 	c.generateMoves()
 	return &c
@@ -56,7 +56,7 @@ func (c *Cube) generateMoves() {
 }
 
 func (c *Cube) GetColor(coord parameters.Coord) color.Color {
-	return c.sides[cubeSide(coord.Side)][coord.Row][coord.Col]
+	return c.sides[newCubeSide(coord.Side)][coord.Row][coord.Col]
 }
 
 func (c *Cube) GetConstraint() models.Constraint {
@@ -212,11 +212,15 @@ func (c *Cube) turn(name string) {
 			nextCoord := cycle[(i+move.steps)%len(cycle)]
 			nextColor := c.GetColor(nextCoord)
 			moved[nextCoord] = nextColor
-			c.sides[cubeSide(nextCoord.Side.String())][nextCoord.Row][nextCoord.Col] = currentColor
+			c.sides[newCubeSide(nextCoord.Side)][nextCoord.Row][nextCoord.Col] = currentColor
 		}
 	}
 }
 
 func (c *Cube) MarshalJSON() ([]byte, error) {
 	return NewCubeJSON(c).marshal()
+}
+
+func (c *Cube) SideConstructor() func(s string) parameters.Side {
+	return NewCubeSide
 }

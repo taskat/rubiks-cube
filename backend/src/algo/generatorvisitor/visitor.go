@@ -69,7 +69,7 @@ func (v *Visitor) visitAlgorithmBlock(ctx *ap.AlgorithmContext, setter algorithm
 }
 
 func (v *Visitor) visitBoolExpr(ctx *ap.BoolExprContext) algorithm.ConditionFunc {
-	visitor := newBoolExprVisitor(v.puzzle.GetConstraint())
+	visitor := newBoolExprVisitor(v.puzzle)
 	return visitor.visitBoolExpr(ctx)
 }
 

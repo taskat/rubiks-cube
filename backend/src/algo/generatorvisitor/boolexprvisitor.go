@@ -12,12 +12,13 @@ type conditionBuilderFunc func(param parameters.Parameter) algorithm.ConditionFu
 
 type boolExprVisitor struct {
 	constraint        models.Constraint
+	sideConstructor   func(s string) parameters.Side
 	functionalEnabled bool
 	conditionBuilder  conditionBuilderFunc
 }
 
-func newBoolExprVisitor(c models.Constraint) *boolExprVisitor {
-	return &boolExprVisitor{constraint: c, functionalEnabled: false}
+func newBoolExprVisitor(p models.Puzzle) *boolExprVisitor {
+	return &boolExprVisitor{constraint: p.GetConstraint(), sideConstructor: p.SideConstructor(), functionalEnabled: false}
 }
 
 func (v *boolExprVisitor) buildAtFunc(leftParam, rightParam parameters.Parameter) algorithm.ConditionFunc {
@@ -161,7 +162,7 @@ func (v *boolExprVisitor) visitFunction(ctx *ap.FunctionContext) func(builder co
 }
 
 func (v *boolExprVisitor) visitFunctionalExpr(ctx *ap.FunctionalExprContext) algorithm.ConditionFunc {
-	paramVisitor := newParameterVisitor(false)
+	paramVisitor := newParameterVisitor(false, v.sideConstructor)
 	list := paramVisitor.visitList(ctx.List().(*ap.ListContext))
 	v.functionalEnabled = true
 	v.visitBoolExpr(ctx.BoolExpr().(*ap.BoolExprContext))
@@ -171,7 +172,7 @@ func (v *boolExprVisitor) visitFunctionalExpr(ctx *ap.FunctionalExprContext) alg
 }
 
 func (v *boolExprVisitor) visitParameter(ctx *ap.ParameterContext) parameters.Parameter {
-	visitor := newParameterVisitor(v.functionalEnabled)
+	visitor := newParameterVisitor(v.functionalEnabled, v.sideConstructor)
 	return visitor.visitParameter(ctx)
 }
 

@@ -1,11 +1,13 @@
 package parameters
 
-type Side string
-
-func NewSide(s string) Side {
-	return Side(s)
+type Side interface {
+	String() string
 }
 
-func (s Side) String() string {
-	return string(s)
-}
+// func NewSide(s string) Side {
+// 	return Side(s)
+// }
+
+// func (s Side) String() string {
+// 	return string(s)
+// }

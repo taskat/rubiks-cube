@@ -30,10 +30,10 @@ func (mg *moveGenerator) generateXMoves() {
 	getSlices := func(col int) [4][]parameters.Coord {
 		slices := [4][]parameters.Coord{}
 		for i := 0; i < mg.size; i++ {
-			slices[0] = append(slices[0], parameters.NewCoord("Front", i, col))
-			slices[1] = append(slices[1], parameters.NewCoord("Up", i, col))
-			slices[2] = append(slices[2], parameters.NewCoord("Back", mg.size-i-1, mg.size-col-1))
-			slices[3] = append(slices[3], parameters.NewCoord("Down", i, col))
+			slices[0] = append(slices[0], parameters.NewCoord(cubeSide("Front"), i, col))
+			slices[1] = append(slices[1], parameters.NewCoord(cubeSide("Up"), i, col))
+			slices[2] = append(slices[2], parameters.NewCoord(cubeSide("Back"), mg.size-i-1, mg.size-col-1))
+			slices[3] = append(slices[3], parameters.NewCoord(cubeSide("Down"), i, col))
 		}
 		return slices
 	}
@@ -65,10 +65,10 @@ func (mg *moveGenerator) generateYMoves() {
 	getSlices := func(row int) [4][]parameters.Coord {
 		slices := [4][]parameters.Coord{}
 		for i := 0; i < mg.size; i++ {
-			slices[0] = append(slices[0], parameters.NewCoord("Front", row, i))
-			slices[1] = append(slices[1], parameters.NewCoord("Left", row, i))
-			slices[2] = append(slices[2], parameters.NewCoord("Back", row, i))
-			slices[3] = append(slices[3], parameters.NewCoord("Right", row, i))
+			slices[0] = append(slices[0], parameters.NewCoord(cubeSide("Front"), row, i))
+			slices[1] = append(slices[1], parameters.NewCoord(cubeSide("Left"), row, i))
+			slices[2] = append(slices[2], parameters.NewCoord(cubeSide("Back"), row, i))
+			slices[3] = append(slices[3], parameters.NewCoord(cubeSide("Right"), row, i))
 		}
 		return slices
 	}
@@ -100,10 +100,10 @@ func (mg *moveGenerator) generateZMoves() {
 	getSlices := func(diffFromFront int) [4][]parameters.Coord {
 		slices := [4][]parameters.Coord{}
 		for i := 0; i < mg.size; i++ {
-			slices[0] = append(slices[0], parameters.NewCoord("Up", mg.size-diffFromFront-1, i))
-			slices[1] = append(slices[1], parameters.NewCoord("Right", i, diffFromFront))
-			slices[2] = append(slices[2], parameters.NewCoord("Down", diffFromFront, mg.size-i-1))
-			slices[3] = append(slices[3], parameters.NewCoord("Left", mg.size-i-1, mg.size-diffFromFront-1))
+			slices[0] = append(slices[0], parameters.NewCoord(cubeSide("Up"), mg.size-diffFromFront-1, i))
+			slices[1] = append(slices[1], parameters.NewCoord(cubeSide("Right"), i, diffFromFront))
+			slices[2] = append(slices[2], parameters.NewCoord(cubeSide("Down"), diffFromFront, mg.size-i-1))
+			slices[3] = append(slices[3], parameters.NewCoord(cubeSide("Left"), mg.size-i-1, mg.size-diffFromFront-1))
 		}
 		return slices
 	}

@@ -13,7 +13,7 @@ type cornerLocation struct {
 }
 
 func newCornerLocation(s1, s2, s3 parameters.Side) cornerLocation {
-	return cornerLocation{sides: [3]cubeSide{cubeSide(s1), cubeSide(s2), cubeSide(s3)}, hash: ""}
+	return cornerLocation{sides: [3]cubeSide{newCubeSide(s1), newCubeSide(s2), newCubeSide(s3)}, hash: ""}
 }
 
 func newCornerLocationFromCubeSides(s1, s2, s3 cubeSide) cornerLocation {

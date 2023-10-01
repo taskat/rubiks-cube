@@ -2,15 +2,23 @@ package cube
 
 import "github.com/taskat/rubiks-cube/src/models/parameters"
 
-type cubeSide parameters.Side
+type cubeSide string
 
-const (
-	Front cubeSide = "Front"
-	Back  cubeSide = "Back"
-	Left  cubeSide = "Left"
-	Right cubeSide = "Right"
-	Up    cubeSide = "Up"
-	Down  cubeSide = "Down"
+func NewCubeSide(s string) parameters.Side {
+	return cubeSide(s)
+}
+
+func newCubeSide(side parameters.Side) cubeSide {
+	return cubeSide(side.String())
+}
+
+var (
+	Front = cubeSide("Front")
+	Back  = cubeSide("Back")
+	Left  = cubeSide("Left")
+	Right = cubeSide("Right")
+	Up    = cubeSide("Up")
+	Down  = cubeSide("Down")
 )
 
 func (c cubeSide) String() string {
@@ -45,7 +53,7 @@ func (c cubeSide) isOpposite(other cubeSide) bool {
 }
 
 func (c cubeSide) toSide() parameters.Side {
-	return parameters.Side(c)
+	return c
 }
 
 func AllSides() []string {

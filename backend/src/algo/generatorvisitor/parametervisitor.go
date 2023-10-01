@@ -10,17 +10,18 @@ import (
 
 type parameterVisitor struct {
 	functionalEnabled bool
+	sideConstructor   func(s string) parameters.Side
 }
 
-func newParameterVisitor(functionalEnabled bool) *parameterVisitor {
-	return &parameterVisitor{functionalEnabled: functionalEnabled}
+func newParameterVisitor(functionalEnabled bool, sideConstructor func(s string) parameters.Side) *parameterVisitor {
+	return &parameterVisitor{functionalEnabled: functionalEnabled, sideConstructor: sideConstructor}
 }
 
 func (v *parameterVisitor) visitCoord(ctx *ap.CoordContext) parameters.Coord {
 	side := ctx.Side().GetText()
 	row, _ := strconv.Atoi(ctx.NUMBER(0).GetText())
 	col, _ := strconv.Atoi(ctx.NUMBER(1).GetText())
-	return parameters.NewCoordFromString(side, row, col)
+	return parameters.NewCoord(v.sideConstructor(side), row, col)
 }
 
 func (v *parameterVisitor) visitList(ctx *ap.ListContext) parameters.List[parameters.Parameter] {
@@ -102,5 +103,9 @@ func (v *parameterVisitor) visitSides(ctx *ap.SidesContext) []string {
 
 func (v *parameterVisitor) visitSingleNode(ctx *ap.SingleNodeContext) parameters.Node {
 	sides := v.visitSides(ctx.Sides().(*ap.SidesContext))
-	return *parameters.NewNode(sides)
+	typedSides := make([]parameters.Side, len(sides))
+	for i, side := range sides {
+		typedSides[i] = v.sideConstructor(side)
+	}
+	return *parameters.NewNode(typedSides)
 }

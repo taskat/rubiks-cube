@@ -13,7 +13,7 @@ type edgeLocation struct {
 }
 
 func newEdgeLocation(s1, s2 parameters.Side) edgeLocation {
-	return edgeLocation{sides: [2]cubeSide{cubeSide(s1), cubeSide(s2)}, hash: ""}
+	return edgeLocation{sides: [2]cubeSide{newCubeSide(s1), newCubeSide(s2)}, hash: ""}
 }
 
 func newEdgeLocationFromCubeSides(s1, s2 cubeSide) edgeLocation {

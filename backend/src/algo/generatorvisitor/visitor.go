@@ -102,6 +102,15 @@ func (v *Visitor) visitRuns(ctx *ap.RunsContext) int {
 func (v *Visitor) visitStep(ctx *ap.StepContext) {
 	v.turns.PushScope(scope.NewScope[[]string]())
 	defer v.turns.PopScope()
+	stepName := ctx.WORD().GetText()
+	label := algorithm.NewLabel(stepName)
+	if v.startBlock == nil {
+		v.startBlock = label
+	}
+	if v.nextSetter != nil {
+		v.nextSetter(label)
+	}
+	v.nextSetter = label.NextSetter()
 	//helpers
 	for _, stepLine := range ctx.AllStepLine() {
 		if stepLine.Helpers() != nil {
@@ -122,11 +131,7 @@ func (v *Visitor) visitStep(ctx *ap.StepContext) {
 		if stepLine.Goal() != nil {
 			v.visitGoal(stepLine.Goal().(*ap.GoalContext), runs)
 			goal = true
-			if v.startBlock == nil {
-				v.startBlock = v.currentGoal
-			} else {
-				v.nextSetter(v.currentGoal)
-			}
+			v.nextSetter(v.currentGoal)
 			v.nextSetter = v.currentGoal.FalseSetter()
 			defer func() {
 				v.nextSetter = v.currentGoal.TrueSetter()

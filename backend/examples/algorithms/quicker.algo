@@ -1,0 +1,129 @@
+helpers:
+    upsideDown: x2
+steps:
+    step white_up:
+        goal: white(Up 1 1)
+        runs: 4
+        branches:
+            if white(Down 1 1):
+                do: upsideDown
+            if white(Front 1 1):
+                do: x
+            if white(Right 1 1):
+                do: z'
+            if white(Back 1 1):
+                do: x'
+            if white(Left 1 1):
+                do: z
+    step white_cross:
+        goal: orientation([(Up, Front), (Up, Right), (Up, Back), (Up, Left)])
+        runs: 8
+        branches:
+            if orientation(Up, Front):
+                do: y
+            if piece(Up, Front) at (Up, Front):
+                do: F R' D' R F2
+            if piece(Up, Front) like (Front, Down):
+                do: D R F' R'
+            if piece(Up, Front) like (Down, Front):
+                do: F2
+            if piece(Up, Front) like (Front, Right):
+                do: R' D R F2
+            if piece(Up, Front) like (Right, Front):
+                do: F'
+            if piece(Up, Front) like (Left, Front):
+                do: F
+            if piece(Up, Front) like (Front, Left):
+                do: L D L' F2
+            if (Up, Front) like (Left, Down):
+                do: L' F L
+            if (Up, Front) like (Down, Left):
+                do: D
+            if (Up, Front) at (Back, Down):
+                do: D'
+            if (Up, Front) like (Right, Down):
+                do: R F' R'
+            if (Up, Front) like (Down, Right):
+                do: D'
+            if (Up, Front) like (Back, Right):
+                do: R D' R' F2
+            if (Up, Front) like (Right, Back):
+                do: R2 F' R2
+            if (Up, Front) like (Back, Left):
+                do: L' D L F2
+            if (Up, Front) like (Left, Back):
+                do: L2 F L2
+            if (Up, Front) like (Up, Right):
+                do: U F U' F'
+            if (Up, Front) like (Right, Up):
+                do: R' F'
+            if (Up, Front) like (Up, Left):
+                do: U' F U F'
+            if (Up, Front) like (Left, Up):
+                do: L F'
+            if (Up, Front) like (Up, Back):
+                do: U2 F U2 F'
+            if (Up, Front) like (Back, Up):
+                do: U
+            prepare: D
+    step white_side:
+        goal: orientation([(Up, Front, Right), (Up, Right, Back), (Up, Back, Left), (Up, Left, Front)])
+        runs: 12
+        branches:
+            if orientation(Up, Front, Right):
+                do: y
+            if piece(Up, Front, Right) like position(Right, Up, Front):
+                do: F D' F'
+            if piece(Up, Front, Right) like pos(Front, Right, Up):
+                do: R' D R
+
+            if (Up, Front, Right) like position(Down, Right, Front):
+                do: R' D2 R D 
+            if (Up, Front, Right) like (Front, Down, Right):
+                do: D' R' D R
+            if piece(Up, Front, Right) like (Right, Front, Down):
+                do: D F D' F'
+
+            if piece(Up, Front, Right) like (Down, Back, Right):
+                do: R D' R2 D R
+            if piece(Up, Front, Right) like (Right, Down, Back):
+                do: F D' F'
+            if piece(Up, Front, Right) like (Back, Right, Down):
+                do: D2 R' D R
+
+            if piece(Up, Front, Right) like (Down, Front, Left):
+                do: F' D F2 D' F'
+            if piece(Up, Front, Right) like (Front, Left, Down):
+                do: D2 F D' F'
+            if piece(Up, Front, Right) like (Left, Down, Front):
+                do: R' D R
+
+            if piece(Up, Front, Right) like (Down, Left, Back):
+                do: D
+            if piece(Up, Front, Right) like (Left, Back, Down):
+                do: D' F D' F'
+            if piece(Up, Front, Right) like (Back, Down, Left):
+                do: D R' D R
+
+            if piece(Up, Front, Right) like (Left, Front, Up):
+                do: L R' D R L'
+            if piece(Up, Front, Right) like (Front, Up, Left):
+                do: L D' L'
+            if piece(Up, Front, Right) like (Up, Left, Front):
+                do: F' R' D R2 F R'
+
+            if piece(Up, Front, Right) like (Right, Back, Up):
+                do: B' D' B
+            if piece(Up, Front, Right) like (Back, Up, Right):
+                do: B' F D' F' B
+            if piece(Up, Front, Right) like (Up, Right, Back):
+                do: R F D' F2 R' F'
+
+            if piece(Up, Front, Right) like (Back, Left, Up):
+                do: B R' D2 R B'
+            if piece(Up, Front, Right) like (Left, Up, Back):
+                do: B D B'
+            if piece(Up, Front, Right) like (Up, Back, Left):
+                do: L' R' D2 R L
+            prepare: D
+    

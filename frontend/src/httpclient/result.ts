@@ -4,7 +4,8 @@ import { Error } from "../error/error";
 export class Result {
     colorPalette: Map<Side, string[][]> = this.createEmptyPalette();
     errors: Error[] = [];
-    turns: string[] = [];
+    turns: Map<string, string[]> = new Map();
+    steps: string[] = [];
     constructor(data: any) {
         if (data.state) {
             const stringToColors: Map<string, string[][]> = new Map(Object.entries(data.state.sides));
@@ -18,7 +19,17 @@ export class Result {
             this.errors = data.errors.map((error: any) => new Error(error));
         }
         if (data.turns) {
-            this.turns = data.turns;
+            this.turns = new Map(Object.entries(data.turns));
+        }
+        if (data.steps) {
+            this.steps = data.steps;
+        }
+        if (data.steps && data.turns) {
+            let orderedTurns = new Map();
+            this.steps.forEach((step: string) => {
+                orderedTurns.set(step, this.turns.get(step));
+            });
+            this.turns = orderedTurns;
         }
     }
 

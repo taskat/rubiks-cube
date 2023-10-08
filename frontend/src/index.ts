@@ -36,15 +36,34 @@ class App {
     errorList?.appendChild(errorItem);
   }
 
-  addMoves(moves: string[]) {
+  addMoves(moves: Map<string, string[]>) {
     const moveList = document.getElementById("moves");
     if (moveList) {
       moveList.innerHTML = "";
     }
-    moves.forEach((move: string) => {
+    let element = document.createElement("p");
+    element.classList.add("stepname");
+    const fullLength = Array.from(moves.values()).flat().length;
+    element.innerHTML = "Solved in " + fullLength + " steps";
+    moveList?.appendChild(element)
+    moves.forEach((turns: string[], step: string) => {
       let element = document.createElement("p");
-      element.innerHTML = move;
+      element.classList.add("stepname");
+      element.innerHTML = step + " (" + turns.length + "):";
       moveList?.appendChild(element)
+      if (turns.length === 0) {
+        let turnElement = document.createElement("p");
+        turnElement.classList.add("turn");
+        turnElement.innerHTML = "-";
+        moveList?.appendChild(turnElement)
+      } else {
+        turns.forEach((turn: string) => {
+          let turnElement = document.createElement("p");
+          turnElement.classList.add("turn");
+          turnElement.innerHTML = turn;
+          moveList?.appendChild(turnElement)
+        });
+      }
     });
   }
 
@@ -97,7 +116,8 @@ class App {
       this.updateErrors(response.errors);
       this.simulator.recreateUiPieces();
       this.addMoves(response.turns);
-      this.simulator.addMoves(response.turns);
+      let allTurns = Array.from(response.turns.values()).flat();
+      this.simulator.addMoves(allTurns);
     });
   }
 

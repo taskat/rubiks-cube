@@ -63,11 +63,12 @@ func (s Server) allHandler(response http.ResponseWriter, request *http.Request) 
 	}
 	algo := algohandler.Handle("algorithm.algo", string(content.Algo), &errorHandler, cube)
 	executor := executor.NewExecutor(&errorHandler)
-	turns := executor.Execute(cube.Clone(), algo)
+	turns, steps := executor.Execute(cube.Clone(), algo)
 	fmt.Println("Turns: ", turns)
+	fmt.Println("Steps: ", steps)
 	messages := errorHandler.GetMessages()
 	fmt.Println("Messages: ", messages)
-	result := NewResult(cube, messages, turns)
+	result := NewResult(cube, messages, turns, steps)
 	data, err := json.Marshal(result)
 	if err != nil {
 		s.writeError(response, http.StatusInternalServerError, err)
@@ -101,7 +102,7 @@ func (s Server) configHandler(response http.ResponseWriter, request *http.Reques
 	cube := confighandler.Handle("config.rubiks", string(content.Config), &errorHandler)
 	messages := errorHandler.GetMessages()
 	fmt.Println("Messages: ", messages)
-	result := NewResult(cube, messages, []string{})
+	result := NewResult(cube, messages, map[string][]string{}, []string{})
 	data, err := json.Marshal(result)
 	if err != nil {
 		s.writeError(response, http.StatusInternalServerError, err)

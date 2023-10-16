@@ -1,9 +1,8 @@
 package algorithm
 
 import (
-	"fmt"
-
 	"github.com/taskat/rubiks-cube/src/models"
+	"github.com/taskat/rubiks-cube/src/models/panics"
 )
 
 type Goal struct {
@@ -23,7 +22,7 @@ func (g *Goal) AddPrepare(p *Prepare) {
 
 func (g *Goal) Execute(p models.Puzzle) Block {
 	if g.runs > g.maxRuns {
-		panic("Goal reached max runs" + fmt.Sprintf(" (%d)", g.maxRuns))
+		panic(panics.NewMaxRunReached(g.maxRuns))
 	}
 	g.runs++
 	for _, prepare := range g.prepares {

@@ -63,11 +63,21 @@ func (s Server) allHandler(response http.ResponseWriter, request *http.Request) 
 	}
 	algo := algohandler.Handle("algorithm.algo", string(content.Algo), &errorHandler, cube)
 	executor := executor.NewExecutor(&errorHandler)
-	turns, steps := executor.Execute(cube.Clone(), algo)
-	fmt.Println("Turns: ", turns)
-	fmt.Println("Steps: ", steps)
-	messages := errorHandler.GetMessages()
-	fmt.Println("Messages: ", messages)
+	execResult := executor.Execute(cube.Clone(), algo)
+	var messages []eh.Message
+	var turns map[string][]string
+	var steps []string
+	if execResult.IsErr() {
+		newMessage := eh.NewMessage(eh.NewContext(0, 0), "Algorithm execution failed: "+execResult.UnwrapErr().Error(), "algorithm.algo", eh.ERROR)
+		messages = append(messages, newMessage)
+	} else {
+		turns = execResult.Unwrap().Turns
+		steps = execResult.Unwrap().Steps
+		fmt.Println("Turns: ", turns)
+		fmt.Println("Steps: ", steps)
+		messages = append(messages, errorHandler.GetMessages()...)
+		fmt.Println("Messages: ", messages)
+	}
 	result := NewResult(cube, messages, turns, steps)
 	data, err := json.Marshal(result)
 	if err != nil {
@@ -117,6 +127,6 @@ func (s Server) Start() {
 }
 
 func (s Server) writeError(response http.ResponseWriter, code int, err error) {
-	response.WriteHeader(http.StatusInternalServerError)
+	response.WriteHeader(code)
 	response.Write([]byte(err.Error()))
 }

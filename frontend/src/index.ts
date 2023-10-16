@@ -31,7 +31,6 @@ class App {
     <td>${error.level}</td>
     <td>${error.text}</td>
     <td>Line ${error.pos.line}, Column ${error.pos.column}</td>
-    <td>${error.file}</td>
     `;
     errorList?.appendChild(errorItem);
   }

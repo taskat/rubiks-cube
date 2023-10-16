@@ -135,9 +135,8 @@ td:last-child {
     margin-right: 5px;
 }
 
-.moves {
+#moves {
     overflow-y: auto;
-    display: flex;
     flex-wrap: wrap;
     overflow-x: hidden;
 }

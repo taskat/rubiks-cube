@@ -2,21 +2,21 @@ puzzle: cube
 size: 2
 state description: beginner
 state:
-    front:
+    Front:
         b b
         b b
-    up: 
+    Up: 
         w w
         w w
-    right: 
+    Right: 
         o o
         o o
-    left: 
+    Left: 
         r r
         r r
-    back: 
+    Back: 
         g g
         g g
-    down: 
+    Down: 
         y y
         y y

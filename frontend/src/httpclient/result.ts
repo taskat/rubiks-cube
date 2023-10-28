@@ -6,6 +6,7 @@ export class Result {
     errors: Error[] = [];
     turns: Map<string, string[]> = new Map();
     steps: string[] = [];
+    size: number = 0;
     constructor(data: any) {
         if (data.state) {
             const stringToColors: Map<string, string[][]> = new Map(Object.entries(data.state.sides));
@@ -13,7 +14,7 @@ export class Result {
                 const side = Side[key as unknown as keyof typeof Side];
                 this.colorPalette.set(side, colors);
             });
-            console.log(this.colorPalette);
+            this.size = data.state.size;
         }
         if (data.errors) {
             this.errors = data.errors.map((error: any) => new Error(error));

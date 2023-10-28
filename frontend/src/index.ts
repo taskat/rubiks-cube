@@ -80,6 +80,7 @@ class App {
     let content = this.editor.getText("config");
     this.httpClient.postConfig(content).then((response) => {
       this.simulator.colorPalette = response.colorPalette;
+      this.simulator.cubeSize = response.size;
       this.updateErrors(response.errors);
       this.simulator.recreateUiPieces();
     });

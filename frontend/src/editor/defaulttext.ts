@@ -1,44 +1,10 @@
-const beginnerWithParenthesis = `puzzle: cube
-size: 3
-state description: beginner
-state: {
-    front:
-        (b b b)
-        (b b b)
-        (b b b)
-    up: 
-        (r r r)
-        (r r r)
-        (r r r)
-    right: 
-        (w w w)
-        (w w w)
-        (w w w)
-    left: 
-        (y y y)
-        (y y y)
-        (y y y)
-    back: 
-        (g g g)
-        (g g g)
-        (g g g)
-    down: 
-        (o o o)
-        (o o o)
-        (o o o)
-}`
-
 const advanced = `puzzle: cube
-size: 3
+size: 2
 state description: advanced
 state:
     corners:
         up: boy wbr ygr gow
-        down: wrg gyo obw rby
-    edges:
-        up: rb bo bw og
-        middle: wr yr rg by 
-        down: gw gy yo ow`
+        down: wrg gyo obw rby`
 
 const algo = `helpers:
     upsideDown: x2
@@ -182,6 +148,5 @@ steps:
         do: U      
     `
 
-export const beginnerConfig = beginnerWithParenthesis;
 export const advancedConfig = advanced;
 export const algorithm = algo;

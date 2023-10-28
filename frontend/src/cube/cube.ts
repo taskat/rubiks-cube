@@ -6,6 +6,7 @@ import CoordsList from "./coordslist";
 import MoveBuilder from "./movebuilder";
 import * as THREE from "three";
 import { Side } from "./side";
+import { SideCoordCalculator } from "./sidecoordcalculator";
 
 const COLORS: Map<String, THREE.Color> = new Map([
   ["b", new THREE.Color("blue")],
@@ -24,8 +25,9 @@ export default class Cube {
   colorPalette: Map<Side, string[][]>
   constructor(cubeSize: number, colorPalette: Map<Side, string[][]>) {
     this.cubeData = new CubeData(cubeSize);
+    const calculator = new SideCoordCalculator(this.cubeData);
     const allCoordsList = this.cubeData.makeAllCoordsList();
-    this.pieces = allCoordsList.coords.map((coord, index) => new Piece(index, coord, this.cubeData));
+    this.pieces = allCoordsList.coords.map((coord, index) => new Piece(index, coord, calculator));
     this.moves = new Map(this.generateMoves().map(move => [move.name, move]));
     this.colorPalette = colorPalette;
   }
@@ -89,6 +91,12 @@ export default class Cube {
     const sideCoord = piece.getSideCoord(side);
     if (sideCoord) {
       let color = (this.colorPalette.get(side) as string[][])[sideCoord.i][sideCoord.j]
+      let color2 = COLORS.get(color);
+      if (!color2) {
+        console.log(sideCoord);
+        console.log(color);
+        console.log(piece.coord);
+      }
       return COLORS.get(color) as THREE.Color;
     } 
     return COLORS.get("-") as THREE.Color;

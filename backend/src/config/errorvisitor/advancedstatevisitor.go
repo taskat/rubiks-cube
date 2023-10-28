@@ -42,7 +42,7 @@ func (v *advancedStateVisitor) checkColors(ctx *cp.AdvancedStateContext) {
 	}
 	stateCtx := ctx.GetParent().(*cp.StateContext)
 	stateDefCtx := stateCtx.GetParent().(*cp.StateDefContext)
-	expected := v.size * v.size
+	expected := v.size*v.size - 1
 	checkColors(stateDefCtx, v, expected)
 }
 

@@ -2,27 +2,27 @@ puzzle: cube
 size: 3
 state description: beginner
 state:
-    front:
+    Front:
         o w r
         b b g
         g w y
-    up: 
+    Up: 
         b r w
         o w b
         g b y
-    right: 
+    Right: 
         g o r
         r o r
         o y b
-    left: 
+    Left: 
         o g w
         w r y
         y w r
-    back: 
+    Back: 
         b b y
         y g r
         w o b
-    down: 
+    Down: 
         w g g
         o y g
         r y o

@@ -32,9 +32,9 @@ var configparserParserStaticData struct {
 func configparserParserInit() {
 	staticData := &configparserParserStaticData
 	staticData.literalNames = []string{
-		"", "'advanced'", "'back'", "'beginner'", "'corners'", "'cube'", "'down'",
-		"'edges'", "'front'", "'left'", "'middle'", "'puzzle'", "'random'",
-		"'right'", "'size'", "'state'", "'state description'", "'up'", "'{'",
+		"", "'advanced'", "'Back'", "'beginner'", "'corners'", "'cube'", "'Down'",
+		"'edges'", "'Front'", "'Left'", "'middle'", "'puzzle'", "'random'",
+		"'Right'", "'size'", "'state'", "'state description'", "'Up'", "'{'",
 		"'}'", "'['", "']'", "'('", "')'", "':'",
 	}
 	staticData.symbolicNames = []string{

@@ -25,14 +25,14 @@ func NewCube(size int) *Cube {
 	return &c
 }
 
-func NewWithSides(sides map[parameters.Side]Side) *Cube {
+func NewWithSides(sides map[parameters.Side]Side, size int) *Cube {
 	cubeSides := make(map[cubeSide]Side, 6)
 	for sideName, side := range sides {
 		cubeSides[newCubeSide(sideName)] = side
 	}
 	c := Cube{
 		sides: cubeSides,
-		size:  len(cubeSides["Front"]),
+		size:  size,
 	}
 	c.generateMoves()
 	return &c

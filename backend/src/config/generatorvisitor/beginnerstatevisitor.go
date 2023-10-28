@@ -23,7 +23,7 @@ func (v *beginnerStateVisitor) visitBeginnerState(ctx *cp.BeginnerStateContext) 
 		cubeSide, sideState := v.visitSide(side.(*cp.SideContext))
 		sides[cubeSide] = sideState
 	}
-	return cube.NewWithSides(sides)
+	return cube.NewWithSides(sides, v.size)
 }
 
 func (v *beginnerStateVisitor) visitColor(ctx *cp.ColorContext) color.Color {

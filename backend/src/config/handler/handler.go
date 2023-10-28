@@ -51,14 +51,13 @@ func Handle(fileName, content string, errorHandler *eh.Errorhandler) models.Puzz
 	if handler.errorHandler.HasErrors() {
 		return nil
 	}
-	// cube := handler.createCube()
+	cube := handler.createCube()
 	// validator := cube.GetValidator()
 	// errors := validator.Validate()
 	// for _, err := range errors {
 	// 	errorHandler.AddError(eh.NewContext(-1, -1), err, fileName)
 	// }
-	// return cube
-	return nil
+	return cube
 }
 
 func (h *Handler) readConfig() {

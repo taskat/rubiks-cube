@@ -11,18 +11,19 @@ import (
 )
 
 type advancedStateVisitor struct {
+	size            int
 	sides           map[parameters.Side]cube.Side
 	sideConstructor func(string) parameters.Side
 }
 
-func newAdvancedStateVisitor(sideConstructor func(string) parameters.Side) *advancedStateVisitor {
-	return &advancedStateVisitor{sides: make(map[parameters.Side]cube.Side, 6), sideConstructor: sideConstructor}
+func newAdvancedStateVisitor(size int, sideConstructor func(string) parameters.Side) *advancedStateVisitor {
+	return &advancedStateVisitor{size: size, sides: make(map[parameters.Side]cube.Side, 6), sideConstructor: sideConstructor}
 }
 
 func (v *advancedStateVisitor) emptySide() cube.Side {
-	side := make(cube.Side, 3)
+	side := make(cube.Side, v.size)
 	for i := range side {
-		side[i] = make([]color.Color, 3)
+		side[i] = make([]color.Color, v.size)
 		for j := range side[i] {
 			side[i][j] = color.Color("-")
 		}
@@ -41,27 +42,33 @@ func (v *advancedStateVisitor) visitAdvancedState(ctx *cp.AdvancedStateContext) 
 	}
 	for side, c := range sideToColor {
 		newSide := v.emptySide()
-		newSide[1][1] = color.Color(c)
+		if v.size%2 == 1 {
+			middle := v.size / 2
+			newSide[middle][middle] = color.Color(c)
+		}
 		v.sides[side] = newSide
 	}
 	v.visitCorners(ctx.Corners().(*cp.CornersContext))
-	v.visitEdges(ctx.Edges().(*cp.EdgesContext))
-	return cube.NewWithSides(v.sides)
+	if v.size > 2 {
+		v.visitEdges(ctx.Edges().(*cp.EdgesContext))
+	}
+	return cube.NewWithSides(v.sides, v.size)
 }
 
 func (v *advancedStateVisitor) visitCornerLayer(ctx *cp.CornerLayerContext) {
+	max := v.size - 1
 	layerToSideCoords := map[string][][]parameters.Coord{
 		"up": {
-			{parameters.NewCoord(v.sideConstructor("Up"), 0, 0), parameters.NewCoord(v.sideConstructor("Left"), 0, 0), parameters.NewCoord(v.sideConstructor("Back"), 0, 2)},
-			{parameters.NewCoord(v.sideConstructor("Up"), 0, 2), parameters.NewCoord(v.sideConstructor("Back"), 0, 0), parameters.NewCoord(v.sideConstructor("Right"), 0, 2)},
-			{parameters.NewCoord(v.sideConstructor("Up"), 2, 2), parameters.NewCoord(v.sideConstructor("Right"), 0, 0), parameters.NewCoord(v.sideConstructor("Front"), 0, 2)},
-			{parameters.NewCoord(v.sideConstructor("Up"), 2, 0), parameters.NewCoord(v.sideConstructor("Front"), 0, 0), parameters.NewCoord(v.sideConstructor("Left"), 0, 2)},
+			{parameters.NewCoord(v.sideConstructor("Up"), 0, 0), parameters.NewCoord(v.sideConstructor("Left"), 0, 0), parameters.NewCoord(v.sideConstructor("Back"), 0, max)},
+			{parameters.NewCoord(v.sideConstructor("Up"), 0, max), parameters.NewCoord(v.sideConstructor("Back"), 0, 0), parameters.NewCoord(v.sideConstructor("Right"), 0, max)},
+			{parameters.NewCoord(v.sideConstructor("Up"), max, max), parameters.NewCoord(v.sideConstructor("Right"), 0, 0), parameters.NewCoord(v.sideConstructor("Front"), 0, max)},
+			{parameters.NewCoord(v.sideConstructor("Up"), max, 0), parameters.NewCoord(v.sideConstructor("Front"), 0, 0), parameters.NewCoord(v.sideConstructor("Left"), 0, max)},
 		},
 		"down": {
-			{parameters.NewCoord(v.sideConstructor("Down"), 0, 0), parameters.NewCoord(v.sideConstructor("Left"), 2, 2), parameters.NewCoord(v.sideConstructor("Front"), 2, 0)},
-			{parameters.NewCoord(v.sideConstructor("Down"), 0, 2), parameters.NewCoord(v.sideConstructor("Front"), 2, 2), parameters.NewCoord(v.sideConstructor("Right"), 2, 0)},
-			{parameters.NewCoord(v.sideConstructor("Down"), 2, 2), parameters.NewCoord(v.sideConstructor("Right"), 2, 2), parameters.NewCoord(v.sideConstructor("Back"), 2, 0)},
-			{parameters.NewCoord(v.sideConstructor("Down"), 2, 0), parameters.NewCoord(v.sideConstructor("Back"), 2, 2), parameters.NewCoord(v.sideConstructor("Left"), 2, 0)},
+			{parameters.NewCoord(v.sideConstructor("Down"), 0, 0), parameters.NewCoord(v.sideConstructor("Left"), max, max), parameters.NewCoord(v.sideConstructor("Front"), max, 0)},
+			{parameters.NewCoord(v.sideConstructor("Down"), 0, max), parameters.NewCoord(v.sideConstructor("Front"), max, max), parameters.NewCoord(v.sideConstructor("Right"), max, 0)},
+			{parameters.NewCoord(v.sideConstructor("Down"), max, max), parameters.NewCoord(v.sideConstructor("Right"), max, max), parameters.NewCoord(v.sideConstructor("Back"), max, 0)},
+			{parameters.NewCoord(v.sideConstructor("Down"), max, 0), parameters.NewCoord(v.sideConstructor("Back"), max, max), parameters.NewCoord(v.sideConstructor("Left"), max, 0)},
 		},
 	}
 	layer := ctx.LayerDef().GetText()

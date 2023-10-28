@@ -42,11 +42,17 @@ func (v *advancedStateVisitor) checkColors(ctx *cp.AdvancedStateContext) {
 	}
 	stateCtx := ctx.GetParent().(*cp.StateContext)
 	stateDefCtx := stateCtx.GetParent().(*cp.StateDefContext)
-	expected := v.size*v.size - 1
+	expected := v.size * v.size
+	if v.size%2 == 1 {
+		expected--
+	}
 	checkColors(stateDefCtx, v, expected)
 }
 
 func (v *advancedStateVisitor) visitAdvancedState(ctx *cp.AdvancedStateContext) {
+	fmt.Println("visitAdvancedState")
+	fmt.Println("corners", ctx.Corners())
+	fmt.Println("edges", ctx.Edges())
 	v.visitCorners(ctx.Corners().(*cp.CornersContext))
 	if v.size > 2 {
 		v.visitEdges(ctx.Edges().(*cp.EdgesContext))
@@ -84,12 +90,12 @@ func (v *advancedStateVisitor) visitCorners(ctx *cp.CornersContext) {
 			}
 		}
 	}
-	if layerCtxs, ok := layerDefs["middle"]; ok {
+	if layerCtxs, ok := layerDefs["Middle"]; ok {
 		for _, layerCtx := range layerCtxs {
 			v.Eh().AddError(layerCtx, "middle layer is invalid for corner definitions", v.FileName())
 		}
 	}
-	necessaryLayers := []string{"up", "down"}
+	necessaryLayers := []string{"Up", "Down"}
 	for _, necessaryLayer := range necessaryLayers {
 		if _, ok := layerDefs[necessaryLayer]; !ok {
 			v.finished = false
@@ -131,7 +137,7 @@ func (v *advancedStateVisitor) visitEdges(ctx *cp.EdgesContext) {
 			}
 		}
 	}
-	necessaryLayers := []string{"up", "middle", "down"}
+	necessaryLayers := []string{"Up", "Middle", "Down"}
 	for _, necessaryLayer := range necessaryLayers {
 		if _, ok := layerDefs[necessaryLayer]; !ok {
 			v.finished = false

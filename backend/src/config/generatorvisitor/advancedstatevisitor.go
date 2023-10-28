@@ -58,13 +58,13 @@ func (v *advancedStateVisitor) visitAdvancedState(ctx *cp.AdvancedStateContext) 
 func (v *advancedStateVisitor) visitCornerLayer(ctx *cp.CornerLayerContext) {
 	max := v.size - 1
 	layerToSideCoords := map[string][][]parameters.Coord{
-		"up": {
+		"Up": {
 			{parameters.NewCoord(v.sideConstructor("Up"), 0, 0), parameters.NewCoord(v.sideConstructor("Left"), 0, 0), parameters.NewCoord(v.sideConstructor("Back"), 0, max)},
 			{parameters.NewCoord(v.sideConstructor("Up"), 0, max), parameters.NewCoord(v.sideConstructor("Back"), 0, 0), parameters.NewCoord(v.sideConstructor("Right"), 0, max)},
 			{parameters.NewCoord(v.sideConstructor("Up"), max, max), parameters.NewCoord(v.sideConstructor("Right"), 0, 0), parameters.NewCoord(v.sideConstructor("Front"), 0, max)},
 			{parameters.NewCoord(v.sideConstructor("Up"), max, 0), parameters.NewCoord(v.sideConstructor("Front"), 0, 0), parameters.NewCoord(v.sideConstructor("Left"), 0, max)},
 		},
-		"down": {
+		"Down": {
 			{parameters.NewCoord(v.sideConstructor("Down"), 0, 0), parameters.NewCoord(v.sideConstructor("Left"), max, max), parameters.NewCoord(v.sideConstructor("Front"), max, 0)},
 			{parameters.NewCoord(v.sideConstructor("Down"), 0, max), parameters.NewCoord(v.sideConstructor("Front"), max, max), parameters.NewCoord(v.sideConstructor("Right"), max, 0)},
 			{parameters.NewCoord(v.sideConstructor("Down"), max, max), parameters.NewCoord(v.sideConstructor("Right"), max, max), parameters.NewCoord(v.sideConstructor("Back"), max, 0)},
@@ -89,19 +89,19 @@ func (v *advancedStateVisitor) visitCorners(ctx *cp.CornersContext) {
 
 func (v *advancedStateVisitor) visitEdgeLayer(ctx *cp.EdgeLayerContext) {
 	layerToSideCoords := map[string][][]parameters.Coord{
-		"up": {
+		"Up": {
 			{parameters.NewCoord(v.sideConstructor("Up"), 0, 1), parameters.NewCoord(v.sideConstructor("Back"), 0, 1)},
 			{parameters.NewCoord(v.sideConstructor("Up"), 1, 2), parameters.NewCoord(v.sideConstructor("Right"), 0, 1)},
 			{parameters.NewCoord(v.sideConstructor("Up"), 2, 1), parameters.NewCoord(v.sideConstructor("Front"), 0, 1)},
 			{parameters.NewCoord(v.sideConstructor("Up"), 1, 0), parameters.NewCoord(v.sideConstructor("Left"), 0, 1)},
 		},
-		"middle": {
+		"Middle": {
 			{parameters.NewCoord(v.sideConstructor("Left"), 1, 0), parameters.NewCoord(v.sideConstructor("Back"), 1, 2)},
 			{parameters.NewCoord(v.sideConstructor("Back"), 1, 0), parameters.NewCoord(v.sideConstructor("Right"), 1, 2)},
 			{parameters.NewCoord(v.sideConstructor("Right"), 1, 0), parameters.NewCoord(v.sideConstructor("Front"), 1, 2)},
 			{parameters.NewCoord(v.sideConstructor("Front"), 1, 0), parameters.NewCoord(v.sideConstructor("Left"), 1, 2)},
 		},
-		"down": {
+		"Down": {
 			{parameters.NewCoord(v.sideConstructor("Down"), 0, 1), parameters.NewCoord(v.sideConstructor("Front"), 2, 1)},
 			{parameters.NewCoord(v.sideConstructor("Down"), 1, 2), parameters.NewCoord(v.sideConstructor("Right"), 2, 1)},
 			{parameters.NewCoord(v.sideConstructor("Down"), 2, 1), parameters.NewCoord(v.sideConstructor("Back"), 2, 1)},

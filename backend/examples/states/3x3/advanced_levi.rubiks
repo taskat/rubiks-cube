@@ -3,9 +3,9 @@ size: 3
 state description: advanced
 state:
     corners:
-        up: byr gry bwo wrg
-        down: wbr boy wgo yog
+        Up: byr gry bwo wrg
+        Down: wbr boy wgo yog
     edges:
-        up: oy gw og bw
-        middle: ob wr rb wo
-        down: ry by rg gy
+        Up: oy gw og bw
+        Middle: ob wr rb wo
+        Down: ry by rg gy

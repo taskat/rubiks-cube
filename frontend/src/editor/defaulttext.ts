@@ -3,8 +3,8 @@ size: 2
 state description: advanced
 state:
     corners:
-        up: boy wbr ygr gow
-        down: wrg gyo obw rby`
+        Up: boy wbr ygr gow
+        Down: wrg gyo obw rby`
 
 const algo = `helpers:
     upsideDown: x2

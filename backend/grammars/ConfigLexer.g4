@@ -10,7 +10,7 @@ DOWN: 'Down';
 EDGES: 'edges';
 FRONT: 'Front';
 LEFT: 'Left';
-MIDDLE: 'middle';
+MIDDLE: 'Middle';
 PUZZLE: 'puzzle';
 RANDOM: 'random';
 RIGHT: 'Right';

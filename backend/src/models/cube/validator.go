@@ -108,7 +108,9 @@ func (v *validator) checkPermutations() []string {
 
 func (v *validator) Validate() []string {
 	errors := v.checkCornerTwists()
-	errors = append(errors, v.checkEdgeFlips()...)
-	errors = append(errors, v.checkPermutations()...)
+	if v.cube.size%2 == 1 {
+		errors = append(errors, v.checkEdgeFlips()...)
+		errors = append(errors, v.checkPermutations()...)
+	}
 	return errors
 }

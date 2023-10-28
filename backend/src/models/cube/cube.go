@@ -70,7 +70,7 @@ func (c *Cube) GetConstraint() models.Constraint {
 
 func (c *Cube) getCornerPieces() []cornerPiece {
 	cornerPieces := make([]cornerPiece, 0, 8)
-	for _, corner := range getCornerCoords() {
+	for _, corner := range getCornerCoords(c.size) {
 		cornerPieces = append(cornerPieces, newCornerPiece(c, corner))
 	}
 	return cornerPieces
@@ -113,10 +113,10 @@ func (c *Cube) GetPosCoords(pos parameters.Position) []parameters.Coord {
 	panic("No coords found")
 }
 
-func (*Cube) getPossibleCoords(length int) [][]parameters.Coord {
+func (c *Cube) getPossibleCoords(length int) [][]parameters.Coord {
 	switch length {
 	case 3:
-		return getCornerCoords()
+		return getCornerCoords(c.size)
 	case 2:
 		return getEdgeCoords()
 	}

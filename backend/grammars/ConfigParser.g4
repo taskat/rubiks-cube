@@ -22,7 +22,7 @@ side: sideDef COLON color+;
 sideDef: FRONT | BACK | LEFT | RIGHT | UP | DOWN;
 color: WORD;
 
-advancedState: corners edges | edges corners;
+advancedState: corners edges | edges corners | corners;
 corners: CORNERS COLON cornerLayer+;
 cornerLayer: layerDef COLON corner+;
 layerDef: UP | MIDDLE | DOWN;

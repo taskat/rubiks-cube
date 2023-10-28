@@ -1,5 +1,5 @@
 puzzle: cube
-size: 3
+size: 2
 state description: beginner
 state:
     front:
@@ -16,7 +16,7 @@ state:
         w y
     back: 
         g b
-        b r
+        g r
     down: 
         g g
         b o

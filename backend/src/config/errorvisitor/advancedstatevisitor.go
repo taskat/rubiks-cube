@@ -10,10 +10,11 @@ import (
 
 type advancedStateVisitor struct {
 	baseVisitor
+	size int
 }
 
-func newAdvancedStateVisitor(fileName string, errorHandler *eh.Errorhandler) *advancedStateVisitor {
-	return &advancedStateVisitor{baseVisitor: *newBaseVisitor(fileName, errorHandler)}
+func newAdvancedStateVisitor(fileName string, errorHandler *eh.Errorhandler, size int) *advancedStateVisitor {
+	return &advancedStateVisitor{baseVisitor: *newBaseVisitor(fileName, errorHandler), size: size}
 }
 
 func (v *advancedStateVisitor) checkColors(ctx *cp.AdvancedStateContext) {
@@ -28,23 +29,28 @@ func (v *advancedStateVisitor) checkColors(ctx *cp.AdvancedStateContext) {
 			}
 		}
 	}
-	for _, layer := range ctx.Edges().(*cp.EdgesContext).AllEdgeLayer() {
-		for _, edge := range layer.(*cp.EdgeLayerContext).AllEdge() {
-			colors := strings.Split(edge.GetText(), "")
-			for _, color := range colors {
-				v.colors[color]++
-			}
+	if v.size > 2 {
+		for _, layer := range ctx.Edges().(*cp.EdgesContext).AllEdgeLayer() {
+			for _, edge := range layer.(*cp.EdgeLayerContext).AllEdge() {
+				colors := strings.Split(edge.GetText(), "")
+				for _, color := range colors {
+					v.colors[color]++
+				}
 
+			}
 		}
 	}
 	stateCtx := ctx.GetParent().(*cp.StateContext)
 	stateDefCtx := stateCtx.GetParent().(*cp.StateDefContext)
-	checkColors(stateDefCtx, v, 8)
+	expected := v.size * v.size
+	checkColors(stateDefCtx, v, expected)
 }
 
 func (v *advancedStateVisitor) visitAdvancedState(ctx *cp.AdvancedStateContext) {
 	v.visitCorners(ctx.Corners().(*cp.CornersContext))
-	v.visitEdges(ctx.Edges().(*cp.EdgesContext))
+	if v.size > 2 {
+		v.visitEdges(ctx.Edges().(*cp.EdgesContext))
+	}
 	v.checkColors(ctx)
 }
 

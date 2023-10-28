@@ -1,0 +1,7 @@
+puzzle: cube
+size: 2
+state description: advanced
+state:
+    corners:
+        up: boy wbr ygr gow
+        down: wrg gyo obw rby

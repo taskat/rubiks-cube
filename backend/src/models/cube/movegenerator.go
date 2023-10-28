@@ -1,6 +1,8 @@
 package cube
 
-import "github.com/taskat/rubiks-cube/src/models/parameters"
+import (
+	"github.com/taskat/rubiks-cube/src/models/parameters"
+)
 
 type moveGenerator struct {
 	size  int
@@ -38,10 +40,14 @@ func (mg *moveGenerator) generateXMoves() {
 		return slices
 	}
 	names := []string{"L", "M", "R"}
+	if (mg.size % 2) == 0 {
+		middle := mg.size / 2
+		names = append(names[:middle], names[middle+1:]...)
+	}
 	for i := 0; i < mg.size; i++ {
 		slices := getSlices(i)
 		cycles := mg.getSliceCycles(slices)
-		if i <= mg.size/2 {
+		if i < mg.size/2 || (mg.size%2 == 1 && i == mg.size/2) {
 			cycles = mg.inverseCycles(cycles)
 		}
 		if i == 0 {
@@ -73,6 +79,10 @@ func (mg *moveGenerator) generateYMoves() {
 		return slices
 	}
 	names := []string{"U", "E", "D"}
+	if (mg.size % 2) == 0 {
+		middle := mg.size / 2
+		names = append(names[:middle], names[middle+1:]...)
+	}
 	for i := 0; i < mg.size; i++ {
 		slices := getSlices(i)
 		cycles := mg.getSliceCycles(slices)
@@ -108,13 +118,17 @@ func (mg *moveGenerator) generateZMoves() {
 		return slices
 	}
 	names := []string{"F", "S", "B"}
+	if (mg.size % 2) == 0 {
+		middle := mg.size / 2
+		names = append(names[:middle], names[middle+1:]...)
+	}
 	for i := 0; i < mg.size; i++ {
 		slices := getSlices(i)
 		cycles := mg.getSliceCycles(slices)
 		if i == 0 {
 			cycles = append(cycles, mg.getSideCycles(Front)...)
 		}
-		if i > mg.size/2 {
+		if i > mg.size/2 || (mg.size%2 == 0 && i == mg.size/2) {
 			cycles = mg.inverseCycles(cycles)
 		}
 		if i == mg.size-1 {
@@ -132,16 +146,19 @@ func (mg *moveGenerator) generateZMoves() {
 }
 
 func (mg *moveGenerator) getSideCycles(side cubeSide) []cycle {
-	cycles := make([]cycle, 3)
-	cycles[0] = cycle{
-		parameters.NewCoord(side, 0, 0), parameters.NewCoord(side, 0, 2),
-		parameters.NewCoord(side, 2, 2), parameters.NewCoord(side, 2, 0),
+	max := mg.size - 1
+	cycles := make([]cycle, 0, 3)
+	cycles = append(cycles, cycle{
+		parameters.NewCoord(side, 0, 0), parameters.NewCoord(side, 0, max),
+		parameters.NewCoord(side, max, max), parameters.NewCoord(side, max, 0),
+	})
+	if mg.size == 3 {
+		cycles = append(cycles, cycle{
+			parameters.NewCoord(side, 0, 1), parameters.NewCoord(side, 1, 2),
+			parameters.NewCoord(side, 2, 1), parameters.NewCoord(side, 1, 0),
+		})
 	}
-	cycles[1] = cycle{
-		parameters.NewCoord(side, 0, 1), parameters.NewCoord(side, 1, 2),
-		parameters.NewCoord(side, 2, 1), parameters.NewCoord(side, 1, 0),
-	}
-	cycles[2] = cycle{parameters.NewCoord(side, 1, 1)}
+	cycles = append(cycles, cycle{parameters.NewCoord(side, 1, 1)})
 	return cycles
 }
 

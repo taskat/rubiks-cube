@@ -20,15 +20,18 @@ const COLORS: Map<String, THREE.Color> = new Map([
 
 export default class Cube {
   cubeData: CubeData;
+  size: number;
   pieces: Piece[];
   moves: Map<string, Move>;
   colorPalette: Map<Side, string[][]>
   constructor(cubeSize: number, colorPalette: Map<Side, string[][]>) {
     this.cubeData = new CubeData(cubeSize);
+    this.size = cubeSize;
     const calculator = new SideCoordCalculator(this.cubeData);
     const allCoordsList = this.cubeData.makeAllCoordsList();
     this.pieces = allCoordsList.coords.map((coord, index) => new Piece(index, coord, calculator));
     this.moves = new Map(this.generateMoves().map(move => [move.name, move]));
+    console.log(this.moves.keys());
     this.colorPalette = colorPalette;
   }
 
@@ -46,19 +49,25 @@ export default class Cube {
     const yRotationMatrices3 = angles.map(rotateY);
     const zRotationMatrices3 = angles.map(rotateZ);
     const allCoordsList = this.cubeData.makeAllCoordsList();
-    const xNames = ["L", "M", "R"];
-    const yNames = ["D", "E", "U"];
-    const zNames = ["B", "S", "F"];
+    const toRemove = this.size % 2 === 0 ? 1 : 0;
+    const middle = Math.floor(this.size / 2);
+    const xNames = ["L", "M", "R"]
+    xNames.splice(middle, toRemove);
+    const yNames = ["D", "E", "U"]
+    yNames.splice(middle, toRemove);
+    const zNames = ["B", "S", "F"]
+    zNames.splice(middle, toRemove);
     const builders: MoveBuilder[] = [
       ...this.cubeData.values.map((xSlice, index) => new MoveBuilder(xRotationMatrices3, allCoordsList.xSlice(xSlice), xNames[index])),
       ...this.cubeData.values.map((ySlice, index) => new MoveBuilder(yRotationMatrices3, allCoordsList.ySlice(ySlice), yNames[index])),
       ...this.cubeData.values.map((zSlice, index) => new MoveBuilder(zRotationMatrices3, allCoordsList.zSlice(zSlice), zNames[index])),
-      new MoveBuilder(xRotationMatrices3, allCoordsList.xSlice(-1).concat(allCoordsList.xSlice(0)), "Lw"),
-      new MoveBuilder(xRotationMatrices3, allCoordsList.xSlice(0).concat(allCoordsList.xSlice(1)), "Rw"),
-      new MoveBuilder(yRotationMatrices3, allCoordsList.ySlice(-1).concat(allCoordsList.ySlice(0)), "Dw"),
-      new MoveBuilder(yRotationMatrices3, allCoordsList.ySlice(0).concat(allCoordsList.ySlice(1)), "Uw"),
-      new MoveBuilder(zRotationMatrices3, allCoordsList.zSlice(-1).concat(allCoordsList.zSlice(0)), "Bw"),
-      new MoveBuilder(zRotationMatrices3, allCoordsList.zSlice(0).concat(allCoordsList.zSlice(1)), "Fw"),
+      // needs update if we want to use them
+      // new MoveBuilder(xRotationMatrices3, allCoordsList.xSlice(-1).concat(allCoordsList.xSlice(0)), "Lw"),
+      // new MoveBuilder(xRotationMatrices3, allCoordsList.xSlice(0).concat(allCoordsList.xSlice(1)), "Rw"),
+      // new MoveBuilder(yRotationMatrices3, allCoordsList.ySlice(-1).concat(allCoordsList.ySlice(0)), "Dw"),
+      // new MoveBuilder(yRotationMatrices3, allCoordsList.ySlice(0).concat(allCoordsList.ySlice(1)), "Uw"),
+      // new MoveBuilder(zRotationMatrices3, allCoordsList.zSlice(-1).concat(allCoordsList.zSlice(0)), "Bw"),
+      // new MoveBuilder(zRotationMatrices3, allCoordsList.zSlice(0).concat(allCoordsList.zSlice(1)), "Fw"),
       new MoveBuilder(xRotationMatrices3, allCoordsList, "x"),
       new MoveBuilder(yRotationMatrices3, allCoordsList, "y"),
       new MoveBuilder(zRotationMatrices3, allCoordsList, "z"),

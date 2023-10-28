@@ -52,11 +52,11 @@ func Handle(fileName, content string, errorHandler *eh.Errorhandler) models.Puzz
 		return nil
 	}
 	cube := handler.createCube()
-	// validator := cube.GetValidator()
-	// errors := validator.Validate()
-	// for _, err := range errors {
-	// 	errorHandler.AddError(eh.NewContext(-1, -1), err, fileName)
-	// }
+	validator := cube.GetValidator()
+	errors := validator.Validate()
+	for _, err := range errors {
+		errorHandler.AddError(eh.NewContext(-1, -1), err, fileName)
+	}
 	return cube
 }
 

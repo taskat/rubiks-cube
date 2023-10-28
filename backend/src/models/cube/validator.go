@@ -15,8 +15,15 @@ func newValidator(c *Cube) *validator {
 }
 
 func (v *validator) checkCornerTwists() []string {
-	upColor := v.cube.sides[Up][1][1]
-	downColor := v.cube.sides[Down][1][1]
+	var upColor, downColor color.Color
+	if v.cube.size%2 == 1 {
+		middle := v.cube.size / 2
+		upColor = v.cube.sides[Up][middle][middle]
+		downColor = v.cube.sides[Down][middle][middle]
+	} else {
+		upColor = color.Color("w")
+		downColor = color.Color("y")
+	}
 	isGoodColor := func(c color.Color) bool {
 		return c == upColor || c == downColor
 	}

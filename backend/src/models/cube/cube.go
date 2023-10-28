@@ -84,13 +84,32 @@ func (c *Cube) getEdgePieces() []edgePiece {
 	return edgePieces
 }
 
-func (c *Cube) getGoalSide(color color.Color) cubeSide {
+func (c *Cube) getGoalSide(col color.Color) cubeSide {
+	if c.size%2 == 0 {
+		switch col {
+		case color.Color("w"):
+			return cubeSide("Up")
+		case color.Color("y"):
+			return cubeSide("Down")
+		case color.Color("r"):
+			return cubeSide("Left")
+		case color.Color("o"):
+			return cubeSide("Right")
+		case color.Color("g"):
+			return cubeSide("Back")
+		case color.Color("b"):
+			return cubeSide("Front")
+		default:
+			panic(fmt.Sprintf("Invalid color %s", col.String()))
+		}
+	}
 	for sideName, side := range c.sides {
-		if side[1][1] == color {
+		middle := c.size / 2
+		if side[middle][middle] == col {
 			return sideName
 		}
 	}
-	panic(fmt.Sprintf("No side with color %s", color.String()))
+	panic(fmt.Sprintf("No side with color %s", col.String()))
 }
 
 func (c *Cube) GetPieceCoords(piece parameters.Piece) []parameters.Coord {

@@ -1,0 +1,22 @@
+puzzle: cube
+size: 3
+state description: beginner
+state:
+    front:
+        b o
+        o w
+    up: 
+        o y
+        r b
+    right: 
+        w r
+        r w
+    left: 
+        y y
+        w y
+    back: 
+        g b
+        b r
+    down: 
+        g g
+        b o

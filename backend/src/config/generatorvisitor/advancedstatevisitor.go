@@ -7,14 +7,16 @@ import (
 	cp "github.com/taskat/rubiks-cube/src/config/parser"
 	"github.com/taskat/rubiks-cube/src/models"
 	"github.com/taskat/rubiks-cube/src/models/cube"
+	"github.com/taskat/rubiks-cube/src/models/parameters"
 )
 
 type advancedStateVisitor struct {
-	sides map[cube.CubeSide]cube.Side
+	sides           map[parameters.Side]cube.Side
+	sideConstructor func(string) parameters.Side
 }
 
-func newAdvancedStateVisitor() *advancedStateVisitor {
-	return &advancedStateVisitor{sides: make(map[cube.CubeSide]cube.Side, 6)}
+func newAdvancedStateVisitor(sideConstructor func(string) parameters.Side) *advancedStateVisitor {
+	return &advancedStateVisitor{sides: make(map[parameters.Side]cube.Side, 6), sideConstructor: sideConstructor}
 }
 
 func (v *advancedStateVisitor) emptySide() cube.Side {
@@ -29,13 +31,13 @@ func (v *advancedStateVisitor) emptySide() cube.Side {
 }
 
 func (v *advancedStateVisitor) visitAdvancedState(ctx *cp.AdvancedStateContext) models.Puzzle {
-	sideToColor := map[cube.CubeSide]string{
-		cube.Front: "b",
-		cube.Back:  "g",
-		cube.Up:    "w",
-		cube.Down:  "y",
-		cube.Left:  "r",
-		cube.Right: "o",
+	sideToColor := map[parameters.Side]string{
+		v.sideConstructor("Front"): "b",
+		v.sideConstructor("Back"):  "g",
+		v.sideConstructor("Up"):    "w",
+		v.sideConstructor("Down"):  "y",
+		v.sideConstructor("Left"):  "r",
+		v.sideConstructor("Right"): "o",
 	}
 	for side, c := range sideToColor {
 		newSide := v.emptySide()
@@ -48,18 +50,18 @@ func (v *advancedStateVisitor) visitAdvancedState(ctx *cp.AdvancedStateContext) 
 }
 
 func (v *advancedStateVisitor) visitCornerLayer(ctx *cp.CornerLayerContext) {
-	layerToSideCoords := map[string][][]sideCoord{
+	layerToSideCoords := map[string][][]parameters.Coord{
 		"up": {
-			{newSideCoord(cube.Up, 0, 0), newSideCoord(cube.Left, 0, 0), newSideCoord(cube.Back, 0, 2)},
-			{newSideCoord(cube.Up, 0, 2), newSideCoord(cube.Back, 0, 0), newSideCoord(cube.Right, 0, 2)},
-			{newSideCoord(cube.Up, 2, 2), newSideCoord(cube.Right, 0, 0), newSideCoord(cube.Front, 0, 2)},
-			{newSideCoord(cube.Up, 2, 0), newSideCoord(cube.Front, 0, 0), newSideCoord(cube.Left, 0, 2)},
+			{parameters.NewCoord(v.sideConstructor("Up"), 0, 0), parameters.NewCoord(v.sideConstructor("Left"), 0, 0), parameters.NewCoord(v.sideConstructor("Back"), 0, 2)},
+			{parameters.NewCoord(v.sideConstructor("Up"), 0, 2), parameters.NewCoord(v.sideConstructor("Back"), 0, 0), parameters.NewCoord(v.sideConstructor("Right"), 0, 2)},
+			{parameters.NewCoord(v.sideConstructor("Up"), 2, 2), parameters.NewCoord(v.sideConstructor("Right"), 0, 0), parameters.NewCoord(v.sideConstructor("Front"), 0, 2)},
+			{parameters.NewCoord(v.sideConstructor("Up"), 2, 0), parameters.NewCoord(v.sideConstructor("Front"), 0, 0), parameters.NewCoord(v.sideConstructor("Left"), 0, 2)},
 		},
 		"down": {
-			{newSideCoord(cube.Down, 0, 0), newSideCoord(cube.Left, 2, 2), newSideCoord(cube.Front, 2, 0)},
-			{newSideCoord(cube.Down, 0, 2), newSideCoord(cube.Front, 2, 2), newSideCoord(cube.Right, 2, 0)},
-			{newSideCoord(cube.Down, 2, 2), newSideCoord(cube.Right, 2, 2), newSideCoord(cube.Back, 2, 0)},
-			{newSideCoord(cube.Down, 2, 0), newSideCoord(cube.Back, 2, 2), newSideCoord(cube.Left, 2, 0)},
+			{parameters.NewCoord(v.sideConstructor("Down"), 0, 0), parameters.NewCoord(v.sideConstructor("Left"), 2, 2), parameters.NewCoord(v.sideConstructor("Front"), 2, 0)},
+			{parameters.NewCoord(v.sideConstructor("Down"), 0, 2), parameters.NewCoord(v.sideConstructor("Front"), 2, 2), parameters.NewCoord(v.sideConstructor("Right"), 2, 0)},
+			{parameters.NewCoord(v.sideConstructor("Down"), 2, 2), parameters.NewCoord(v.sideConstructor("Right"), 2, 2), parameters.NewCoord(v.sideConstructor("Back"), 2, 0)},
+			{parameters.NewCoord(v.sideConstructor("Down"), 2, 0), parameters.NewCoord(v.sideConstructor("Back"), 2, 2), parameters.NewCoord(v.sideConstructor("Left"), 2, 0)},
 		},
 	}
 	layer := ctx.LayerDef().GetText()
@@ -67,7 +69,7 @@ func (v *advancedStateVisitor) visitCornerLayer(ctx *cp.CornerLayerContext) {
 		colors := strings.Split(corner.(*cp.CornerContext).GetText(), "")
 		for j, c := range colors {
 			sc := layerToSideCoords[layer][i][j]
-			v.sides[sc.side][sc.Row][sc.Col] = color.Color(c)
+			v.sides[sc.Side][sc.Row][sc.Col] = color.Color(c)
 		}
 	}
 }
@@ -79,24 +81,24 @@ func (v *advancedStateVisitor) visitCorners(ctx *cp.CornersContext) {
 }
 
 func (v *advancedStateVisitor) visitEdgeLayer(ctx *cp.EdgeLayerContext) {
-	layerToSideCoords := map[string][][]sideCoord{
+	layerToSideCoords := map[string][][]parameters.Coord{
 		"up": {
-			{newSideCoord(cube.Up, 0, 1), newSideCoord(cube.Back, 0, 1)},
-			{newSideCoord(cube.Up, 1, 2), newSideCoord(cube.Right, 0, 1)},
-			{newSideCoord(cube.Up, 2, 1), newSideCoord(cube.Front, 0, 1)},
-			{newSideCoord(cube.Up, 1, 0), newSideCoord(cube.Left, 0, 1)},
+			{parameters.NewCoord(v.sideConstructor("Up"), 0, 1), parameters.NewCoord(v.sideConstructor("Back"), 0, 1)},
+			{parameters.NewCoord(v.sideConstructor("Up"), 1, 2), parameters.NewCoord(v.sideConstructor("Right"), 0, 1)},
+			{parameters.NewCoord(v.sideConstructor("Up"), 2, 1), parameters.NewCoord(v.sideConstructor("Front"), 0, 1)},
+			{parameters.NewCoord(v.sideConstructor("Up"), 1, 0), parameters.NewCoord(v.sideConstructor("Left"), 0, 1)},
 		},
 		"middle": {
-			{newSideCoord(cube.Left, 1, 0), newSideCoord(cube.Back, 1, 2)},
-			{newSideCoord(cube.Back, 1, 0), newSideCoord(cube.Right, 1, 2)},
-			{newSideCoord(cube.Right, 1, 0), newSideCoord(cube.Front, 1, 2)},
-			{newSideCoord(cube.Front, 1, 0), newSideCoord(cube.Left, 1, 2)},
+			{parameters.NewCoord(v.sideConstructor("Left"), 1, 0), parameters.NewCoord(v.sideConstructor("Back"), 1, 2)},
+			{parameters.NewCoord(v.sideConstructor("Back"), 1, 0), parameters.NewCoord(v.sideConstructor("Right"), 1, 2)},
+			{parameters.NewCoord(v.sideConstructor("Right"), 1, 0), parameters.NewCoord(v.sideConstructor("Front"), 1, 2)},
+			{parameters.NewCoord(v.sideConstructor("Front"), 1, 0), parameters.NewCoord(v.sideConstructor("Left"), 1, 2)},
 		},
 		"down": {
-			{newSideCoord(cube.Down, 0, 1), newSideCoord(cube.Front, 2, 1)},
-			{newSideCoord(cube.Down, 1, 2), newSideCoord(cube.Right, 2, 1)},
-			{newSideCoord(cube.Down, 2, 1), newSideCoord(cube.Back, 2, 1)},
-			{newSideCoord(cube.Down, 1, 0), newSideCoord(cube.Left, 2, 1)},
+			{parameters.NewCoord(v.sideConstructor("Down"), 0, 1), parameters.NewCoord(v.sideConstructor("Front"), 2, 1)},
+			{parameters.NewCoord(v.sideConstructor("Down"), 1, 2), parameters.NewCoord(v.sideConstructor("Right"), 2, 1)},
+			{parameters.NewCoord(v.sideConstructor("Down"), 2, 1), parameters.NewCoord(v.sideConstructor("Back"), 2, 1)},
+			{parameters.NewCoord(v.sideConstructor("Down"), 1, 0), parameters.NewCoord(v.sideConstructor("Left"), 2, 1)},
 		},
 	}
 	layer := ctx.LayerDef().GetText()
@@ -104,7 +106,7 @@ func (v *advancedStateVisitor) visitEdgeLayer(ctx *cp.EdgeLayerContext) {
 		colors := strings.Split(edge.(*cp.EdgeContext).GetText(), "")
 		for j, c := range colors {
 			sc := layerToSideCoords[layer][i][j]
-			v.sides[sc.side][sc.Row][sc.Col] = color.Color(c)
+			v.sides[sc.Side][sc.Row][sc.Col] = color.Color(c)
 		}
 	}
 }

@@ -3,15 +3,21 @@ package cube
 import (
 	"sort"
 	"strings"
+
+	"github.com/taskat/rubiks-cube/src/models/parameters"
 )
 
 type cornerLocation struct {
-	sides [3]CubeSide
+	sides [3]cubeSide
 	hash  string
 }
 
-func newCornerLocation(s1, s2, s3 CubeSide) cornerLocation {
-	return cornerLocation{sides: [3]CubeSide{s1, s2, s3}, hash: ""}
+func newCornerLocation(s1, s2, s3 parameters.Side) cornerLocation {
+	return cornerLocation{sides: [3]cubeSide{newCubeSide(s1), newCubeSide(s2), newCubeSide(s3)}, hash: ""}
+}
+
+func newCornerLocationFromCubeSides(s1, s2, s3 cubeSide) cornerLocation {
+	return cornerLocation{sides: [3]cubeSide{s1, s2, s3}, hash: ""}
 }
 
 func (c cornerLocation) getHash() string {

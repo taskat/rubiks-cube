@@ -19,3 +19,12 @@ func (s Side) String() string {
 	}
 	return strings.Join(lines, "\n")
 }
+
+func (s Side) clone() Side {
+	side := make(Side, len(s))
+	for i, row := range s {
+		side[i] = make([]color.Color, len(row))
+		copy(side[i], row)
+	}
+	return side
+}

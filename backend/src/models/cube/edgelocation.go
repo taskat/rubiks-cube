@@ -3,15 +3,21 @@ package cube
 import (
 	"sort"
 	"strings"
+
+	"github.com/taskat/rubiks-cube/src/models/parameters"
 )
 
 type edgeLocation struct {
-	sides [2]CubeSide
+	sides [2]cubeSide
 	hash  string
 }
 
-func newEdgeLocation(s1, s2 CubeSide) edgeLocation {
-	return edgeLocation{sides: [2]CubeSide{s1, s2}, hash: ""}
+func newEdgeLocation(s1, s2 parameters.Side) edgeLocation {
+	return edgeLocation{sides: [2]cubeSide{newCubeSide(s1), newCubeSide(s2)}, hash: ""}
+}
+
+func newEdgeLocationFromCubeSides(s1, s2 cubeSide) edgeLocation {
+	return edgeLocation{sides: [2]cubeSide{s1, s2}, hash: ""}
 }
 
 func (e edgeLocation) distance(other edgeLocation) int {
@@ -28,21 +34,21 @@ func (e edgeLocation) distance(other edgeLocation) int {
 	return 1
 }
 
-func (e edgeLocation) getDifferentSides(other edgeLocation) [2]CubeSide {
+func (e edgeLocation) getDifferentSides(other edgeLocation) [2]cubeSide {
 	switch {
 	case e.sides[0] == other.sides[0]:
-		return [2]CubeSide{e.sides[1], other.sides[1]}
+		return [2]cubeSide{e.sides[1], other.sides[1]}
 	case e.sides[0] == other.sides[1]:
-		return [2]CubeSide{e.sides[1], other.sides[0]}
+		return [2]cubeSide{e.sides[1], other.sides[0]}
 	case e.sides[1] == other.sides[0]:
-		return [2]CubeSide{e.sides[0], other.sides[1]}
+		return [2]cubeSide{e.sides[0], other.sides[1]}
 	case e.sides[1] == other.sides[1]:
-		return [2]CubeSide{e.sides[0], other.sides[0]}
+		return [2]cubeSide{e.sides[0], other.sides[0]}
 	}
 	panic("There is more than two different sides")
 }
 
-func (e edgeLocation) getSameSide(other edgeLocation) CubeSide {
+func (e edgeLocation) getSameSide(other edgeLocation) cubeSide {
 	switch {
 	case e.sides[0] == other.sides[0]:
 		return e.sides[0]
@@ -57,7 +63,7 @@ func (e edgeLocation) getSameSide(other edgeLocation) CubeSide {
 }
 
 func (e edgeLocation) getMiddleLocation(other edgeLocation) edgeLocation {
-	newLocation := newEdgeLocation(e.sides[0], e.sides[1])
+	newLocation := newEdgeLocationFromCubeSides(e.sides[0], e.sides[1])
 	newLocation.sides[0] = newLocation.sides[0].getOpposite()
 	if newLocation.hasSameSide(other) {
 		return newLocation

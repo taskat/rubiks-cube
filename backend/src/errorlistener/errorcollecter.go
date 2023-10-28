@@ -1,17 +1,17 @@
 package errorlistener
 
 import (
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
 	eh "github.com/taskat/rubiks-cube/src/errorhandler"
 )
 
 type ErrorCollector struct {
-	antlr.ErrorListener
+	antlr.DefaultErrorListener
 	file string
-	eh   eh.Errorhandler
+	eh   *eh.Errorhandler
 }
 
-func NewErrorCollector(file string, errorHandler eh.Errorhandler) *ErrorCollector {
+func NewErrorCollector(file string, errorHandler *eh.Errorhandler) *ErrorCollector {
 	return &ErrorCollector{file: file, eh: errorHandler}
 }
 

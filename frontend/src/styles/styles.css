@@ -49,10 +49,6 @@ body {
     flex-direction: row;
 }
 
-.moves {
-    background-color: blue;
-}
-
 .errorlist {
     overflow: auto;
 }
@@ -122,4 +118,25 @@ td:nth-child(3) {
 th:last-child,
 td:last-child {
     width: 10%;
+}
+
+.movestitle {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.stepname {
+    font-weight: bold;
+}
+
+.turn {
+    display: inline-block;
+    font-weight: normal;
+    margin-right: 5px;
+}
+
+#moves {
+    overflow-y: auto;
+    flex-wrap: wrap;
+    overflow-x: hidden;
 }

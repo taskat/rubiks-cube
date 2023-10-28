@@ -1,7 +1,7 @@
 package errorlistener
 
 import (
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
 	eh "github.com/taskat/rubiks-cube/src/errorhandler"
 )
 
@@ -10,7 +10,7 @@ type Recognizer interface {
 	RemoveErrorListeners()
 }
 
-func AddCustomErrorListener(to Recognizer, fileName string, eh eh.Errorhandler) {
+func AddCustomErrorListener(to Recognizer, fileName string, eh *eh.Errorhandler) {
 	to.RemoveErrorListeners()
 	to.AddErrorListener(NewErrorCollector(fileName, eh))
 }

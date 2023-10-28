@@ -1,6 +1,6 @@
 package httpserver
 
 type Request struct {
-	Config    string `json:"config"`
-	Algorithm string `json:"algorithm"`
+	Config string `json:"config"`
+	Algo   string `json:"algo"`
 }

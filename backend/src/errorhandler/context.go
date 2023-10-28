@@ -1,7 +1,7 @@
 package errorhandler
 
 import (
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
 )
 
 type Context struct {
@@ -10,6 +10,10 @@ type Context struct {
 
 func NewContext(line, column int) IContext {
 	return &Context{t: *newToken(line, column)}
+}
+
+func NewContextFromTerminal(t antlr.TerminalNode) IContext {
+	return &Context{t: *newToken(t.GetSymbol().GetLine(), t.GetSymbol().GetColumn())}
 }
 
 func (c Context) GetStart() antlr.Token {

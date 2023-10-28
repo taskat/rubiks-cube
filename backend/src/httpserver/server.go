@@ -6,8 +6,10 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/taskat/rubiks-cube/src/algo/handler"
 	"github.com/taskat/rubiks-cube/src/config/handler"
 	eh "github.com/taskat/rubiks-cube/src/errorhandler"
+	"github.com/taskat/rubiks-cube/src/executor"
 )
 
 type Server struct {
@@ -19,6 +21,7 @@ func NewServer() *Server {
 	s := &Server{mux: mux}
 	s.mux.HandleFunc("/", s.check)
 	s.mux.HandleFunc("/config", s.configHandler)
+	s.mux.HandleFunc("/all", s.allHandler)
 	return s
 }
 
@@ -33,6 +36,55 @@ func (s Server) addHeaders(response http.ResponseWriter, request *http.Request) 
 		return
 	}
 	s.mux.ServeHTTP(response, request)
+}
+
+func (s Server) allHandler(response http.ResponseWriter, request *http.Request) {
+	if request.Method != "POST" {
+		response.Header().Set("Allow", "POST")
+		response.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+	body, err := ioutil.ReadAll(request.Body)
+	if err != nil {
+		s.writeError(response, http.StatusBadRequest, err)
+		return
+	}
+	var content Request
+	err = json.Unmarshal(body, &content)
+	if err != nil {
+		s.writeError(response, http.StatusBadRequest, err)
+		return
+	}
+	errorHandler := eh.NewHandler()
+	cube := confighandler.Handle("config.rubiks", string(content.Config), &errorHandler)
+	if len(errorHandler.GetErrors()) != 0 || len(errorHandler.GetWarnings()) != 0 {
+		msg := "There are errors/warnings in the configuration. Skipping algorithm checking and execution."
+		errorHandler.AddInfo(eh.NewContext(0, 0), msg, "algorithm.algo")
+	}
+	algo := algohandler.Handle("algorithm.algo", string(content.Algo), &errorHandler, cube)
+	executor := executor.NewExecutor(&errorHandler)
+	execResult := executor.Execute(cube.Clone(), algo)
+	var messages []eh.Message
+	var turns map[string][]string
+	var steps []string
+	if execResult.IsErr() {
+		newMessage := eh.NewMessage(eh.NewContext(0, 0), "Algorithm execution failed: "+execResult.UnwrapErr().Error(), "algorithm.algo", eh.ERROR)
+		messages = append(messages, newMessage)
+	} else {
+		turns = execResult.Unwrap().Turns
+		steps = execResult.Unwrap().Steps
+		fmt.Println("Turns: ", turns)
+		fmt.Println("Steps: ", steps)
+		messages = append(messages, errorHandler.GetMessages()...)
+		fmt.Println("Messages: ", messages)
+	}
+	result := NewResult(cube, messages, turns, steps)
+	data, err := json.Marshal(result)
+	if err != nil {
+		s.writeError(response, http.StatusInternalServerError, err)
+		return
+	}
+	response.Write(data)
 }
 
 func (s Server) check(response http.ResponseWriter, request *http.Request) {
@@ -57,9 +109,10 @@ func (s Server) configHandler(response http.ResponseWriter, request *http.Reques
 		return
 	}
 	errorHandler := eh.NewHandler()
-	cube := confighandler.Handle("config.rubiks", string(content.Config), errorHandler)
+	cube := confighandler.Handle("config.rubiks", string(content.Config), &errorHandler)
 	messages := errorHandler.GetMessages()
-	result := NewResult(cube, messages)
+	fmt.Println("Messages: ", messages)
+	result := NewResult(cube, messages, map[string][]string{}, []string{})
 	data, err := json.Marshal(result)
 	if err != nil {
 		s.writeError(response, http.StatusInternalServerError, err)
@@ -74,6 +127,6 @@ func (s Server) Start() {
 }
 
 func (s Server) writeError(response http.ResponseWriter, code int, err error) {
-	response.WriteHeader(http.StatusInternalServerError)
+	response.WriteHeader(code)
 	response.Write([]byte(err.Error()))
 }

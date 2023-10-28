@@ -3,20 +3,21 @@ package errorvisitor
 import (
 	"strconv"
 
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
+	"github.com/taskat/rubiks-cube/src/basevisitor"
+	"github.com/taskat/rubiks-cube/src/basevisitor/util"
 	cp "github.com/taskat/rubiks-cube/src/config/parser"
 	eh "github.com/taskat/rubiks-cube/src/errorhandler"
 )
 
 type Visitor struct {
-	fileName            string
+	basevisitor.ErrorVisitor
 	stateDescription    string
 	stateDescriptionCtx eh.IContext
-	eh                  eh.Errorhandler
 }
 
-func NewVisitor(fileName string, errorHandler eh.Errorhandler) *Visitor {
-	return &Visitor{fileName: fileName, eh: errorHandler}
+func NewVisitor(fileName string, errorHandler *eh.Errorhandler) *Visitor {
+	return &Visitor{ErrorVisitor: *basevisitor.NewErrorVisitor(errorHandler, fileName)}
 }
 
 func (v *Visitor) Visit(tree antlr.Tree) {
@@ -28,26 +29,10 @@ func (v *Visitor) Visit(tree antlr.Tree) {
 }
 
 func (v *Visitor) visitConfigFile(ctx *cp.ConfigFileContext) {
-	puzzleDefs := getLines[*cp.PuzzleTypeDefContext](ctx.AllConfigLine())
-	puzzleDef := checkOnlyOneDef(puzzleDefs, "puzzle definition", true, v)
-	if puzzleDef != nil {
-		v.visitPuzzleTypeDef(*puzzleDef)
-	}
-	sizeDefs := getLines[*cp.SizeDefContext](ctx.AllConfigLine())
-	sizeDef := checkOnlyOneDef(sizeDefs, "size definition", true, v)
-	if sizeDef != nil {
-		v.visitSizeDef(*sizeDef)
-	}
-	stateDescriptionDefs := getLines[*cp.StateDescriptionDefContext](ctx.AllConfigLine())
-	stateDescriptionDef := checkOnlyOneDef(stateDescriptionDefs, "state description definition", false, v)
-	if stateDescriptionDef != nil {
-		v.visitStateDescriptionDef(*stateDescriptionDef)
-	}
-	stateDefs := getLines[*cp.StateDefContext](ctx.AllConfigLine())
-	stateDef := checkOnlyOneDef(stateDefs, "state definition", true, v)
-	if stateDef != nil {
-		v.visitStateDef(*stateDef)
-	}
+	visitDef(ctx, "puzzle definition", v, util.CheckOneDef[*cp.PuzzleTypeDefContext], v.visitPuzzleTypeDef)
+	visitDef(ctx, "size definition", v, util.CheckOneDef[*cp.SizeDefContext], v.visitSizeDef)
+	visitDef(ctx, "state description definition", v, util.CheckOptionalDef[*cp.StateDescriptionDefContext], v.visitStateDescriptionDef)
+	visitDef(ctx, "state definition", v, util.CheckOneDef[*cp.StateDefContext], v.visitStateDef)
 }
 
 func (v *Visitor) visitPuzzleTypeDef(ctx *cp.PuzzleTypeDefContext) {
@@ -58,38 +43,38 @@ func (v *Visitor) visitSizeDef(ctx *cp.SizeDefContext) {
 	sizeString := ctx.NUMBER().GetText()
 	size, err := strconv.Atoi(sizeString)
 	if err != nil {
-		v.eh.AddError(ctx, "cannot convert to size (integer)", v.fileName)
+		v.Eh().AddError(ctx, "cannot convert to size (integer)", v.FileName())
 	} else if size != 3 {
-		v.eh.AddError(ctx, "Size can only be 3", v.fileName)
+		v.Eh().AddError(ctx, "Size can only be 3", v.FileName())
 	}
 }
 
 func (v *Visitor) visitState(ctx *cp.StateContext) {
 	if ctx.RANDOM() != nil {
 		if v.stateDescription != "" {
-			v.eh.AddInfo(v.stateDescriptionCtx, "state description can be omitted", v.fileName)
+			v.Eh().AddInfo(v.stateDescriptionCtx, "state description can be omitted", v.FileName())
 		}
 	}
 	errorMsg := "state is not consistent with state description type"
 	if ctx.BeginnerState() != nil {
 		if v.stateDescription != "beginner" {
-			v.eh.AddError(ctx.BeginnerState(), errorMsg, v.fileName)
+			v.Eh().AddError(ctx.BeginnerState(), errorMsg, v.FileName())
 			if v.stateDescriptionCtx != nil {
-				v.eh.AddError(v.stateDescriptionCtx, errorMsg, v.fileName)
+				v.Eh().AddError(v.stateDescriptionCtx, errorMsg, v.FileName())
 			}
 		} else {
-			visitor := newBeginnerStateVisitor(v.fileName, &v.eh)
+			visitor := newBeginnerStateVisitor(v.FileName(), v.Eh())
 			visitor.visitBeginnerState(ctx.BeginnerState().(*cp.BeginnerStateContext))
 		}
 	}
 	if ctx.AdvancedState() != nil {
 		if v.stateDescription != "advanced" {
-			v.eh.AddError(ctx.AdvancedState(), errorMsg, v.fileName)
+			v.Eh().AddError(ctx.AdvancedState(), errorMsg, v.FileName())
 			if v.stateDescriptionCtx != nil {
-				v.eh.AddError(v.stateDescriptionCtx, errorMsg, v.fileName)
+				v.Eh().AddError(v.stateDescriptionCtx, errorMsg, v.FileName())
 			}
 		} else {
-			visitor := newAdvancedStateVisitor(v.fileName, &v.eh)
+			visitor := newAdvancedStateVisitor(v.FileName(), v.Eh())
 			visitor.visitAdvancedState(ctx.AdvancedState().(*cp.AdvancedStateContext))
 		}
 	}
@@ -104,30 +89,13 @@ func (v *Visitor) visitStateDef(ctx *cp.StateDefContext) {
 	v.visitState(ctx.State().(*cp.StateContext))
 }
 
-func checkOnlyOneDef[def antlr.ParserRuleContext](defs []def, defType string, necessary bool, v *Visitor) *def {
-	if len(defs) > 1 {
-		for _, d := range defs {
-			v.eh.AddError(d, "Multiple "+defType+" found", v.fileName)
-		}
-		return nil
-	} else if necessary && len(defs) == 0 {
-		ctx := eh.NewContext(-1, -1)
-		v.eh.AddError(ctx, "No "+defType+" found", v.fileName)
-		return nil
-	}
-	if necessary || len(defs) == 1 {
-		return &defs[0]
+func visitDef[defType antlr.ParserRuleContext](ctx *cp.ConfigFileContext, defName string, v util.Visitor,
+	checkDefs func([]defType, string, util.Visitor, eh.IContext) *defType, visitGoal func(defType)) *defType {
+	defs := util.GetLines[defType](ctx.AllConfigLine())
+	def := checkDefs(defs, defName, v, ctx)
+	if def != nil {
+		visitGoal(*def)
+		return def
 	}
 	return nil
-}
-
-func getLines[def any](lines []cp.IConfigLineContext) []def {
-	result := make([]def, 0, 1)
-	for _, l := range lines {
-		line := l.(*cp.ConfigLineContext).GetChild(0)
-		if line, ok := line.(def); ok {
-			result = append(result, line)
-		}
-	}
-	return result
 }

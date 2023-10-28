@@ -3,13 +3,17 @@ package generatorvisitor
 import (
 	"strconv"
 
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
 	cp "github.com/taskat/rubiks-cube/src/config/parser"
 	"github.com/taskat/rubiks-cube/src/models"
+	"github.com/taskat/rubiks-cube/src/models/cube"
+	"github.com/taskat/rubiks-cube/src/models/parameters"
 )
 
 type Visitor struct {
-	size int
+	size            int
+	puzzle          models.Puzzle
+	sideConstructor func(string) parameters.Side
 }
 
 func NewVisitor() Visitor {
@@ -26,16 +30,28 @@ func (v *Visitor) Visit(tree antlr.Tree) models.Puzzle {
 
 func (v *Visitor) visitConfigFile(ctx *cp.ConfigFileContext) models.Puzzle {
 	for _, line := range ctx.AllConfigLine() {
-		stateDef := line.(*cp.ConfigLineContext).StateDef()
-		if stateDef != nil {
-			return v.visitStateDef(stateDef.(*cp.StateDefContext))
-		}
-		sizeDef := line.(*cp.ConfigLineContext).SizeDef()
-		if sizeDef != nil {
-			v.visitSizeDef(sizeDef.(*cp.SizeDefContext))
-		}
+		v.visitConfigLine(line.(*cp.ConfigLineContext))
 	}
-	panic("No state definition found!")
+	return v.puzzle
+}
+
+func (v *Visitor) visitConfigLine(ctx *cp.ConfigLineContext) {
+	if ctx.PuzzleTypeDef() != nil {
+		v.visitPuzzleTypeDef(ctx.PuzzleTypeDef().(*cp.PuzzleTypeDefContext))
+	}
+	if ctx.SizeDef() != nil {
+		v.visitSizeDef(ctx.SizeDef().(*cp.SizeDefContext))
+	}
+	if ctx.StateDef() != nil {
+		v.puzzle = v.visitStateDef(ctx.StateDef().(*cp.StateDefContext))
+	}
+}
+
+func (v *Visitor) visitPuzzleTypeDef(ctx *cp.PuzzleTypeDefContext) {
+	if ctx.PuzzleType().CUBE() != nil {
+		puzzle := cube.NewCube(v.size)
+		v.sideConstructor = puzzle.SideConstructor()
+	}
 }
 
 func (v *Visitor) visitSizeDef(ctx *cp.SizeDefContext) {
@@ -48,10 +64,10 @@ func (v *Visitor) visitState(ctx *cp.StateContext) models.Puzzle {
 		panic("random not implemented yet!")
 	}
 	if ctx.AdvancedState() != nil {
-		visitor := newAdvancedStateVisitor()
+		visitor := newAdvancedStateVisitor(v.sideConstructor)
 		return visitor.visitAdvancedState(ctx.AdvancedState().(*cp.AdvancedStateContext))
 	}
-	visitor := newBeginnerStateVisitor(v.size)
+	visitor := newBeginnerStateVisitor(v.size, v.sideConstructor)
 	return visitor.visitBeginnerState(ctx.BeginnerState().(*cp.BeginnerStateContext))
 }
 

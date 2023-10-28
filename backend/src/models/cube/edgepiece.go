@@ -2,6 +2,7 @@ package cube
 
 import (
 	"github.com/taskat/rubiks-cube/src/color"
+	"github.com/taskat/rubiks-cube/src/models/parameters"
 )
 
 type edgePiece struct {
@@ -11,11 +12,11 @@ type edgePiece struct {
 	c            *Cube
 }
 
-func newEdgePiece(c *Cube, coords []sideCoord) edgePiece {
-	location := newEdgeLocation(coords[0].side, coords[1].side)
-	colors := [2]color.Color{c.sides[coords[0].side][coords[0].Row][coords[0].Col],
-		c.sides[coords[1].side][coords[1].Row][coords[1].Col]}
-	goalLocation := newEdgeLocation(c.getGoalSide(colors[0]), c.getGoalSide(colors[1]))
+func newEdgePiece(c *Cube, coords []parameters.Coord) edgePiece {
+	location := newEdgeLocation(coords[0].Side, coords[1].Side)
+	colors := [2]color.Color{c.sides[newCubeSide(coords[0].Side)][coords[0].Row][coords[0].Col],
+		c.sides[newCubeSide(coords[1].Side)][coords[1].Row][coords[1].Col]}
+	goalLocation := newEdgeLocationFromCubeSides(c.getGoalSide(colors[0]), c.getGoalSide(colors[1]))
 	return edgePiece{location, colors, goalLocation, c}
 }
 
@@ -45,17 +46,55 @@ func (e edgePiece) isFlipped() bool {
 	return e.c.getGoalSide(e.colors[1]) != sameSide
 }
 
-var edgeCoords = [][]sideCoord{
-	{newSideCoord(Up, 0, 1), newSideCoord(Back, 0, 1)},
-	{newSideCoord(Up, 1, 2), newSideCoord(Right, 0, 1)},
-	{newSideCoord(Up, 2, 1), newSideCoord(Front, 0, 1)},
-	{newSideCoord(Up, 1, 0), newSideCoord(Left, 0, 1)},
-	{newSideCoord(Front, 1, 2), newSideCoord(Right, 1, 0)},
-	{newSideCoord(Right, 1, 2), newSideCoord(Back, 1, 0)},
-	{newSideCoord(Back, 1, 2), newSideCoord(Left, 1, 0)},
-	{newSideCoord(Left, 1, 2), newSideCoord(Front, 1, 0)},
-	{newSideCoord(Down, 0, 1), newSideCoord(Front, 2, 1)},
-	{newSideCoord(Down, 1, 2), newSideCoord(Right, 2, 1)},
-	{newSideCoord(Down, 2, 1), newSideCoord(Back, 2, 1)},
-	{newSideCoord(Down, 1, 0), newSideCoord(Left, 2, 1)},
+func getEdgeCoords() [][]parameters.Coord {
+	coords := make([][]parameters.Coord, 12)
+	coords[0] = []parameters.Coord{
+		parameters.NewCoord(cubeSide("Up"), 0, 1),
+		parameters.NewCoord(cubeSide("Back"), 0, 1),
+	}
+	coords[1] = []parameters.Coord{
+		parameters.NewCoord(cubeSide("Up"), 1, 2),
+		parameters.NewCoord(cubeSide("Right"), 0, 1),
+	}
+	coords[2] = []parameters.Coord{
+		parameters.NewCoord(cubeSide("Up"), 2, 1),
+		parameters.NewCoord(cubeSide("Front"), 0, 1),
+	}
+	coords[3] = []parameters.Coord{
+		parameters.NewCoord(cubeSide("Up"), 1, 0),
+		parameters.NewCoord(cubeSide("Left"), 0, 1),
+	}
+	coords[4] = []parameters.Coord{
+		parameters.NewCoord(cubeSide("Down"), 0, 1),
+		parameters.NewCoord(cubeSide("Front"), 2, 1),
+	}
+	coords[5] = []parameters.Coord{
+		parameters.NewCoord(cubeSide("Down"), 1, 2),
+		parameters.NewCoord(cubeSide("Right"), 2, 1),
+	}
+	coords[6] = []parameters.Coord{
+		parameters.NewCoord(cubeSide("Down"), 2, 1),
+		parameters.NewCoord(cubeSide("Back"), 2, 1),
+	}
+	coords[7] = []parameters.Coord{
+		parameters.NewCoord(cubeSide("Down"), 1, 0),
+		parameters.NewCoord(cubeSide("Left"), 2, 1),
+	}
+	coords[8] = []parameters.Coord{
+		parameters.NewCoord(cubeSide("Left"), 1, 0),
+		parameters.NewCoord(cubeSide("Back"), 1, 2),
+	}
+	coords[9] = []parameters.Coord{
+		parameters.NewCoord(cubeSide("Left"), 1, 2),
+		parameters.NewCoord(cubeSide("Front"), 1, 0),
+	}
+	coords[10] = []parameters.Coord{
+		parameters.NewCoord(cubeSide("Right"), 1, 0),
+		parameters.NewCoord(cubeSide("Front"), 1, 2),
+	}
+	coords[11] = []parameters.Coord{
+		parameters.NewCoord(cubeSide("Right"), 1, 2),
+		parameters.NewCoord(cubeSide("Back"), 1, 0),
+	}
+	return coords
 }

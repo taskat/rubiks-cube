@@ -20,7 +20,7 @@ const BEFORE_DELAY = 2000;
 const AFTER_DELAY = 2000;
 
 export default class Simulator{
-  animationSpeed: number = 750;
+  animationSpeed: number = 100;
   model: THREE.BufferGeometry = new THREE.BufferGeometry();
   modelName: string = "/cube-bevelled.glb";
   cubeSize: number = 3;
@@ -34,6 +34,7 @@ export default class Simulator{
   animationMixer: THREE.AnimationMixer = new THREE.AnimationMixer(this.animationGroup);
   colorPalette: Map<Side, string[][]> = ColorsChecker;
   cube: Cube = new Cube(this.cubeSize, this.colorPalette);
+  moves: Move[] = [];
   constructor() {}
 
   makeRotationMatrix4(rotationMatrix3: math.Matrix): THREE.Matrix4 {
@@ -51,6 +52,11 @@ export default class Simulator{
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(container.offsetWidth, container.offsetHeight);
     container.appendChild(this.renderer.domElement);
+  }
+
+  addMoves(moves: string[]) {
+    this.moves = moves.map((move: string) => this.cube.moves.get(move)) as Move[];
+    console.log("moves:", this.moves);
   }
 
   addResizeListener(w: number, h: number) {
@@ -173,10 +179,8 @@ export default class Simulator{
 
   scramble() {
     this.recreateUiPieces();
-    // const moves = [this.cube.moves.get("S")];
-    const moves: Move[] = [];
     this.resetUiPieces(this.cube);
-    setTimeout(this.animateMoves.bind(this), BEFORE_DELAY, moves);
+    setTimeout(this.animateMoves.bind(this), BEFORE_DELAY, this.moves);
   }
 
   resetUiPieces(cube: Cube) {

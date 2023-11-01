@@ -1,12 +1,4 @@
-const advanced = `puzzle: cube
-size: 2
-state description: advanced
-state:
-    corners:
-        Up: boy wbr ygr gow
-        Down: wrg gyo obw rby`
-
-const algo = `helpers:
+helpers:
     upsideDown: x2
 steps:
     step white_side:
@@ -60,7 +52,3 @@ steps:
         goal: orientation(Up, Front, Right)
         runs: 3
         do: U        
-`
-
-export const advancedConfig = advanced;
-export const algorithm = algo;

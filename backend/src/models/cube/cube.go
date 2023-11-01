@@ -11,18 +11,15 @@ import (
 )
 
 type Cube struct {
-	sides map[cubeSide]Side
-	size  int
-	moves map[string]move
+	sides       map[cubeSide]Side
+	size        int
+	moves       map[string]move
+	orientation *orientation
 }
 
 func NewCube(size int) *Cube {
-	c := Cube{
-		sides: make(map[cubeSide]Side, 6),
-		size:  size,
-	}
-	c.generateMoves()
-	return &c
+	sides := make(map[parameters.Side]Side, 6)
+	return NewWithSides(sides, size)
 }
 
 func NewWithSides(sides map[parameters.Side]Side, size int) *Cube {
@@ -33,6 +30,9 @@ func NewWithSides(sides map[parameters.Side]Side, size int) *Cube {
 	c := Cube{
 		sides: cubeSides,
 		size:  size,
+	}
+	if size%2 == 0 {
+		c.orientation = newOrientation()
 	}
 	c.generateMoves()
 	return &c
@@ -47,7 +47,7 @@ func (c *Cube) Clone() models.Puzzle {
 	for name, move := range c.moves {
 		moves[name] = move
 	}
-	return &Cube{sides: sides, size: c.size, moves: moves}
+	return &Cube{sides: sides, size: c.size, moves: moves, orientation: c.orientation}
 }
 
 func (c *Cube) generateMoves() {
@@ -119,6 +119,10 @@ func (c *Cube) GetPieceCoords(piece parameters.Piece) []parameters.Coord {
 			return c.sortCoordsByPiece(coords, piece)
 		}
 	}
+	fmt.Println(piece)
+	fmt.Println(possibleCoords)
+	c.pieceAtCoords(piece, possibleCoords[0], true)
+	fmt.Println(c.orientation)
 	panic("No coords found")
 }
 
@@ -151,10 +155,23 @@ func posAtCoords(pos parameters.Position, coords []parameters.Coord) bool {
 	return true
 }
 
-func (c *Cube) pieceAtCoords(piece parameters.Piece, coords []parameters.Coord) bool {
+func (c *Cube) getSideColor(side parameters.Side) color.Color {
+	if c.orientation == nil {
+		middle := c.size / 2
+		return c.GetColor(parameters.NewCoord(side, middle, middle))
+	}
+	return c.orientation.getColor(side)
+}
+
+func (c *Cube) pieceAtCoords(piece parameters.Piece, coords []parameters.Coord, log ...bool) bool {
 	colors := make([]color.Color, 0, len(piece.Sides))
 	for _, sideName := range piece.Sides {
-		colors = append(colors, c.GetColor(parameters.NewCoord(sideName, 1, 1)))
+		colors = append(colors, c.getSideColor(sideName))
+	}
+	if log != nil && log[0] {
+		fmt.Println(piece)
+		fmt.Println(coords)
+		fmt.Println(colors)
 	}
 	for _, coord := range coords {
 		color := c.GetColor(coord)
@@ -186,7 +203,7 @@ func (c *Cube) sortCoordsByPiece(coords []parameters.Coord, piece parameters.Pie
 	sorted := make([]parameters.Coord, len(coords))
 	for i, side := range piece.Sides {
 		for _, coord := range coords {
-			if c.GetColor(coord).Equals(c.GetColor(parameters.NewCoord(side, 1, 1))) {
+			if c.GetColor(coord).Equals(c.getSideColor(side)) {
 				sorted[i] = coord
 				break
 			}
@@ -233,6 +250,9 @@ func (c *Cube) turn(name string) {
 			moved[nextCoord] = nextColor
 			c.sides[newCubeSide(nextCoord.Side)][nextCoord.Row][nextCoord.Col] = currentColor
 		}
+	}
+	if c.orientation != nil {
+		c.orientation.turn(name)
 	}
 }
 

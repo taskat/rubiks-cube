@@ -99,6 +99,17 @@ export default class Cube {
     }
     const sideCoord = piece.getSideCoord(side);
     if (sideCoord) {
+      let side2 = this.colorPalette.get(side);
+      if (!side2) {
+        console.log(side);
+        console.log(piece.coord);
+      }
+      let row = (side2 as string[][])[sideCoord.i];
+      if (!row) {
+        console.log(sideCoord);
+        console.log(side);
+        console.log(piece.coord);
+      }
       let color = (this.colorPalette.get(side) as string[][])[sideCoord.i][sideCoord.j]
       let color2 = COLORS.get(color);
       if (!color2) {

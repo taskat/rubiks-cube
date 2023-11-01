@@ -158,7 +158,9 @@ func (mg *moveGenerator) getSideCycles(side cubeSide) []cycle {
 			parameters.NewCoord(side, 2, 1), parameters.NewCoord(side, 1, 0),
 		})
 	}
-	cycles = append(cycles, cycle{parameters.NewCoord(side, 1, 1)})
+	if mg.size%2 == 1 && mg.size > 2 {
+		cycles = append(cycles, cycle{parameters.NewCoord(side, 1, 1)})
+	}
 	return cycles
 }
 

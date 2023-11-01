@@ -113,6 +113,7 @@ class App {
     let algo = this.editor.getText("algo");
     this.httpClient.postAll(config, algo).then((response) => {
       this.simulator.colorPalette = response.colorPalette;
+      this.simulator.cubeSize = response.size;
       this.updateErrors(response.errors);
       this.simulator.recreateUiPieces();
       this.addMoves(response.turns);

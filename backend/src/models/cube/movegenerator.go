@@ -1,6 +1,8 @@
 package cube
 
 import (
+	"fmt"
+
 	"github.com/taskat/rubiks-cube/src/models/parameters"
 )
 
@@ -28,6 +30,25 @@ func (mg *moveGenerator) generateAllMoves() map[string]move {
 	return mg.moves
 }
 
+func (mg *moveGenerator) generateNames(basics []string) []string {
+	half := mg.size / 2
+	names := make([]string, 0, mg.size)
+	names = append(names, basics[0])
+	for i := 2; i <= half; i++ {
+		newName := fmt.Sprintf("%d%s", i, basics[0])
+		names = append(names, newName)
+	}
+	if mg.size%2 == 1 {
+		names = append(names, basics[1])
+	}
+	for i := half; i >= 2; i-- {
+		newName := fmt.Sprintf("%d%s", i, basics[2])
+		names = append(names, newName)
+	}
+	names = append(names, basics[2])
+	return names
+}
+
 func (mg *moveGenerator) generateXMoves() {
 	getSlices := func(col int) [4][]parameters.Coord {
 		slices := [4][]parameters.Coord{}
@@ -39,11 +60,7 @@ func (mg *moveGenerator) generateXMoves() {
 		}
 		return slices
 	}
-	names := []string{"L", "M", "R"}
-	if (mg.size % 2) == 0 {
-		middle := mg.size / 2
-		names = append(names[:middle], names[middle+1:]...)
-	}
+	names := mg.generateNames([]string{"L", "M", "R"})
 	for i := 0; i < mg.size; i++ {
 		slices := getSlices(i)
 		cycles := mg.getSliceCycles(slices)
@@ -78,11 +95,7 @@ func (mg *moveGenerator) generateYMoves() {
 		}
 		return slices
 	}
-	names := []string{"U", "E", "D"}
-	if (mg.size % 2) == 0 {
-		middle := mg.size / 2
-		names = append(names[:middle], names[middle+1:]...)
-	}
+	names := mg.generateNames([]string{"U", "E", "D"})
 	for i := 0; i < mg.size; i++ {
 		slices := getSlices(i)
 		cycles := mg.getSliceCycles(slices)
@@ -117,11 +130,7 @@ func (mg *moveGenerator) generateZMoves() {
 		}
 		return slices
 	}
-	names := []string{"F", "S", "B"}
-	if (mg.size % 2) == 0 {
-		middle := mg.size / 2
-		names = append(names[:middle], names[middle+1:]...)
-	}
+	names := mg.generateNames([]string{"F", "S", "B"})
 	for i := 0; i < mg.size; i++ {
 		slices := getSlices(i)
 		cycles := mg.getSliceCycles(slices)

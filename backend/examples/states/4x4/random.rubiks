@@ -1,0 +1,34 @@
+puzzle: cube
+size: 4
+state description: beginner
+state:
+    Front:
+        y y y r
+        g r b y
+        r w w o
+        b r y g
+    Up: 
+        g r y b
+        b o y b
+        y y g y
+        r o b w
+    Right: 
+        b r w y
+        b y r w
+        b o g b
+        o w w r
+    Left: 
+        w w g g
+        o w r w
+        g b b g
+        y b g o
+    Back: 
+        o o w r
+        o b r g
+        r y g w
+        b g g g
+    Down: 
+        w b r w
+        r g o o
+        o w o r
+        o y o y

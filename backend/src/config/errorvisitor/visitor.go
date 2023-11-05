@@ -1,6 +1,7 @@
 package errorvisitor
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
@@ -44,10 +45,12 @@ func (v *Visitor) visitSizeDef(ctx *cp.SizeDefContext) {
 	sizeString := ctx.NUMBER().GetText()
 	var err error
 	v.size, err = strconv.Atoi(sizeString)
+	min := 2
+	max := 4
 	if err != nil {
 		v.Eh().AddError(ctx, "cannot convert to size (integer)", v.FileName())
-	} else if v.size > 3 || v.size < 2 {
-		v.Eh().AddError(ctx, "Size has tp be >1 and <4", v.FileName())
+	} else if v.size < min || v.size > max {
+		v.Eh().AddError(ctx, fmt.Sprintf("Size has to be >=%d and <=%d", min, max), v.FileName())
 	}
 }
 

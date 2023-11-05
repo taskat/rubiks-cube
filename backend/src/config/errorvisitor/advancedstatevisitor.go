@@ -50,9 +50,11 @@ func (v *advancedStateVisitor) checkColors(ctx *cp.AdvancedStateContext) {
 }
 
 func (v *advancedStateVisitor) visitAdvancedState(ctx *cp.AdvancedStateContext) {
-	fmt.Println("visitAdvancedState")
-	fmt.Println("corners", ctx.Corners())
-	fmt.Println("edges", ctx.Edges())
+	if v.size > 3 {
+		v.valid = false
+		v.Eh().AddError(ctx, "Advanced description only valid for 2x2x2 and 3x3x3", v.FileName())
+		return
+	}
 	v.visitCorners(ctx.Corners().(*cp.CornersContext))
 	if v.size > 2 {
 		v.visitEdges(ctx.Edges().(*cp.EdgesContext))

@@ -102,7 +102,7 @@ func (v *boolExprVisitor) visitExpr(ctx *ap.ExprContext) {
 }
 
 func (v *boolExprVisitor) visitFunctionalExpr(ctx *ap.FunctionalExprContext) {
-	paramVisitor := newParamVisitor(v.ErrorVisitor, v.constraint.Sides, v.ts, nil)
+	paramVisitor := newParamVisitor(v.ErrorVisitor, v.constraint.Sides, v.ts, nil, *v.constraint)
 	v.nested = true
 	v.listElementType = paramVisitor.visitList(ctx.List().(*ap.ListContext)).(listType).elemType
 	defer func() {
@@ -115,9 +115,9 @@ func (v *boolExprVisitor) visitFunctionalExpr(ctx *ap.FunctionalExprContext) {
 func (v *boolExprVisitor) visitParameter(ctx *ap.ParameterContext) iType {
 	var visitor *paramVisitor
 	if v.nested {
-		visitor = newParamVisitor(v.ErrorVisitor, v.constraint.Sides, v.ts, v.listElementType)
+		visitor = newParamVisitor(v.ErrorVisitor, v.constraint.Sides, v.ts, v.listElementType, *v.constraint)
 	} else {
-		visitor = newParamVisitor(v.ErrorVisitor, v.constraint.Sides, v.ts, nil)
+		visitor = newParamVisitor(v.ErrorVisitor, v.constraint.Sides, v.ts, nil, *v.constraint)
 	}
 	return visitor.visitParameter(ctx)
 }

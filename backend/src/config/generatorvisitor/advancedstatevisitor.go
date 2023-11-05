@@ -1,6 +1,7 @@
 package generatorvisitor
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/taskat/rubiks-cube/src/color"
@@ -32,6 +33,9 @@ func (v *advancedStateVisitor) emptySide() cube.Side {
 }
 
 func (v *advancedStateVisitor) visitAdvancedState(ctx *cp.AdvancedStateContext) models.Puzzle {
+	if v.size > 3 {
+		panic(fmt.Sprintf("Size %d too big for advanced state", v.size))
+	}
 	sideToColor := map[parameters.Side]string{
 		v.sideConstructor("Front"): "b",
 		v.sideConstructor("Back"):  "g",

@@ -76,9 +76,13 @@ func (c *Cube) getCornerPieces() []cornerPiece {
 	return cornerPieces
 }
 
-func (c *Cube) getEdgePieces() []edgePiece {
-	edgePieces := make([]edgePiece, 0, 12)
-	for _, edge := range getEdgeCoords() {
+func (c *Cube) getMiddleEdgePieces() []edgePiece {
+	edgePieces := make([]edgePiece, 0, 12*(c.size-2))
+	middle := c.size / 2
+	for _, edge := range getEdgeCoords(c.size) {
+		if edge[0].Row != middle || edge[0].Col != middle {
+			continue
+		}
 		edgePieces = append(edgePieces, newEdgePiece(c, edge))
 	}
 	return edgePieces
@@ -141,7 +145,7 @@ func (c *Cube) getPossibleCoords(length int) [][]parameters.Coord {
 	case 3:
 		return getCornerCoords(c.size)
 	case 2:
-		return getEdgeCoords()
+		return getEdgeCoords(c.size)
 	}
 	panic("Invalid length")
 }

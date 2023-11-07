@@ -66,7 +66,7 @@ func (v *validator) checkCornerCycles() int {
 }
 
 func (v *validator) checkEdgeCycles() int {
-	edgePiecesArray := v.cube.getEdgePieces()
+	edgePiecesArray := v.cube.getMiddleEdgePieces()
 	edgePieces := make(map[string]edgePiece, len(edgePiecesArray))
 	for _, piece := range edgePiecesArray {
 		edgePieces[piece.location.getHash()] = piece
@@ -93,7 +93,7 @@ func (v *validator) checkEdgeCycles() int {
 }
 
 func (v *validator) checkEdgeFlips() []string {
-	edgePieces := v.cube.getEdgePieces()
+	edgePieces := v.cube.getMiddleEdgePieces()
 	moves := 0
 	for _, piece := range edgePieces {
 		moves += piece.movesToGoal()

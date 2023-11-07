@@ -140,7 +140,7 @@ func (v *paramVisitor) visitSingleNode(ctx *ap.SingleNodeContext) iType {
 	case 1:
 		v.Eh().AddError(ctx, "Middle piece/position cannot be part of singleNode", v.FileName())
 	case 2:
-		if ctx.NUMBER() == nil {
+		if ctx.NUMBER(0) == nil {
 			if v.constraint.Size > 3 {
 				v.Eh().AddError(ctx, "Edge piece/position must have index for cubes greater than 3x3x3", v.FileName())
 			}
@@ -148,14 +148,14 @@ func (v *paramVisitor) visitSingleNode(ctx *ap.SingleNodeContext) iType {
 			if v.constraint.Size == 2 {
 				v.Eh().AddError(ctx, "Edge piece/position cannot have index for 2x2x2 cube", v.FileName())
 			} else if v.constraint.Size == 3 {
-				index := ctx.NUMBER().GetText()
+				index := ctx.NUMBER(0).GetText()
 				if index != "0" {
 					v.Eh().AddError(ctx, "Edge piece/position index must be 0 (or emitted) for 3x3x3 cube", v.FileName())
 				}
 			}
 		}
 	case 3:
-		if ctx.NUMBER() != nil {
+		if ctx.NUMBER(0) != nil {
 			v.Eh().AddError(ctx, "Corner piece/position cannot have index", v.FileName())
 		}
 	}

@@ -138,24 +138,30 @@ func (v *paramVisitor) visitSingleNode(ctx *ap.SingleNodeContext) iType {
 	numberOfSides := v.visitSides(ctx.Sides().(*ap.SidesContext))
 	switch numberOfSides {
 	case 1:
-		v.Eh().AddError(ctx, "Middle piece/position cannot be part of singleNode", v.FileName())
+		v.Eh().AddError(ctx, "Center piece/position cannot be part of singleNode", v.FileName())
 	case 2:
-		if ctx.NUMBER(0) == nil {
-			if v.constraint.Size > 3 {
-				v.Eh().AddError(ctx, "Edge piece/position must have index for cubes greater than 3x3x3", v.FileName())
+		switch {
+		case ctx.NUMBER() != nil && v.constraint.Size == 2:
+			v.Eh().AddError(ctx, "Edge piece/position cannot have index for 2x2x2 cube", v.FileName())
+		case ctx.NUMBER() != nil && v.constraint.Size == 3:
+			indexString := ctx.NUMBER().GetText()
+			if indexString != "0" {
+				v.Eh().AddError(ctx, "Edge piece/position index must be 0 (or emitted) for 3x3x3 cube", v.FileName())
 			}
-		} else {
-			if v.constraint.Size == 2 {
-				v.Eh().AddError(ctx, "Edge piece/position cannot have index for 2x2x2 cube", v.FileName())
-			} else if v.constraint.Size == 3 {
-				index := ctx.NUMBER(0).GetText()
-				if index != "0" {
-					v.Eh().AddError(ctx, "Edge piece/position index must be 0 (or emitted) for 3x3x3 cube", v.FileName())
-				}
+		case ctx.NUMBER() == nil && v.constraint.Size > 3:
+			v.Eh().AddError(ctx, "Edge piece/position must have index for cubes greater than 3x3x3", v.FileName())
+		case ctx.NUMBER() != nil && v.constraint.Size > 3:
+			indexString := ctx.NUMBER().GetText()
+			index, err := strconv.Atoi(indexString)
+			if err != nil {
+				panic("Invalid index")
+			}
+			if index < 0 || index > v.constraint.Size-3 {
+				v.Eh().AddError(ctx, fmt.Sprintf("Edge piece/position index must be between 0 and %d", v.constraint.Size-3), v.FileName())
 			}
 		}
 	case 3:
-		if ctx.NUMBER(0) != nil {
+		if ctx.NUMBER() != nil {
 			v.Eh().AddError(ctx, "Corner piece/position cannot have index", v.FileName())
 		}
 	}

@@ -32,7 +32,7 @@ functionalExpr: function LPAREN boolExpr COMMA list RPAREN;
 function: ALL | ANY | NONE;
 parameter: singleNode | node | piece | position | coord | list | QUESTIONMARK;
 
-singleNode: sides (NUMBER NUMBER?)?;
+singleNode: sides NUMBER?;
 node: LPAREN singleNode RPAREN;
 piece: PIECE node;
 position: (POS | POSITION) node;

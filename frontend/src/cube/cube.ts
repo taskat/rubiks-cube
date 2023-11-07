@@ -43,20 +43,32 @@ export default class Cube {
     this.pieces = moves.reduce((pieces, move) => move.makeMove(pieces), this.pieces);
   }
 
+  generateNames(basics: string[]): string[] {
+    const half = this.size / 2;
+    let names: string[] = [];
+    names.push(basics[0]);
+    for (let i = 2; i <= half; i++) {
+      names.push(`${i}${basics[0]}`);
+    }
+    if (this.size % 2 === 1) {
+      names.push(basics[1]);
+    }
+    for (let i = half; i >= 2; i--) {
+      names.push(`${i}${basics[2]}`);
+    }
+    names.push(basics[2]);
+    return names
+  }
+
   generateMoves(): Move[] {
     const angles = [90, 180, 270];
     const xRotationMatrices3 = angles.map(rotateX);
     const yRotationMatrices3 = angles.map(rotateY);
     const zRotationMatrices3 = angles.map(rotateZ);
     const allCoordsList = this.cubeData.makeAllCoordsList();
-    const toRemove = this.size % 2 === 0 ? 1 : 0;
-    const middle = Math.floor(this.size / 2);
-    const xNames = ["L", "M", "R"]
-    xNames.splice(middle, toRemove);
-    const yNames = ["D", "E", "U"]
-    yNames.splice(middle, toRemove);
-    const zNames = ["B", "S", "F"]
-    zNames.splice(middle, toRemove);
+    const xNames = this.generateNames(["L", "M", "R"]);
+    const yNames = this.generateNames(["D", "E", "U"]);
+    const zNames = this.generateNames(["B", "S", "F"]);
     const builders: MoveBuilder[] = [
       ...this.cubeData.values.map((xSlice, index) => new MoveBuilder(xRotationMatrices3, allCoordsList.xSlice(xSlice), xNames[index])),
       ...this.cubeData.values.map((ySlice, index) => new MoveBuilder(yRotationMatrices3, allCoordsList.ySlice(ySlice), yNames[index])),
@@ -73,7 +85,7 @@ export default class Cube {
       new MoveBuilder(zRotationMatrices3, allCoordsList, "z"),
     ];
     const toReverse = ["U", "R", "B", "Uw", "Rw", "Bw", "x", "y"];
-    builders.forEach(builder => { 
+    builders.forEach(builder => {
       if (toReverse.includes(builder.name)) {
         builder.reverse();
       }
@@ -118,7 +130,7 @@ export default class Cube {
         console.log(piece.coord);
       }
       return COLORS.get(color) as THREE.Color;
-    } 
+    }
     return COLORS.get("-") as THREE.Color;
   }
 

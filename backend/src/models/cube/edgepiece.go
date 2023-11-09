@@ -48,7 +48,7 @@ func (e edgePiece) isFlipped() bool {
 
 func getEdgeCoords(size int) [][]parameters.Coord {
 	perEdge := size - 2
-	coords := make([][]parameters.Coord, 12*perEdge)
+	coords := make([][]parameters.Coord, 0, 12*perEdge)
 	inverse := func(i int) int {
 		return size - i - 1
 	}

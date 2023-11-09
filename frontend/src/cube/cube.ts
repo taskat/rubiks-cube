@@ -84,7 +84,7 @@ export default class Cube {
       new MoveBuilder(yRotationMatrices3, allCoordsList, "y"),
       new MoveBuilder(zRotationMatrices3, allCoordsList, "z"),
     ];
-    const toReverse = ["U", "R", "B", "Uw", "Rw", "Bw", "x", "y"];
+    const toReverse = ["U", "R", "B", "2U", "2R", "2B", "x", "y"];
     builders.forEach(builder => {
       if (toReverse.includes(builder.name)) {
         builder.reverse();

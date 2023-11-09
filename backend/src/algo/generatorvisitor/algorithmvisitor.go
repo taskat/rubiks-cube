@@ -3,6 +3,7 @@ package generatorvisitor
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	ap "github.com/taskat/rubiks-cube/src/algo/parser"
 	"github.com/taskat/rubiks-cube/src/symboltable"
@@ -34,9 +35,11 @@ func (v *algorithmVisitor) visitTurn(ctx *ap.TurnContext) []string {
 		if len(moves) > 1 {
 			return moves
 		}
+		name = strings.ReplaceAll(name, "(", "")
+		name = strings.ReplaceAll(name, ")", "")
 		return []string{ctx.GetText()}
 	}
-	repeat, _ := strconv.Atoi(ctx.NUMBER().GetText())
+	repeat, _ := strconv.Atoi(ctx.NUMBER(0).GetText())
 	moves := v.visitAlgorithm(ctx.Algorithm().(*ap.AlgorithmContext))
 	expanded := make([]string, len(moves)*repeat)
 	for i := 0; i < repeat; i++ {

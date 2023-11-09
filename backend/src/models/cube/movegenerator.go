@@ -154,21 +154,47 @@ func (mg *moveGenerator) generateZMoves() {
 	mg.addMove(move{cycles: fullCubeCycles, steps: 1}, "z")
 }
 
+func cycleNumber(size int) int {
+	cycles := 0
+	for i := size - 1; i >= 1; i -= 2 {
+		cycles += i
+	}
+	if size%2 == 1 {
+		cycles++
+	}
+	return cycles
+}
+
 func (mg *moveGenerator) getSideCycles(side cubeSide) []cycle {
 	max := mg.size - 1
-	cycles := make([]cycle, 0, 3)
+	cycles := make([]cycle, 0, cycleNumber(mg.size))
 	cycles = append(cycles, cycle{
 		parameters.NewCoord(side, 0, 0), parameters.NewCoord(side, 0, max),
 		parameters.NewCoord(side, max, max), parameters.NewCoord(side, max, 0),
 	})
-	if mg.size == 3 {
-		cycles = append(cycles, cycle{
-			parameters.NewCoord(side, 0, 1), parameters.NewCoord(side, 1, 2),
-			parameters.NewCoord(side, 2, 1), parameters.NewCoord(side, 1, 0),
-		})
+	if mg.size > 2 {
+		edges := mg.size - 2
+		for i := 1; i <= edges; i++ {
+			cycles = append(cycles, cycle{
+				parameters.NewCoord(side, 0, i), parameters.NewCoord(side, i, max),
+				parameters.NewCoord(side, max, mg.size-i-1), parameters.NewCoord(side, mg.size-i-1, 0),
+			})
+		}
 	}
-	if mg.size%2 == 1 && mg.size > 2 {
-		cycles = append(cycles, cycle{parameters.NewCoord(side, 1, 1)})
+	if mg.size > 2 {
+		limit := (mg.size - 1) / 2
+		for i := 1; i <= limit; i++ {
+			for j := i; j < max-i; j++ {
+				cycles = append(cycles, cycle{
+					parameters.NewCoord(side, i, j), parameters.NewCoord(side, j, max-i),
+					parameters.NewCoord(side, max-i, max-j), parameters.NewCoord(side, max-j, i),
+				})
+			}
+		}
+		if mg.size%2 == 1 {
+			middle := mg.size / 2
+			cycles = append(cycles, cycle{parameters.NewCoord(side, middle, middle)})
+		}
 	}
 	return cycles
 }

@@ -19,8 +19,8 @@ ifBranch: IF boolExpr COLON doDef;
 prepareBranch: PREPARE COLON ((doDef consecutive) | algorithm);
 consecutive: CONSECUTIVE COLON NUMBER;
 
-algorithm: turn+;
-turn: WORD (NUMBER | PRIME)? | NUMBER LPAREN algorithm RPAREN;
+algorithm: turn*;
+turn: WORD (NUMBER | PRIME)? | LPAREN NUMBER WORD (NUMBER | PRIME)? RPAREN | NUMBER LPAREN algorithm RPAREN;
 
 boolExpr: unaryOp boolExpr | boolExpr binaryOp boolExpr | LPAREN boolExpr RPAREN | expr;
 unaryOp: NOT;

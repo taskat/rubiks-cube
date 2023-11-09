@@ -1,65 +1,66 @@
 const advanced = `puzzle: cube
-size: 2
-state description: advanced
+size: 4
+state description: beginner
 state:
-    corners:
-        Up: boy wbr ygr gow
-        Down: wrg gyo obw rby`
+    Front:
+        y y y r
+        g r b y
+        r w w o
+        b r y g
+    Up: 
+        g r y b
+        b o y b
+        y y g y
+        r o b w
+    Right: 
+        b r w y
+        b y r w
+        b o g b
+        o w w r
+    Left: 
+        w w g g
+        o w r w
+        g b b g
+        y b g o
+    Back: 
+        o o w r
+        o b r g
+        r y g w
+        b g g g
+    Down: 
+        w b r w
+        r g o o
+        o w o r
+        o y o y`
 
 const algo = `helpers:
-    upsideDown: x2
+upsideDown: x2
 steps:
-    step white_side:
-        goal: orientation([(Up, Front, Right), (Up, Right, Back), (Up, Back, Left), (Up, Left, Front)])
-        runs: 16
-        branches:
-            if orientation(Up, Front, Right):
-                do: y
-            if piece(Up, Front, Right) like position(Right, Up, Front):
-                do: R' D' R D
-            if piece(Up, Front, Right) like pos(Front, Right, Up):
-                do: R' D R
-            if (Up, Front, Right) like position(Down, Right, Front):
-                do: R' D2 R D 
-            if (Up, Front, Right) like (Front, Down, Right):
-                do: D' R' D R y
-            if piece(Up, Front, Right) like (Right, Front, Down):
-                do: D F D' F' y
-            if piece(Up, Front, Right) at (Up, Back, Right):
-                do: B' D' B
-            if piece(Up, Front, Right) at (Up, Back, Left):
-                do: L' D2 L
-            if piece(Up, Front, Right) at (Up, Left, Front):
-                do: L D L'
-            prepare: D
-    step yellow_up:
-        do: upsideDown
-    step yellow_corners:
-        goal: place([(Up, Front, Right), (Up, Right, Back), (Up, Back, Left), (Up, Left, Front)])
-        helpers:
-            cycleCorners: U R U' L' U R' U' L
-        runs: 9
-        branches:
-            if place(Up, Front, Right):
-                do: cycleCorners
-            prepare: 
-                do: y
-                consecutive: 3
-            prepare: cycleCorners
-    step yellow_corners_orient:
-        goal: orientation([(Up, Front, Right), (Up, Right, Back), (Up, Back, Left), (Up, Left, Front)])
-        runs: 4
-        branches:
-            if yellow(Up 1 1):
-                do: U
-            if yellow(Front 0 1):
-                do: 4(R' D' R D) U
-            if yellow(Right 0 0):
-                do: 2(R' D' R D) U
-    step orient_top_layer:
-        goal: orientation(Up, Front, Right)
-        runs: 3
-        do: U        
+step white_center:
+    goal: white([Up 1 1, Up 1 2, Up 2 1, Up 2 2])
+    runs: 12
+    branches:
+        if white(Up 2 2):
+            do: U'
+        if white(Front 2 2):
+            do: (2D) (2R') (2D') (2R)
+        if white(Front 1 1):
+            do: F2
+        if white(Front 1 2):
+            do: F
+        if white(Front 2 1):
+            do: F'
+        if any(white(?), [Right 1 1, Right 1 2, Right 2 1, Right 2 2]):
+            do: (2U) (2D')
+        if any(white(?), [Left 1 1, Left 1 2, Left 2 1, Left 2 2]):
+            do: (2U') (2D)
+        if any(white(?), [Back 1 1, Back 1 2, Back 2 1, Back 2 2]):
+            do: (2U2) (2D2)
+        if any(white(?), [Down 1 1, Down 1 2, Down 2 1, Down 2 2]):
+            do: (2R) F2 (2R2) D2 (2R)
+        
+
+        
 `
 
 export const advancedConfig = advanced;

@@ -1,7 +1,7 @@
 package errorvisitor
 
 import (
-	"strconv"
+	"strings"
 
 	ap "github.com/taskat/rubiks-cube/src/algo/parser"
 	"github.com/taskat/rubiks-cube/src/basevisitor"
@@ -26,21 +26,9 @@ func (v *algorithmVisitor) visitAlgorithm(ctx *ap.AlgorithmContext) {
 
 func (v *algorithmVisitor) visitTurn(ctx *ap.TurnContext) {
 	if ctx.WORD() != nil {
-		turnName := ctx.WORD().GetText()
-		if ctx.PRIME() != nil {
-			turnName += "'"
-		} else if ctx.NUMBER() != nil {
-			numberString := ctx.NUMBER().GetText()
-			number, err := strconv.Atoi(numberString)
-			if err != nil {
-				panic(err)
-			}
-			if number == 2 {
-				turnName += "2"
-			} else {
-				v.Eh().AddError(ctx, "Only 2 can be in turns", v.FileName())
-			}
-		}
+		turnName := ctx.GetText()
+		turnName = strings.ReplaceAll(turnName, "(", "")
+		turnName = strings.ReplaceAll(turnName, ")", "")
 		if _, err := v.turns.GetIdentifier(turnName); err != nil {
 			v.Eh().AddError(ctx, "Turn "+turnName+" is not defined", v.FileName())
 		}

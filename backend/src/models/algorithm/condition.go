@@ -1,6 +1,10 @@
 package algorithm
 
-import "github.com/taskat/rubiks-cube/src/models"
+import (
+	"fmt"
+
+	"github.com/taskat/rubiks-cube/src/models"
+)
 
 type ConditionFunc func(models.Puzzle) bool
 
@@ -15,9 +19,12 @@ func NewCondition(condFunc ConditionFunc) *Condition {
 }
 
 func (c *Condition) Execute(p models.Puzzle) Block {
+	fmt.Print("Condition ")
 	if c.condFunc(p) {
+		fmt.Println("true")
 		return c.trueBlock
 	}
+	fmt.Println("false")
 	return c.falseBlock
 }
 

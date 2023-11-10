@@ -27,7 +27,9 @@ func (v *algorithmVisitor) visitAlgorithm(ctx *ap.AlgorithmContext) []string {
 
 func (v *algorithmVisitor) visitTurn(ctx *ap.TurnContext) []string {
 	if ctx.WORD() != nil {
-		name := ctx.WORD().GetText()
+		name := ctx.GetText()
+		name = strings.ReplaceAll(name, "(", "")
+		name = strings.ReplaceAll(name, ")", "")
 		moves, err := v.turns.GetIdentifier(name)
 		if err != nil {
 			panic(fmt.Errorf("Turn %s not found", name))
@@ -35,9 +37,8 @@ func (v *algorithmVisitor) visitTurn(ctx *ap.TurnContext) []string {
 		if len(moves) > 1 {
 			return moves
 		}
-		name = strings.ReplaceAll(name, "(", "")
-		name = strings.ReplaceAll(name, ")", "")
-		return []string{ctx.GetText()}
+
+		return []string{name}
 	}
 	repeat, _ := strconv.Atoi(ctx.NUMBER(0).GetText())
 	moves := v.visitAlgorithm(ctx.Algorithm().(*ap.AlgorithmContext))

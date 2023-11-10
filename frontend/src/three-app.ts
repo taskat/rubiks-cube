@@ -16,11 +16,11 @@ const PIECE_MATERIAL = new THREE.MeshPhysicalMaterial({
   reflectivity: .5
 })
 
-const BEFORE_DELAY = 2000;
-const AFTER_DELAY = 2000;
+const BEFORE_DELAY = 500;
+const AFTER_DELAY = 5000;
 
 export default class Simulator{
-  animationSpeed: number = 500;
+  animationSpeed: number = 200;
   model: THREE.BufferGeometry = new THREE.BufferGeometry();
   modelName: string = "/cube-bevelled.glb";
   cubeSize: number = 3;

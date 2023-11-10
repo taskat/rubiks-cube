@@ -2,7 +2,6 @@ package generatorvisitor
 
 import (
 	"fmt"
-
 	"github.com/taskat/rubiks-cube/src/color"
 	"github.com/taskat/rubiks-cube/src/models"
 	"github.com/taskat/rubiks-cube/src/models/algorithm"
@@ -81,6 +80,28 @@ func none(builder conditionBuilderFunc, list parameters.List[parameters.Paramete
 				return false
 			}
 		}
+		return true
+	}
+}
+
+func same(list parameters.List[parameters.Coord]) algorithm.ConditionFunc {
+	return func(p models.Puzzle) bool {
+		if len(list) < 2 {
+			return true
+		}
+		firstColor := p.GetColor(list[0])
+		colors := make([]color.Color, 0, len(list))
+		defer func(a *[]color.Color) {
+			fmt.Println(*a)
+		}(&colors)
+		fmt.Println("same", firstColor)
+		for _, coord := range list {
+			colors = append(colors, p.GetColor(coord))
+			if !p.GetColor(coord).Equals(firstColor) {
+				return false
+			}
+		}
+		fmt.Println("same true")
 		return true
 	}
 }

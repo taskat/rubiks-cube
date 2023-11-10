@@ -233,6 +233,11 @@ func (c *Cube) String() string {
 func (c *Cube) Turn(name string) {
 	_, ok := c.moves[name]
 	if !ok {
+		moves := make([]string, 0, len(c.moves))
+		for move := range c.moves {
+			moves = append(moves, move)
+		}
+		fmt.Println(moves)
 		panic(fmt.Sprintf("Undefined move %s", name))
 	}
 	c.turn(name)

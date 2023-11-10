@@ -40,6 +40,8 @@ func (v *boolExprVisitor) initOperators() {
 	scope.AddIdentifier(atOp.String(), &atOp)
 	likeOp := newBinaryOperator("like", v.ts.getType("piece"), v.ts.getType("position"))
 	scope.AddIdentifier(likeOp.String(), &likeOp)
+	sameOp := newUnaryOperator("same", v.ts.getType("[coord]"))
+	scope.AddIdentifier(sameOp.String(), &sameOp)
 	v.operators.PushScope(scope)
 }
 

@@ -80,8 +80,62 @@ step yellow_center:
             do: (2U') (2D)
         if any(yellow(?), [Back 1 1, Back 1 2, Back 2 1, Back 2 2]):
             do: (2U2) (2D2) 
+step green_up:
+    do: x y'
+step green_center:
+    goal: green([Up 1 1, Up 1 2, Up 2 1, Up 2 2])
+    runs: 12
+    branches:
+        if green([Up 1 2, Up 2 2]):
+            do: U2
+        if green(Up 2 2):
+            do: (2R') F' (2R)
+        if green(Front 1 1) and green(Up 1 2):
+            do: (2R') F (2R) U2
+        if green(Front 1 1) and none(green(?), [Up 1 2, Up 2 2]):
+            do: F (2R)
+        if green(Front 1 2):
+            do: F'
+        if green(Front 2 1):
+            do: F
+        if green(Front 2 2):
+            do: F2
+        if any(green(?), [Down 1 2, Down 2 2]):
+            do: (2R) F2 (2R')
+        if any(green(?), [Down 1 1, Down 2 1]):
+            do: D2 (2R) F2 (2R') 
+        if any(green(?), [Back 1 1, Back 2 1]):
+            do: (2R2) F2 (2R2)
+        if any(green(?), [Back 1 2, Back 2 2]):
+            do: B2 (2R2) F2 (2R2)
+step red_up:
+    do: x
+step red_center:
+    goal: red([Up 1 1, Up 1 2, Up 2 1, Up 2 2])
+    runs: 12
+    branches:
+        if red([Up 1 2, Up 2 2]):
+            do: U2
+        if red(Up 2 2):
+            do: (2R') F' (2R)
+        if red(Front 1 1) and red(Up 1 2):
+            do: (2R') F (2R) U2
+        if red(Front 1 1) and none(red(?), [Up 1 2, Up 2 2]):
+            do: (2R') F (2R)
+        if red(Front 1 2):
+            do: F'
+        if red(Front 2 1):
+            do: F
+        if red(Front 2 2):
+            do: F2
+        if any(red(?), [Down 1 2, Down 2 2]):
+            do: (2R) F2 (2R')
+        if any(red(?), [Down 1 1, Down 2 1]):
+            do: D2 (2R) F2 (2R') 
 step blue_up:
-    do: x 
+    do: x
+
+        
 
 `
 

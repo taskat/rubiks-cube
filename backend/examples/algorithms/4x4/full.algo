@@ -55,16 +55,16 @@ steps:
                 do: U2
             if green(Up 2 2):
                 do: (2R') F' (2R)
+            if green(Front 1 1) and green(Up 1 2):
+                do: (2R') F (2R) U2
+            if green(Front 1 1) and none(green(?), [Up 1 2, Up 2 2]):
+                do: F (2R)
             if green(Front 1 2):
                 do: F'
             if green(Front 2 1):
                 do: F
             if green(Front 2 2):
                 do: F2
-            if green(Front 1 1) and green(Up 1 2):
-                do: (2R') F (2R) U2
-            if green(Front 1 1) and none(green(?), [Up 1 2, Up 2 2]):
-                do: F (2R)
             if any(green(?), [Down 1 2, Down 2 2]):
                 do: (2R) F2 (2R')
             if any(green(?), [Down 1 1, Down 2 1]):
@@ -77,25 +77,57 @@ steps:
         do: x
     step red_center:
         goal: red([Up 1 1, Up 1 2, Up 2 1, Up 2 2])
-        runs: 36
+        runs: 12
         branches:
             if red([Up 1 2, Up 2 2]):
                 do: U2
             if red(Up 2 2):
                 do: (2R') F' (2R)
+            if red(Front 1 1) and red(Up 1 2):
+                do: (2R') F (2R) U2
+            if red(Front 1 1) and none(red(?), [Up 1 2, Up 2 2]):
+                do: (2R') F (2R)
             if red(Front 1 2):
                 do: F'
             if red(Front 2 1):
                 do: F
             if red(Front 2 2):
                 do: F2
-            if red(Front 1 1) and red(Up 1 2):
-                do: (2R') F (2R) U2
-            if red(Front 1 1) and none(red(?), [Up 1 2, Up 2 2]):
-                do: (2R') F (2R)
             if any(red(?), [Down 1 2, Down 2 2]):
                 do: (2R) F2 (2R')
             if any(red(?), [Down 1 1, Down 2 1]):
                 do: D2 (2R) F2 (2R') 
+    step blue_up:
+        do: x
+    step last_centers:
+        goal: blue([Up 1 1, Up 1 2, Up 2 1, Up 2 2])
+        runs: 7
+        branches:
+            if none(blue(?), [Up 1 1, Up 1 2, Up 2 1, Up 2 2]):
+                do: (2R) U2 (2R') (2L') U2 (2L)
+            if blue([Up 1 2, Up 2 2]):
+                do: U2
+            if blue([Up 1 1, Up 1 2]) and not blue([Up 1 1, Up 2 1]):
+                do: U'
+            if blue([Up 2 1, Up 2 2]) and not blue([Up 1 1, Up 2 1]):
+                do: U
+            if blue(Up 2 2):
+                do: (2R') F' (2R)
+            if blue(Up 1 1) and not blue(Up 2 1):
+                do: (2L) F (2L') F' (2R') F (2R)
+            if blue(Up 2 1) and not blue([Up 1 2, Up 1 1]):
+                do: 2U
+            if blue([Up 1 2, Front 1 1]):
+                do: (2R') F (2R) U2
+            if blue(Front 1 2):
+                do: F'
+            if blue(Front 2 1):
+                do: F
+            if blue(Front 2 2):
+                do: F2
+    step pair_edges:
+    
             
+            
+
             

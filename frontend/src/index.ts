@@ -46,23 +46,23 @@ class App {
     element.innerHTML = "Solved in " + fullLength + " steps";
     moveList?.appendChild(element)
     moves.forEach((turns: string[], step: string) => {
-      let element = document.createElement("p");
-      element.classList.add("stepname");
-      element.innerHTML = step + " (" + turns.length + "):";
-      moveList?.appendChild(element)
+      let liElement = document.createElement("li");
+      liElement.classList.add("stepname");
+      liElement.innerHTML = step + " (" + turns.length + "):\n";
       if (turns.length === 0) {
         let turnElement = document.createElement("p");
         turnElement.classList.add("turn");
         turnElement.innerHTML = "-";
-        moveList?.appendChild(turnElement)
+        liElement?.appendChild(turnElement)
       } else {
         turns.forEach((turn: string) => {
           let turnElement = document.createElement("p");
           turnElement.classList.add("turn");
           turnElement.innerHTML = turn;
-          moveList?.appendChild(turnElement)
+          liElement?.appendChild(turnElement)
         });
       }
+      moveList?.appendChild(liElement)
     });
   }
 

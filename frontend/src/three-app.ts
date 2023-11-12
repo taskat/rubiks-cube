@@ -218,7 +218,13 @@ export default class Simulator{
       let mesh = child as THREE.Mesh;
       mesh.geometry.dispose();
     });
-    this.puzzleGroup.clear();
+    this.scene.remove(this.puzzleGroup);
+    this.scene.remove(this.animationGroup);
+    this.puzzleGroup = new THREE.Group();
+    this.animationGroup = new THREE.Group();
+    this.animationMixer = new THREE.AnimationMixer(this.animationGroup);  
+    this.scene.add(this.puzzleGroup);
+    this.scene.add(this.animationGroup);
     this.createUiPieces();
   }
 

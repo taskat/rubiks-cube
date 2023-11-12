@@ -149,7 +149,7 @@ func (v *paramVisitor) visitSingleNode(ctx *ap.SingleNodeContext) iType {
 				v.Eh().AddError(ctx, "Edge piece/position index must be 0 (or emitted) for 3x3x3 cube", v.FileName())
 			}
 		case ctx.NUMBER() == nil && v.constraint.Size > 3:
-			v.Eh().AddError(ctx, "Edge piece/position must have index for cubes greater than 3x3x3", v.FileName())
+			// v.Eh().AddError(ctx, "Edge piece/position must have index for cubes greater than 3x3x3", v.FileName())
 		case ctx.NUMBER() != nil && v.constraint.Size > 3:
 			indexString := ctx.NUMBER().GetText()
 			index, err := strconv.Atoi(indexString)

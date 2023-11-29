@@ -1,0 +1,40 @@
+puzzle: cube
+size: 5
+state description: custom
+state:
+    Front:
+        b g b g b
+        g b g b g
+        b g b g b
+        g b g b g
+        b g b g b
+    Up: 
+        w y w y w
+        y w y w y
+        w y w y w
+        y w y w y
+        w y w y w
+    Right: 
+        o r o r o
+        r o r o r
+        o r o r o
+        r o r o r
+        o r o r o
+    Left: 
+        r o r o r
+        o r o r o
+        r o r o r
+        o r o r o
+        r o r o r
+    Back: 
+        g b g b g
+        b g b g b
+        g b g b g
+        b g b g b
+        g b g b g
+    Down: 
+        y w y w y
+        w y w y w
+        y w y w y
+        w y w y w
+        y w y w y

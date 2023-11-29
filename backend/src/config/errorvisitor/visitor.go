@@ -46,7 +46,7 @@ func (v *Visitor) visitSizeDef(ctx *cp.SizeDefContext) {
 	var err error
 	v.size, err = strconv.Atoi(sizeString)
 	min := 2
-	max := 4
+	max := 7
 	if err != nil {
 		v.Eh().AddError(ctx, "cannot convert to size (integer)", v.FileName())
 	} else if v.size < min || v.size > max {

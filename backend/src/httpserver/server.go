@@ -39,6 +39,11 @@ func (s Server) addHeaders(response http.ResponseWriter, request *http.Request) 
 }
 
 func (s Server) allHandler(response http.ResponseWriter, request *http.Request) {
+	defer func() {
+		if r := recover(); r != nil {
+			s.writeError(response, http.StatusInternalServerError, fmt.Errorf("Panic: %v", r))
+		}
+	}()
 	if request.Method != "POST" {
 		response.Header().Set("Allow", "POST")
 		response.WriteHeader(http.StatusMethodNotAllowed)
@@ -96,6 +101,11 @@ func (s Server) check(response http.ResponseWriter, request *http.Request) {
 }
 
 func (s Server) configHandler(response http.ResponseWriter, request *http.Request) {
+	defer func() {
+		if r := recover(); r != nil {
+			s.writeError(response, http.StatusInternalServerError, fmt.Errorf("Panic: %v", r))
+		}
+	}()
 	if request.Method != "POST" {
 		response.Header().Set("Allow", "POST")
 		response.WriteHeader(http.StatusMethodNotAllowed)

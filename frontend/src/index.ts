@@ -83,6 +83,9 @@ class App {
       this.simulator.cubeSize = response.size;
       this.updateErrors(response.errors);
       this.simulator.recreateUiPieces();
+    }).catch((error) => {
+      console.log(error);
+      alert("Error: " + error);
     });
   }
 
@@ -119,6 +122,9 @@ class App {
       this.addMoves(response.turns);
       let allTurns = Array.from(response.turns.values()).flat();
       this.simulator.addMoves(allTurns);
+    }).catch((error) => {
+      console.log(error);
+      alert("Error: " + error);
     });
   }
 

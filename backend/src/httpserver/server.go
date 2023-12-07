@@ -41,7 +41,10 @@ func (s Server) addHeaders(response http.ResponseWriter, request *http.Request) 
 func (s Server) allHandler(response http.ResponseWriter, request *http.Request) {
 	defer func() {
 		if r := recover(); r != nil {
+			fmt.Println("Panic: ", r)
 			s.writeError(response, http.StatusInternalServerError, fmt.Errorf("Panic: %v", r))
+			panic(r)
+
 		}
 	}()
 	if request.Method != "POST" {
@@ -103,6 +106,7 @@ func (s Server) check(response http.ResponseWriter, request *http.Request) {
 func (s Server) configHandler(response http.ResponseWriter, request *http.Request) {
 	defer func() {
 		if r := recover(); r != nil {
+			fmt.Println("Panic: ", r)
 			s.writeError(response, http.StatusInternalServerError, fmt.Errorf("Panic: %v", r))
 		}
 	}()

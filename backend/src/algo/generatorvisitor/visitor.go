@@ -152,7 +152,7 @@ func (v *Visitor) visitStep(ctx *ap.StepContext) {
 				setter = func(block algorithm.Block) {}
 			}
 			action := v.visitDoDef(stepLine.DoDef().(*ap.DoDefContext), setter)
-			if v.currentGoal == nil {
+			if v.currentGoal == nil && v.startBlock == nil {
 				v.startBlock = action
 			}
 			v.previousBlock = action

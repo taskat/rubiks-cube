@@ -1,6 +1,6 @@
 puzzle: cube
 size: 5
-state description: custom
+state description: beginner
 state:
     Front:
         b g b g b

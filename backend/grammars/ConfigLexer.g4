@@ -2,22 +2,22 @@ lexer grammar ConfigLexer;
 
 // Keywords
 ADVANCED: 'advanced';
-BACK: 'back';
+BACK: 'Back';
 BEGINNER: 'beginner';
 CORNERS: 'corners';
 CUBE: 'cube';
-DOWN: 'down';
+DOWN: 'Down';
 EDGES: 'edges';
-FRONT: 'front';
-LEFT: 'left';
-MIDDLE: 'middle';
+FRONT: 'Front';
+LEFT: 'Left';
+MIDDLE: 'Middle';
 PUZZLE: 'puzzle';
 RANDOM: 'random';
-RIGHT: 'right';
+RIGHT: 'Right';
 SIZE: 'size';
 STATE: 'state';
 STATE_DESCRIPTION: 'state description';
-UP: 'up';
+UP: 'Up';
 
 // Parenthesis
 LCURLY: '{';

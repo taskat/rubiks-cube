@@ -1,11 +1,13 @@
 package errorvisitor
 
 import (
+	"fmt"
 	"strconv"
 
 	ap "github.com/taskat/rubiks-cube/src/algo/parser"
 	"github.com/taskat/rubiks-cube/src/basevisitor"
 	eh "github.com/taskat/rubiks-cube/src/errorhandler"
+	"github.com/taskat/rubiks-cube/src/models"
 )
 
 type paramVisitor struct {
@@ -13,14 +15,16 @@ type paramVisitor struct {
 	sides           []string
 	placeholderType iType
 	ts              *typeSystem
+	constraint      models.Constraint
 }
 
-func newParamVisitor(errorVisitor basevisitor.ErrorVisitor, sides []string, ts *typeSystem, placeholderType iType) *paramVisitor {
+func newParamVisitor(errorVisitor basevisitor.ErrorVisitor, sides []string, ts *typeSystem, placeholderType iType, constraint models.Constraint) *paramVisitor {
 	return &paramVisitor{
 		ErrorVisitor:    errorVisitor,
 		sides:           sides,
 		placeholderType: placeholderType,
 		ts:              ts,
+		constraint:      constraint,
 	}
 }
 
@@ -36,13 +40,14 @@ func (v *paramVisitor) visitCoord(ctx *ap.CoordContext) iType {
 	if err != nil {
 		panic("Invalid col")
 	}
-	if row < 0 || row > 2 {
+	limit := v.constraint.Size - 1
+	if row < 0 || row > limit {
 		errCtx := eh.NewContextFromTerminal(ctx.NUMBER(0))
-		v.Eh().AddError(errCtx, "Row must be between 0 and 2", v.FileName())
+		v.Eh().AddError(errCtx, fmt.Sprintf("Row must be between 0 and %d", limit), v.FileName())
 	}
-	if col < 0 || col > 2 {
+	if col < 0 || col > limit {
 		errCtx := eh.NewContextFromTerminal(ctx.NUMBER(1))
-		v.Eh().AddError(errCtx, "Col must be between 0 and 2", v.FileName())
+		v.Eh().AddError(errCtx, fmt.Sprintf("Col must be between 0 and %d", limit), v.FileName())
 	}
 	return v.ts.getType("coord")
 }
@@ -122,16 +127,43 @@ func (v *paramVisitor) visitSide(ctx *ap.SideContext) {
 	v.Eh().AddError(ctx, "Unknown side: "+ctx.WORD().GetText(), v.FileName())
 }
 
-func (v *paramVisitor) visitSides(ctx *ap.SidesContext) {
+func (v *paramVisitor) visitSides(ctx *ap.SidesContext) int {
 	for _, side := range ctx.AllSide() {
 		v.visitSide(side.(*ap.SideContext))
 	}
+	return len(ctx.AllSide())
 }
 
 func (v *paramVisitor) visitSingleNode(ctx *ap.SingleNodeContext) iType {
-	v.visitSides(ctx.Sides().(*ap.SidesContext))
-	if ctx.NUMBER() != nil {
-		v.Eh().AddError(ctx, "Unexpected number", v.FileName())
+	numberOfSides := v.visitSides(ctx.Sides().(*ap.SidesContext))
+	switch numberOfSides {
+	case 1:
+		v.Eh().AddError(ctx, "Center piece/position cannot be part of singleNode", v.FileName())
+	case 2:
+		switch {
+		case ctx.NUMBER() != nil && v.constraint.Size == 2:
+			v.Eh().AddError(ctx, "Edge piece/position cannot have index for 2x2x2 cube", v.FileName())
+		case ctx.NUMBER() != nil && v.constraint.Size == 3:
+			indexString := ctx.NUMBER().GetText()
+			if indexString != "0" {
+				v.Eh().AddError(ctx, "Edge piece/position index must be 0 (or emitted) for 3x3x3 cube", v.FileName())
+			}
+		case ctx.NUMBER() == nil && v.constraint.Size > 3:
+			// v.Eh().AddError(ctx, "Edge piece/position must have index for cubes greater than 3x3x3", v.FileName())
+		case ctx.NUMBER() != nil && v.constraint.Size > 3:
+			indexString := ctx.NUMBER().GetText()
+			index, err := strconv.Atoi(indexString)
+			if err != nil {
+				panic("Invalid index")
+			}
+			if index < 0 || index > v.constraint.Size-3 {
+				v.Eh().AddError(ctx, fmt.Sprintf("Edge piece/position index must be between 0 and %d", v.constraint.Size-3), v.FileName())
+			}
+		}
+	case 3:
+		if ctx.NUMBER() != nil {
+			v.Eh().AddError(ctx, "Corner piece/position cannot have index", v.FileName())
+		}
 	}
 	return v.ts.getType("node")
 }

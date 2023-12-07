@@ -46,23 +46,23 @@ class App {
     element.innerHTML = "Solved in " + fullLength + " steps";
     moveList?.appendChild(element)
     moves.forEach((turns: string[], step: string) => {
-      let element = document.createElement("p");
-      element.classList.add("stepname");
-      element.innerHTML = step + " (" + turns.length + "):";
-      moveList?.appendChild(element)
+      let liElement = document.createElement("li");
+      liElement.classList.add("stepname");
+      liElement.innerHTML = step + " (" + turns.length + "):\n";
       if (turns.length === 0) {
         let turnElement = document.createElement("p");
         turnElement.classList.add("turn");
         turnElement.innerHTML = "-";
-        moveList?.appendChild(turnElement)
+        liElement?.appendChild(turnElement)
       } else {
         turns.forEach((turn: string) => {
           let turnElement = document.createElement("p");
           turnElement.classList.add("turn");
           turnElement.innerHTML = turn;
-          moveList?.appendChild(turnElement)
+          liElement?.appendChild(turnElement)
         });
       }
+      moveList?.appendChild(liElement)
     });
   }
 
@@ -80,8 +80,12 @@ class App {
     let content = this.editor.getText("config");
     this.httpClient.postConfig(content).then((response) => {
       this.simulator.colorPalette = response.colorPalette;
+      this.simulator.cubeSize = response.size;
       this.updateErrors(response.errors);
       this.simulator.recreateUiPieces();
+    }).catch((error) => {
+      console.log(error);
+      alert("Error: " + error);
     });
   }
 
@@ -112,11 +116,15 @@ class App {
     let algo = this.editor.getText("algo");
     this.httpClient.postAll(config, algo).then((response) => {
       this.simulator.colorPalette = response.colorPalette;
+      this.simulator.cubeSize = response.size;
       this.updateErrors(response.errors);
       this.simulator.recreateUiPieces();
       this.addMoves(response.turns);
       let allTurns = Array.from(response.turns.values()).flat();
       this.simulator.addMoves(allTurns);
+    }).catch((error) => {
+      console.log(error);
+      alert("Error: " + error);
     });
   }
 

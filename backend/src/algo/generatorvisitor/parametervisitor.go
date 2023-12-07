@@ -107,5 +107,9 @@ func (v *parameterVisitor) visitSingleNode(ctx *ap.SingleNodeContext) parameters
 	for i, side := range sides {
 		typedSides[i] = v.sideConstructor(side)
 	}
-	return *parameters.NewNode(typedSides)
+	index := -1
+	if ctx.NUMBER() != nil {
+		index, _ = strconv.Atoi(ctx.NUMBER().GetText())
+	}
+	return *parameters.NewNode(typedSides, index)
 }

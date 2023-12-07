@@ -34,47 +34,48 @@ func (c cornerPiece) getTwist(isGood func(color.Color) bool) int {
 	panic("No good side found")
 }
 
-func getCornerCoords() [][]parameters.Coord {
+func getCornerCoords(size int) [][]parameters.Coord {
 	coords := make([][]parameters.Coord, 8)
+	max := size - 1
 	coords[0] = []parameters.Coord{
 		parameters.NewCoord(cubeSide("Up"), 0, 0),
 		parameters.NewCoord(cubeSide("Left"), 0, 0),
-		parameters.NewCoord(cubeSide("Back"), 0, 2),
+		parameters.NewCoord(cubeSide("Back"), 0, max),
 	}
 	coords[1] = []parameters.Coord{
-		parameters.NewCoord(cubeSide("Up"), 0, 2),
+		parameters.NewCoord(cubeSide("Up"), 0, max),
 		parameters.NewCoord(cubeSide("Back"), 0, 0),
-		parameters.NewCoord(cubeSide("Right"), 0, 2),
+		parameters.NewCoord(cubeSide("Right"), 0, max),
 	}
 	coords[2] = []parameters.Coord{
-		parameters.NewCoord(cubeSide("Up"), 2, 2),
+		parameters.NewCoord(cubeSide("Up"), max, max),
 		parameters.NewCoord(cubeSide("Right"), 0, 0),
-		parameters.NewCoord(cubeSide("Front"), 0, 2),
+		parameters.NewCoord(cubeSide("Front"), 0, max),
 	}
 	coords[3] = []parameters.Coord{
-		parameters.NewCoord(cubeSide("Up"), 2, 0),
+		parameters.NewCoord(cubeSide("Up"), max, 0),
 		parameters.NewCoord(cubeSide("Front"), 0, 0),
-		parameters.NewCoord(cubeSide("Left"), 0, 2),
+		parameters.NewCoord(cubeSide("Left"), 0, max),
 	}
 	coords[4] = []parameters.Coord{
 		parameters.NewCoord(cubeSide("Down"), 0, 0),
-		parameters.NewCoord(cubeSide("Left"), 2, 2),
-		parameters.NewCoord(cubeSide("Front"), 2, 0),
+		parameters.NewCoord(cubeSide("Left"), max, max),
+		parameters.NewCoord(cubeSide("Front"), max, 0),
 	}
 	coords[5] = []parameters.Coord{
-		parameters.NewCoord(cubeSide("Down"), 0, 2),
-		parameters.NewCoord(cubeSide("Front"), 2, 2),
-		parameters.NewCoord(cubeSide("Right"), 2, 0),
+		parameters.NewCoord(cubeSide("Down"), 0, max),
+		parameters.NewCoord(cubeSide("Front"), max, max),
+		parameters.NewCoord(cubeSide("Right"), max, 0),
 	}
 	coords[6] = []parameters.Coord{
-		parameters.NewCoord(cubeSide("Down"), 2, 2),
-		parameters.NewCoord(cubeSide("Right"), 2, 2),
-		parameters.NewCoord(cubeSide("Back"), 2, 0),
+		parameters.NewCoord(cubeSide("Down"), max, max),
+		parameters.NewCoord(cubeSide("Right"), max, max),
+		parameters.NewCoord(cubeSide("Back"), max, 0),
 	}
 	coords[7] = []parameters.Coord{
-		parameters.NewCoord(cubeSide("Down"), 2, 0),
-		parameters.NewCoord(cubeSide("Back"), 2, 2),
-		parameters.NewCoord(cubeSide("Left"), 2, 0),
+		parameters.NewCoord(cubeSide("Down"), max, 0),
+		parameters.NewCoord(cubeSide("Back"), max, max),
+		parameters.NewCoord(cubeSide("Left"), max, 0),
 	}
 	return coords
 }

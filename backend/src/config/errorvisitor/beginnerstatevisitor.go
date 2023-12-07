@@ -9,10 +9,11 @@ import (
 
 type beginnerStateVisitor struct {
 	baseVisitor
+	size int
 }
 
-func newBeginnerStateVisitor(filename string, errorHandler *eh.Errorhandler) *beginnerStateVisitor {
-	return &beginnerStateVisitor{baseVisitor: *newBaseVisitor(filename, errorHandler)}
+func newBeginnerStateVisitor(filename string, errorHandler *eh.Errorhandler, size int) *beginnerStateVisitor {
+	return &beginnerStateVisitor{baseVisitor: *newBaseVisitor(filename, errorHandler), size: size}
 }
 
 func (v *beginnerStateVisitor) checkSideNames(sides []cp.ISideContext) {
@@ -43,7 +44,8 @@ func (v *beginnerStateVisitor) checkColors(ctx *cp.BeginnerStateContext) {
 	}
 	stateCtx := ctx.GetParent().(*cp.StateContext)
 	stateDefCtx := stateCtx.GetParent().(*cp.StateDefContext)
-	checkColors(stateDefCtx, v, 9)
+	expectedColors := v.size * v.size
+	checkColors(stateDefCtx, v, expectedColors)
 }
 
 func (v *beginnerStateVisitor) visitBeginnerState(ctx *cp.BeginnerStateContext) {
@@ -66,12 +68,13 @@ func (v *beginnerStateVisitor) visitBeginnerState(ctx *cp.BeginnerStateContext) 
 
 func (v *beginnerStateVisitor) visitSide(ctx *cp.SideContext) {
 	colors := ctx.AllColor()
-	if len(colors) < 9 {
-		warningMsg := fmt.Sprintf("side state should have 9 cells, has %d", len(colors))
+	cells := v.size * v.size
+	if len(colors) < cells {
+		warningMsg := fmt.Sprintf("side state should have %d cells, has %d", cells, len(colors))
 		v.Eh().AddWarning(ctx, warningMsg, v.FileName())
 		v.finished = false
-	} else if len(colors) > 9 {
-		errorMsg := fmt.Sprintf("invalid number of cell, wanted 9, has %d", len(colors))
+	} else if len(colors) > cells {
+		errorMsg := fmt.Sprintf("invalid number of cell, wanted %d, has %d", cells, len(colors))
 		v.Eh().AddError(ctx, errorMsg, v.FileName())
 		v.valid = false
 	}

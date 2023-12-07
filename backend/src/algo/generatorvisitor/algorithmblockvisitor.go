@@ -3,6 +3,7 @@ package generatorvisitor
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	ap "github.com/taskat/rubiks-cube/src/algo/parser"
 	"github.com/taskat/rubiks-cube/src/models/algorithm"
@@ -33,13 +34,15 @@ func (v *algorithmBlockVisitor) visitAlgorithmMoves(ctx *ap.AlgorithmContext) []
 func (v *algorithmBlockVisitor) visitTurn(ctx *ap.TurnContext) []string {
 	if ctx.WORD() != nil {
 		name := ctx.GetText()
+		name = strings.ReplaceAll(name, "(", "")
+		name = strings.ReplaceAll(name, ")", "")
 		moves, err := v.turns.GetIdentifier(name)
 		if err != nil {
 			panic(fmt.Errorf("Turn %s not found", name))
 		}
 		return moves
 	}
-	repeat, _ := strconv.Atoi(ctx.NUMBER().GetText())
+	repeat, _ := strconv.Atoi(ctx.NUMBER(0).GetText())
 	moves := v.visitAlgorithmMoves(ctx.Algorithm().(*ap.AlgorithmContext))
 	expanded := make([]string, len(moves)*repeat)
 	for i := 0; i < repeat; i++ {

@@ -1,6 +1,8 @@
 package confighandler
 
 import (
+	"fmt"
+
 	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
 	ev "github.com/taskat/rubiks-cube/src/config/errorvisitor"
 	gv "github.com/taskat/rubiks-cube/src/config/generatorvisitor"
@@ -9,6 +11,8 @@ import (
 	eh "github.com/taskat/rubiks-cube/src/errorhandler"
 	el "github.com/taskat/rubiks-cube/src/errorlistener"
 	"github.com/taskat/rubiks-cube/src/models"
+	"github.com/taskat/rubiks-cube/src/models/cube"
+	"github.com/taskat/rubiks-cube/src/models/parameters"
 )
 
 type Handler struct {
@@ -51,13 +55,14 @@ func Handle(fileName, content string, errorHandler *eh.Errorhandler) models.Puzz
 	if handler.errorHandler.HasErrors() {
 		return nil
 	}
-	cube := handler.createCube()
-	validator := cube.GetValidator()
+	c := handler.createCube()
+	validator := c.GetValidator()
 	errors := validator.Validate()
 	for _, err := range errors {
 		errorHandler.AddError(eh.NewContext(-1, -1), err, fileName)
 	}
-	return cube
+	fmt.Println(c.GetColor(parameters.NewCoord(cube.NewCubeSide("Front"), 1, 1)))
+	return c
 }
 
 func (h *Handler) readConfig() {

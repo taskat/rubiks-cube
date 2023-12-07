@@ -1,11 +1,16 @@
 package cube
 
-import "github.com/taskat/rubiks-cube/src/models/parameters"
+import (
+	"strings"
+
+	"github.com/taskat/rubiks-cube/src/models/parameters"
+)
 
 type cubeSide string
 
 func NewCubeSide(s string) parameters.Side {
-	return cubeSide(s)
+	start := strings.ToUpper(string(s[0]))
+	return cubeSide(start + strings.ToLower(s[1:]))
 }
 
 func newCubeSide(side parameters.Side) cubeSide {

@@ -16,11 +16,11 @@ const PIECE_MATERIAL = new THREE.MeshPhysicalMaterial({
   reflectivity: .5
 })
 
-const BEFORE_DELAY = 2000;
-const AFTER_DELAY = 2000;
+const BEFORE_DELAY = 500;
+const AFTER_DELAY = 5000;
 
 export default class Simulator{
-  animationSpeed: number = 100;
+  animationSpeed: number = 2000;
   model: THREE.BufferGeometry = new THREE.BufferGeometry();
   modelName: string = "/cube-bevelled.glb";
   cubeSize: number = 3;
@@ -218,7 +218,13 @@ export default class Simulator{
       let mesh = child as THREE.Mesh;
       mesh.geometry.dispose();
     });
-    this.puzzleGroup.clear();
+    this.scene.remove(this.puzzleGroup);
+    this.scene.remove(this.animationGroup);
+    this.puzzleGroup = new THREE.Group();
+    this.animationGroup = new THREE.Group();
+    this.animationMixer = new THREE.AnimationMixer(this.animationGroup);  
+    this.scene.add(this.puzzleGroup);
+    this.scene.add(this.animationGroup);
     this.createUiPieces();
   }
 

@@ -32,9 +32,9 @@ var configparserParserStaticData struct {
 func configparserParserInit() {
 	staticData := &configparserParserStaticData
 	staticData.literalNames = []string{
-		"", "'advanced'", "'back'", "'beginner'", "'corners'", "'cube'", "'down'",
-		"'edges'", "'front'", "'left'", "'middle'", "'puzzle'", "'random'",
-		"'right'", "'size'", "'state'", "'state description'", "'up'", "'{'",
+		"", "'advanced'", "'Back'", "'beginner'", "'corners'", "'cube'", "'Down'",
+		"'edges'", "'Front'", "'Left'", "'Middle'", "'puzzle'", "'random'",
+		"'Right'", "'size'", "'state'", "'state description'", "'Up'", "'{'",
 		"'}'", "'['", "']'", "'('", "')'", "':'",
 	}
 	staticData.symbolicNames = []string{
@@ -51,7 +51,7 @@ func configparserParserInit() {
 	}
 	staticData.predictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 28, 140, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 1, 28, 141, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
 		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 2, 10, 7,
 		10, 2, 11, 7, 11, 2, 12, 7, 12, 2, 13, 7, 13, 2, 14, 7, 14, 2, 15, 7, 15,
 		2, 16, 7, 16, 2, 17, 7, 17, 2, 18, 7, 18, 2, 19, 7, 19, 2, 20, 7, 20, 1,
@@ -60,20 +60,20 @@ func configparserParserInit() {
 		4, 1, 4, 1, 5, 1, 5, 1, 5, 1, 5, 1, 6, 1, 6, 1, 7, 1, 7, 1, 7, 1, 7, 1,
 		8, 1, 8, 1, 8, 3, 8, 80, 8, 8, 1, 9, 4, 9, 83, 8, 9, 11, 9, 12, 9, 84,
 		1, 10, 1, 10, 1, 10, 4, 10, 90, 8, 10, 11, 10, 12, 10, 91, 1, 11, 1, 11,
-		1, 12, 1, 12, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 3, 13, 104, 8,
-		13, 1, 14, 1, 14, 1, 14, 4, 14, 109, 8, 14, 11, 14, 12, 14, 110, 1, 15,
-		1, 15, 1, 15, 4, 15, 116, 8, 15, 11, 15, 12, 15, 117, 1, 16, 1, 16, 1,
-		17, 1, 17, 1, 18, 1, 18, 1, 18, 4, 18, 127, 8, 18, 11, 18, 12, 18, 128,
-		1, 19, 1, 19, 1, 19, 4, 19, 134, 8, 19, 11, 19, 12, 19, 135, 1, 20, 1,
+		1, 12, 1, 12, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 1, 13, 3, 13, 105,
+		8, 13, 1, 14, 1, 14, 1, 14, 4, 14, 110, 8, 14, 11, 14, 12, 14, 111, 1,
+		15, 1, 15, 1, 15, 4, 15, 117, 8, 15, 11, 15, 12, 15, 118, 1, 16, 1, 16,
+		1, 17, 1, 17, 1, 18, 1, 18, 1, 18, 4, 18, 128, 8, 18, 11, 18, 12, 18, 129,
+		1, 19, 1, 19, 1, 19, 4, 19, 135, 8, 19, 11, 19, 12, 19, 136, 1, 20, 1,
 		20, 1, 20, 0, 0, 21, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26,
 		28, 30, 32, 34, 36, 38, 40, 0, 3, 2, 0, 1, 1, 3, 3, 5, 0, 2, 2, 6, 6, 8,
-		9, 13, 13, 17, 17, 3, 0, 6, 6, 10, 10, 17, 17, 131, 0, 45, 1, 0, 0, 0,
+		9, 13, 13, 17, 17, 3, 0, 6, 6, 10, 10, 17, 17, 133, 0, 45, 1, 0, 0, 0,
 		2, 54, 1, 0, 0, 0, 4, 56, 1, 0, 0, 0, 6, 60, 1, 0, 0, 0, 8, 62, 1, 0, 0,
 		0, 10, 66, 1, 0, 0, 0, 12, 70, 1, 0, 0, 0, 14, 72, 1, 0, 0, 0, 16, 79,
 		1, 0, 0, 0, 18, 82, 1, 0, 0, 0, 20, 86, 1, 0, 0, 0, 22, 93, 1, 0, 0, 0,
-		24, 95, 1, 0, 0, 0, 26, 103, 1, 0, 0, 0, 28, 105, 1, 0, 0, 0, 30, 112,
-		1, 0, 0, 0, 32, 119, 1, 0, 0, 0, 34, 121, 1, 0, 0, 0, 36, 123, 1, 0, 0,
-		0, 38, 130, 1, 0, 0, 0, 40, 137, 1, 0, 0, 0, 42, 44, 3, 2, 1, 0, 43, 42,
+		24, 95, 1, 0, 0, 0, 26, 104, 1, 0, 0, 0, 28, 106, 1, 0, 0, 0, 30, 113,
+		1, 0, 0, 0, 32, 120, 1, 0, 0, 0, 34, 122, 1, 0, 0, 0, 36, 124, 1, 0, 0,
+		0, 38, 131, 1, 0, 0, 0, 40, 138, 1, 0, 0, 0, 42, 44, 3, 2, 1, 0, 43, 42,
 		1, 0, 0, 0, 44, 47, 1, 0, 0, 0, 45, 43, 1, 0, 0, 0, 45, 46, 1, 0, 0, 0,
 		46, 48, 1, 0, 0, 0, 47, 45, 1, 0, 0, 0, 48, 49, 5, 0, 0, 1, 49, 1, 1, 0,
 		0, 0, 50, 55, 3, 4, 2, 0, 51, 55, 3, 8, 4, 0, 52, 55, 3, 10, 5, 0, 53,
@@ -92,21 +92,21 @@ func configparserParserInit() {
 		0, 0, 0, 90, 91, 1, 0, 0, 0, 91, 89, 1, 0, 0, 0, 91, 92, 1, 0, 0, 0, 92,
 		21, 1, 0, 0, 0, 93, 94, 7, 1, 0, 0, 94, 23, 1, 0, 0, 0, 95, 96, 5, 26,
 		0, 0, 96, 25, 1, 0, 0, 0, 97, 98, 3, 28, 14, 0, 98, 99, 3, 36, 18, 0, 99,
-		104, 1, 0, 0, 0, 100, 101, 3, 36, 18, 0, 101, 102, 3, 28, 14, 0, 102, 104,
-		1, 0, 0, 0, 103, 97, 1, 0, 0, 0, 103, 100, 1, 0, 0, 0, 104, 27, 1, 0, 0,
-		0, 105, 106, 5, 4, 0, 0, 106, 108, 5, 24, 0, 0, 107, 109, 3, 30, 15, 0,
-		108, 107, 1, 0, 0, 0, 109, 110, 1, 0, 0, 0, 110, 108, 1, 0, 0, 0, 110,
-		111, 1, 0, 0, 0, 111, 29, 1, 0, 0, 0, 112, 113, 3, 32, 16, 0, 113, 115,
-		5, 24, 0, 0, 114, 116, 3, 34, 17, 0, 115, 114, 1, 0, 0, 0, 116, 117, 1,
-		0, 0, 0, 117, 115, 1, 0, 0, 0, 117, 118, 1, 0, 0, 0, 118, 31, 1, 0, 0,
-		0, 119, 120, 7, 2, 0, 0, 120, 33, 1, 0, 0, 0, 121, 122, 5, 26, 0, 0, 122,
-		35, 1, 0, 0, 0, 123, 124, 5, 7, 0, 0, 124, 126, 5, 24, 0, 0, 125, 127,
-		3, 38, 19, 0, 126, 125, 1, 0, 0, 0, 127, 128, 1, 0, 0, 0, 128, 126, 1,
-		0, 0, 0, 128, 129, 1, 0, 0, 0, 129, 37, 1, 0, 0, 0, 130, 131, 3, 32, 16,
-		0, 131, 133, 5, 24, 0, 0, 132, 134, 3, 40, 20, 0, 133, 132, 1, 0, 0, 0,
-		134, 135, 1, 0, 0, 0, 135, 133, 1, 0, 0, 0, 135, 136, 1, 0, 0, 0, 136,
-		39, 1, 0, 0, 0, 137, 138, 5, 26, 0, 0, 138, 41, 1, 0, 0, 0, 10, 45, 54,
-		79, 84, 91, 103, 110, 117, 128, 135,
+		105, 1, 0, 0, 0, 100, 101, 3, 36, 18, 0, 101, 102, 3, 28, 14, 0, 102, 105,
+		1, 0, 0, 0, 103, 105, 3, 28, 14, 0, 104, 97, 1, 0, 0, 0, 104, 100, 1, 0,
+		0, 0, 104, 103, 1, 0, 0, 0, 105, 27, 1, 0, 0, 0, 106, 107, 5, 4, 0, 0,
+		107, 109, 5, 24, 0, 0, 108, 110, 3, 30, 15, 0, 109, 108, 1, 0, 0, 0, 110,
+		111, 1, 0, 0, 0, 111, 109, 1, 0, 0, 0, 111, 112, 1, 0, 0, 0, 112, 29, 1,
+		0, 0, 0, 113, 114, 3, 32, 16, 0, 114, 116, 5, 24, 0, 0, 115, 117, 3, 34,
+		17, 0, 116, 115, 1, 0, 0, 0, 117, 118, 1, 0, 0, 0, 118, 116, 1, 0, 0, 0,
+		118, 119, 1, 0, 0, 0, 119, 31, 1, 0, 0, 0, 120, 121, 7, 2, 0, 0, 121, 33,
+		1, 0, 0, 0, 122, 123, 5, 26, 0, 0, 123, 35, 1, 0, 0, 0, 124, 125, 5, 7,
+		0, 0, 125, 127, 5, 24, 0, 0, 126, 128, 3, 38, 19, 0, 127, 126, 1, 0, 0,
+		0, 128, 129, 1, 0, 0, 0, 129, 127, 1, 0, 0, 0, 129, 130, 1, 0, 0, 0, 130,
+		37, 1, 0, 0, 0, 131, 132, 3, 32, 16, 0, 132, 134, 5, 24, 0, 0, 133, 135,
+		3, 40, 20, 0, 134, 133, 1, 0, 0, 0, 135, 136, 1, 0, 0, 0, 136, 134, 1,
+		0, 0, 0, 136, 137, 1, 0, 0, 0, 137, 39, 1, 0, 0, 0, 138, 139, 5, 26, 0,
+		0, 139, 41, 1, 0, 0, 0, 10, 45, 54, 79, 84, 91, 104, 111, 118, 129, 136,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -1900,11 +1900,10 @@ func (p *ConfigParser) AdvancedState() (localctx IAdvancedStateContext) {
 		}
 	}()
 
-	p.SetState(103)
+	p.SetState(104)
 	p.GetErrorHandler().Sync(p)
-
-	switch p.GetTokenStream().LA(1) {
-	case ConfigParserCORNERS:
+	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 5, p.GetParserRuleContext()) {
+	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
 			p.SetState(97)
@@ -1915,7 +1914,7 @@ func (p *ConfigParser) AdvancedState() (localctx IAdvancedStateContext) {
 			p.Edges()
 		}
 
-	case ConfigParserEDGES:
+	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
 			p.SetState(100)
@@ -1926,8 +1925,13 @@ func (p *ConfigParser) AdvancedState() (localctx IAdvancedStateContext) {
 			p.Corners()
 		}
 
-	default:
-		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+	case 3:
+		p.EnterOuterAlt(localctx, 3)
+		{
+			p.SetState(103)
+			p.Corners()
+		}
+
 	}
 
 	return localctx
@@ -2060,24 +2064,24 @@ func (p *ConfigParser) Corners() (localctx ICornersContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(105)
+		p.SetState(106)
 		p.Match(ConfigParserCORNERS)
 	}
 	{
-		p.SetState(106)
+		p.SetState(107)
 		p.Match(ConfigParserCOLON)
 	}
-	p.SetState(108)
+	p.SetState(109)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for ok := true; ok; ok = ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&132160) != 0) {
 		{
-			p.SetState(107)
+			p.SetState(108)
 			p.CornerLayer()
 		}
 
-		p.SetState(110)
+		p.SetState(111)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -2224,24 +2228,24 @@ func (p *ConfigParser) CornerLayer() (localctx ICornerLayerContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(112)
+		p.SetState(113)
 		p.LayerDef()
 	}
 	{
-		p.SetState(113)
+		p.SetState(114)
 		p.Match(ConfigParserCOLON)
 	}
-	p.SetState(115)
+	p.SetState(116)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for ok := true; ok; ok = _la == ConfigParserWORD {
 		{
-			p.SetState(114)
+			p.SetState(115)
 			p.Corner()
 		}
 
-		p.SetState(117)
+		p.SetState(118)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -2338,7 +2342,7 @@ func (p *ConfigParser) LayerDef() (localctx ILayerDefContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(119)
+		p.SetState(120)
 		_la = p.GetTokenStream().LA(1)
 
 		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&132160) != 0) {
@@ -2430,7 +2434,7 @@ func (p *ConfigParser) Corner() (localctx ICornerContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(121)
+		p.SetState(122)
 		p.Match(ConfigParserWORD)
 	}
 
@@ -2564,24 +2568,24 @@ func (p *ConfigParser) Edges() (localctx IEdgesContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(123)
+		p.SetState(124)
 		p.Match(ConfigParserEDGES)
 	}
 	{
-		p.SetState(124)
+		p.SetState(125)
 		p.Match(ConfigParserCOLON)
 	}
-	p.SetState(126)
+	p.SetState(127)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for ok := true; ok; ok = ((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&132160) != 0) {
 		{
-			p.SetState(125)
+			p.SetState(126)
 			p.EdgeLayer()
 		}
 
-		p.SetState(128)
+		p.SetState(129)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -2728,24 +2732,24 @@ func (p *ConfigParser) EdgeLayer() (localctx IEdgeLayerContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(130)
+		p.SetState(131)
 		p.LayerDef()
 	}
 	{
-		p.SetState(131)
+		p.SetState(132)
 		p.Match(ConfigParserCOLON)
 	}
-	p.SetState(133)
+	p.SetState(134)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for ok := true; ok; ok = _la == ConfigParserWORD {
 		{
-			p.SetState(132)
+			p.SetState(133)
 			p.Edge()
 		}
 
-		p.SetState(135)
+		p.SetState(136)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -2831,7 +2835,7 @@ func (p *ConfigParser) Edge() (localctx IEdgeContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(137)
+		p.SetState(138)
 		p.Match(ConfigParserWORD)
 	}
 

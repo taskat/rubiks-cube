@@ -1,6 +1,7 @@
 package generatorvisitor
 
 import (
+	"fmt"
 	"github.com/taskat/rubiks-cube/src/color"
 	"github.com/taskat/rubiks-cube/src/models"
 	"github.com/taskat/rubiks-cube/src/models/algorithm"
@@ -49,6 +50,7 @@ func at(piece parameters.Piece, pos parameters.Position) algorithm.ConditionFunc
 
 func colorListMatch(expectedColor color.Color, coords parameters.List[parameters.Coord]) algorithm.ConditionFunc {
 	return func(p models.Puzzle) bool {
+		fmt.Println("color list match", coords)
 		for _, coord := range coords {
 			if !p.GetColor(coord).Equals(expectedColor) {
 				return false
@@ -82,8 +84,32 @@ func none(builder conditionBuilderFunc, list parameters.List[parameters.Paramete
 	}
 }
 
+func same(list parameters.List[parameters.Coord]) algorithm.ConditionFunc {
+	return func(p models.Puzzle) bool {
+		if len(list) < 2 {
+			return true
+		}
+		firstColor := p.GetColor(list[0])
+		colors := make([]color.Color, 0, len(list))
+		defer func(a *[]color.Color) {
+			fmt.Println(*a)
+		}(&colors)
+		fmt.Println("same", firstColor)
+		for _, coord := range list {
+			colors = append(colors, p.GetColor(coord))
+			if !p.GetColor(coord).Equals(firstColor) {
+				return false
+			}
+		}
+		fmt.Println("same true")
+		return true
+	}
+}
+
 func singleColorMatch(expectedColor color.Color, coord parameters.Coord) algorithm.ConditionFunc {
 	return func(p models.Puzzle) bool {
+		fmt.Println("single color match")
+		fmt.Println(p.GetColor(coord))
 		return p.GetColor(coord).Equals(expectedColor)
 	}
 }

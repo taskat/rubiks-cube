@@ -1,0 +1,11 @@
+puzzle: cube
+size: 3
+state description: advanced
+state:
+    corners:
+        Up: wrg wgo wob wbr
+        Down: yrb ybo yog ygr
+    edges:
+        Up: wg wo wb wr
+        Middle: rg go ob br
+        Down: yb yo yg yr

@@ -1,6 +1,7 @@
 package errorvisitor
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
@@ -13,6 +14,7 @@ import (
 type Visitor struct {
 	basevisitor.ErrorVisitor
 	stateDescription    string
+	size                int
 	stateDescriptionCtx eh.IContext
 }
 
@@ -41,11 +43,14 @@ func (v *Visitor) visitPuzzleTypeDef(ctx *cp.PuzzleTypeDefContext) {
 
 func (v *Visitor) visitSizeDef(ctx *cp.SizeDefContext) {
 	sizeString := ctx.NUMBER().GetText()
-	size, err := strconv.Atoi(sizeString)
+	var err error
+	v.size, err = strconv.Atoi(sizeString)
+	min := 2
+	max := 7
 	if err != nil {
 		v.Eh().AddError(ctx, "cannot convert to size (integer)", v.FileName())
-	} else if size != 3 {
-		v.Eh().AddError(ctx, "Size can only be 3", v.FileName())
+	} else if v.size < min || v.size > max {
+		v.Eh().AddError(ctx, fmt.Sprintf("Size has to be >=%d and <=%d", min, max), v.FileName())
 	}
 }
 
@@ -63,7 +68,7 @@ func (v *Visitor) visitState(ctx *cp.StateContext) {
 				v.Eh().AddError(v.stateDescriptionCtx, errorMsg, v.FileName())
 			}
 		} else {
-			visitor := newBeginnerStateVisitor(v.FileName(), v.Eh())
+			visitor := newBeginnerStateVisitor(v.FileName(), v.Eh(), v.size)
 			visitor.visitBeginnerState(ctx.BeginnerState().(*cp.BeginnerStateContext))
 		}
 	}
@@ -74,7 +79,7 @@ func (v *Visitor) visitState(ctx *cp.StateContext) {
 				v.Eh().AddError(v.stateDescriptionCtx, errorMsg, v.FileName())
 			}
 		} else {
-			visitor := newAdvancedStateVisitor(v.FileName(), v.Eh())
+			visitor := newAdvancedStateVisitor(v.FileName(), v.Eh(), v.size)
 			visitor.visitAdvancedState(ctx.AdvancedState().(*cp.AdvancedStateContext))
 		}
 	}

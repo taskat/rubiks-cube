@@ -6,6 +6,7 @@ import CoordsList from "./coordslist";
 import MoveBuilder from "./movebuilder";
 import * as THREE from "three";
 import { Side } from "./side";
+import { SideCoordCalculator } from "./sidecoordcalculator";
 
 const COLORS: Map<String, THREE.Color> = new Map([
   ["b", new THREE.Color("blue")],
@@ -19,14 +20,18 @@ const COLORS: Map<String, THREE.Color> = new Map([
 
 export default class Cube {
   cubeData: CubeData;
+  size: number;
   pieces: Piece[];
   moves: Map<string, Move>;
   colorPalette: Map<Side, string[][]>
   constructor(cubeSize: number, colorPalette: Map<Side, string[][]>) {
     this.cubeData = new CubeData(cubeSize);
+    this.size = cubeSize;
+    const calculator = new SideCoordCalculator(this.cubeData);
     const allCoordsList = this.cubeData.makeAllCoordsList();
-    this.pieces = allCoordsList.coords.map((coord, index) => new Piece(index, coord, this.cubeData));
+    this.pieces = allCoordsList.coords.map((coord, index) => new Piece(index, coord, calculator));
     this.moves = new Map(this.generateMoves().map(move => [move.name, move]));
+    console.log(this.moves.keys());
     this.colorPalette = colorPalette;
   }
 
@@ -38,31 +43,49 @@ export default class Cube {
     this.pieces = moves.reduce((pieces, move) => move.makeMove(pieces), this.pieces);
   }
 
+  generateNames(basics: string[]): string[] {
+    const half = this.size / 2;
+    let names: string[] = [];
+    names.push(basics[0]);
+    for (let i = 2; i <= half; i++) {
+      names.push(`${i}${basics[0]}`);
+    }
+    if (this.size % 2 === 1) {
+      names.push(basics[1]);
+    }
+    for (let i = half; i >= 2; i--) {
+      names.push(`${i}${basics[2]}`);
+    }
+    names.push(basics[2]);
+    return names
+  }
+
   generateMoves(): Move[] {
     const angles = [90, 180, 270];
     const xRotationMatrices3 = angles.map(rotateX);
     const yRotationMatrices3 = angles.map(rotateY);
     const zRotationMatrices3 = angles.map(rotateZ);
     const allCoordsList = this.cubeData.makeAllCoordsList();
-    const xNames = ["L", "M", "R"];
-    const yNames = ["D", "E", "U"];
-    const zNames = ["B", "S", "F"];
+    const xNames = this.generateNames(["L", "M", "R"]);
+    const yNames = this.generateNames(["D", "E", "U"]);
+    const zNames = this.generateNames(["B", "S", "F"]);
     const builders: MoveBuilder[] = [
       ...this.cubeData.values.map((xSlice, index) => new MoveBuilder(xRotationMatrices3, allCoordsList.xSlice(xSlice), xNames[index])),
       ...this.cubeData.values.map((ySlice, index) => new MoveBuilder(yRotationMatrices3, allCoordsList.ySlice(ySlice), yNames[index])),
       ...this.cubeData.values.map((zSlice, index) => new MoveBuilder(zRotationMatrices3, allCoordsList.zSlice(zSlice), zNames[index])),
-      new MoveBuilder(xRotationMatrices3, allCoordsList.xSlice(-1).concat(allCoordsList.xSlice(0)), "Lw"),
-      new MoveBuilder(xRotationMatrices3, allCoordsList.xSlice(0).concat(allCoordsList.xSlice(1)), "Rw"),
-      new MoveBuilder(yRotationMatrices3, allCoordsList.ySlice(-1).concat(allCoordsList.ySlice(0)), "Dw"),
-      new MoveBuilder(yRotationMatrices3, allCoordsList.ySlice(0).concat(allCoordsList.ySlice(1)), "Uw"),
-      new MoveBuilder(zRotationMatrices3, allCoordsList.zSlice(-1).concat(allCoordsList.zSlice(0)), "Bw"),
-      new MoveBuilder(zRotationMatrices3, allCoordsList.zSlice(0).concat(allCoordsList.zSlice(1)), "Fw"),
+      // needs update if we want to use them
+      // new MoveBuilder(xRotationMatrices3, allCoordsList.xSlice(-1).concat(allCoordsList.xSlice(0)), "Lw"),
+      // new MoveBuilder(xRotationMatrices3, allCoordsList.xSlice(0).concat(allCoordsList.xSlice(1)), "Rw"),
+      // new MoveBuilder(yRotationMatrices3, allCoordsList.ySlice(-1).concat(allCoordsList.ySlice(0)), "Dw"),
+      // new MoveBuilder(yRotationMatrices3, allCoordsList.ySlice(0).concat(allCoordsList.ySlice(1)), "Uw"),
+      // new MoveBuilder(zRotationMatrices3, allCoordsList.zSlice(-1).concat(allCoordsList.zSlice(0)), "Bw"),
+      // new MoveBuilder(zRotationMatrices3, allCoordsList.zSlice(0).concat(allCoordsList.zSlice(1)), "Fw"),
       new MoveBuilder(xRotationMatrices3, allCoordsList, "x"),
       new MoveBuilder(yRotationMatrices3, allCoordsList, "y"),
       new MoveBuilder(zRotationMatrices3, allCoordsList, "z"),
     ];
-    const toReverse = ["U", "R", "B", "Uw", "Rw", "Bw", "x", "y"];
-    builders.forEach(builder => { 
+    const toReverse = ["U", "R", "B", "2U", "2R", "2B", "x", "y"];
+    builders.forEach(builder => {
       if (toReverse.includes(builder.name)) {
         builder.reverse();
       }
@@ -88,9 +111,26 @@ export default class Cube {
     }
     const sideCoord = piece.getSideCoord(side);
     if (sideCoord) {
+      let side2 = this.colorPalette.get(side);
+      if (!side2) {
+        console.log(side);
+        console.log(piece.coord);
+      }
+      let row = (side2 as string[][])[sideCoord.i];
+      if (!row) {
+        console.log(sideCoord);
+        console.log(side);
+        console.log(piece.coord);
+      }
       let color = (this.colorPalette.get(side) as string[][])[sideCoord.i][sideCoord.j]
+      let color2 = COLORS.get(color);
+      if (!color2) {
+        console.log(sideCoord);
+        console.log(color);
+        console.log(piece.coord);
+      }
       return COLORS.get(color) as THREE.Color;
-    } 
+    }
     return COLORS.get("-") as THREE.Color;
   }
 

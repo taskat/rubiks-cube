@@ -64,7 +64,7 @@ func (v *Visitor) visitState(ctx *cp.StateContext) models.Puzzle {
 		panic("random not implemented yet!")
 	}
 	if ctx.AdvancedState() != nil {
-		visitor := newAdvancedStateVisitor(v.sideConstructor)
+		visitor := newAdvancedStateVisitor(v.size, v.sideConstructor)
 		return visitor.visitAdvancedState(ctx.AdvancedState().(*cp.AdvancedStateContext))
 	}
 	visitor := newBeginnerStateVisitor(v.size, v.sideConstructor)

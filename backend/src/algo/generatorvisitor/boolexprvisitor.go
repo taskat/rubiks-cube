@@ -183,6 +183,13 @@ func (v *boolExprVisitor) visitUnaryExpr(ctx *ap.UnaryExprContext) algorithm.Con
 		return v.buildBinaryFuncFromUnary(param, v.buildAtFunc)
 	case "orientation":
 		return v.buildBinaryFuncFromUnary(param, v.buildLikeFunc)
+	case "same":
+		paramList := param.(parameters.List[parameters.Parameter])
+		correctList := make(parameters.List[parameters.Coord], len(paramList))
+		for i, param := range paramList {
+			correctList[i] = param.(parameters.Coord)
+		}
+		return same(correctList)
 	}
 	expectedColor := color.Color(ctx.WORD().GetText())
 	switch typedParam := param.(type) {

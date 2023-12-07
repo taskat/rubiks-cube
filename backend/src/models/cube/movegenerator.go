@@ -1,6 +1,10 @@
 package cube
 
-import "github.com/taskat/rubiks-cube/src/models/parameters"
+import (
+	"fmt"
+
+	"github.com/taskat/rubiks-cube/src/models/parameters"
+)
 
 type moveGenerator struct {
 	size  int
@@ -26,6 +30,25 @@ func (mg *moveGenerator) generateAllMoves() map[string]move {
 	return mg.moves
 }
 
+func (mg *moveGenerator) generateNames(basics []string) []string {
+	half := mg.size / 2
+	names := make([]string, 0, mg.size)
+	names = append(names, basics[0])
+	for i := 2; i <= half; i++ {
+		newName := fmt.Sprintf("%d%s", i, basics[0])
+		names = append(names, newName)
+	}
+	if mg.size%2 == 1 {
+		names = append(names, basics[1])
+	}
+	for i := half; i >= 2; i-- {
+		newName := fmt.Sprintf("%d%s", i, basics[2])
+		names = append(names, newName)
+	}
+	names = append(names, basics[2])
+	return names
+}
+
 func (mg *moveGenerator) generateXMoves() {
 	getSlices := func(col int) [4][]parameters.Coord {
 		slices := [4][]parameters.Coord{}
@@ -37,11 +60,11 @@ func (mg *moveGenerator) generateXMoves() {
 		}
 		return slices
 	}
-	names := []string{"L", "M", "R"}
+	names := mg.generateNames([]string{"L", "M", "R"})
 	for i := 0; i < mg.size; i++ {
 		slices := getSlices(i)
 		cycles := mg.getSliceCycles(slices)
-		if i <= mg.size/2 {
+		if i < mg.size/2 || (mg.size%2 == 1 && i == mg.size/2) {
 			cycles = mg.inverseCycles(cycles)
 		}
 		if i == 0 {
@@ -72,7 +95,7 @@ func (mg *moveGenerator) generateYMoves() {
 		}
 		return slices
 	}
-	names := []string{"U", "E", "D"}
+	names := mg.generateNames([]string{"U", "E", "D"})
 	for i := 0; i < mg.size; i++ {
 		slices := getSlices(i)
 		cycles := mg.getSliceCycles(slices)
@@ -107,14 +130,14 @@ func (mg *moveGenerator) generateZMoves() {
 		}
 		return slices
 	}
-	names := []string{"F", "S", "B"}
+	names := mg.generateNames([]string{"F", "S", "B"})
 	for i := 0; i < mg.size; i++ {
 		slices := getSlices(i)
 		cycles := mg.getSliceCycles(slices)
 		if i == 0 {
 			cycles = append(cycles, mg.getSideCycles(Front)...)
 		}
-		if i > mg.size/2 {
+		if i > mg.size/2 || (mg.size%2 == 0 && i == mg.size/2) {
 			cycles = mg.inverseCycles(cycles)
 		}
 		if i == mg.size-1 {
@@ -131,17 +154,48 @@ func (mg *moveGenerator) generateZMoves() {
 	mg.addMove(move{cycles: fullCubeCycles, steps: 1}, "z")
 }
 
+func cycleNumber(size int) int {
+	cycles := 0
+	for i := size - 1; i >= 1; i -= 2 {
+		cycles += i
+	}
+	if size%2 == 1 {
+		cycles++
+	}
+	return cycles
+}
+
 func (mg *moveGenerator) getSideCycles(side cubeSide) []cycle {
-	cycles := make([]cycle, 3)
-	cycles[0] = cycle{
-		parameters.NewCoord(side, 0, 0), parameters.NewCoord(side, 0, 2),
-		parameters.NewCoord(side, 2, 2), parameters.NewCoord(side, 2, 0),
+	max := mg.size - 1
+	cycles := make([]cycle, 0, cycleNumber(mg.size))
+	cycles = append(cycles, cycle{
+		parameters.NewCoord(side, 0, 0), parameters.NewCoord(side, 0, max),
+		parameters.NewCoord(side, max, max), parameters.NewCoord(side, max, 0),
+	})
+	if mg.size > 2 {
+		edges := mg.size - 2
+		for i := 1; i <= edges; i++ {
+			cycles = append(cycles, cycle{
+				parameters.NewCoord(side, 0, i), parameters.NewCoord(side, i, max),
+				parameters.NewCoord(side, max, mg.size-i-1), parameters.NewCoord(side, mg.size-i-1, 0),
+			})
+		}
 	}
-	cycles[1] = cycle{
-		parameters.NewCoord(side, 0, 1), parameters.NewCoord(side, 1, 2),
-		parameters.NewCoord(side, 2, 1), parameters.NewCoord(side, 1, 0),
+	if mg.size > 2 {
+		limit := (mg.size - 1) / 2
+		for i := 1; i <= limit; i++ {
+			for j := i; j < max-i; j++ {
+				cycles = append(cycles, cycle{
+					parameters.NewCoord(side, i, j), parameters.NewCoord(side, j, max-i),
+					parameters.NewCoord(side, max-i, max-j), parameters.NewCoord(side, max-j, i),
+				})
+			}
+		}
+		if mg.size%2 == 1 {
+			middle := mg.size / 2
+			cycles = append(cycles, cycle{parameters.NewCoord(side, middle, middle)})
+		}
 	}
-	cycles[2] = cycle{parameters.NewCoord(side, 1, 1)}
 	return cycles
 }
 

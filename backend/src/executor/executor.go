@@ -1,8 +1,6 @@
 package executor
 
 import (
-	"fmt"
-
 	eh "github.com/taskat/rubiks-cube/src/errorhandler"
 	"github.com/taskat/rubiks-cube/src/models"
 	"github.com/taskat/rubiks-cube/src/models/algorithm"
@@ -24,7 +22,6 @@ func (e *Executor) Execute(state models.Puzzle, algo algorithm.Algorithm) (resul
 	block := algo.Execute(puzzleWrapper)
 	for !block.Finished() {
 		block = block.Execute(puzzleWrapper)
-		fmt.Println(block)
 	}
 	executionResult := *NewExecutionResult(puzzleWrapper.turns, puzzleWrapper.steps)
 	return utils.Ok(executionResult)

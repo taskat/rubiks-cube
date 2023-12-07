@@ -15,8 +15,15 @@ func newValidator(c *Cube) *validator {
 }
 
 func (v *validator) checkCornerTwists() []string {
-	upColor := v.cube.sides[Up][1][1]
-	downColor := v.cube.sides[Down][1][1]
+	var upColor, downColor color.Color
+	if v.cube.size%2 == 1 {
+		middle := v.cube.size / 2
+		upColor = v.cube.sides[Up][middle][middle]
+		downColor = v.cube.sides[Down][middle][middle]
+	} else {
+		upColor = color.Color("w")
+		downColor = color.Color("y")
+	}
 	isGoodColor := func(c color.Color) bool {
 		return c == upColor || c == downColor
 	}
@@ -59,7 +66,7 @@ func (v *validator) checkCornerCycles() int {
 }
 
 func (v *validator) checkEdgeCycles() int {
-	edgePiecesArray := v.cube.getEdgePieces()
+	edgePiecesArray := v.cube.getMiddleEdgePieces()
 	edgePieces := make(map[string]edgePiece, len(edgePiecesArray))
 	for _, piece := range edgePiecesArray {
 		edgePieces[piece.location.getHash()] = piece
@@ -86,7 +93,7 @@ func (v *validator) checkEdgeCycles() int {
 }
 
 func (v *validator) checkEdgeFlips() []string {
-	edgePieces := v.cube.getEdgePieces()
+	edgePieces := v.cube.getMiddleEdgePieces()
 	moves := 0
 	for _, piece := range edgePieces {
 		moves += piece.movesToGoal()
@@ -108,7 +115,9 @@ func (v *validator) checkPermutations() []string {
 
 func (v *validator) Validate() []string {
 	errors := v.checkCornerTwists()
-	errors = append(errors, v.checkEdgeFlips()...)
-	errors = append(errors, v.checkPermutations()...)
+	if v.cube.size%2 == 1 {
+		errors = append(errors, v.checkEdgeFlips()...)
+		errors = append(errors, v.checkPermutations()...)
+	}
 	return errors
 }

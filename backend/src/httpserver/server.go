@@ -39,6 +39,14 @@ func (s Server) addHeaders(response http.ResponseWriter, request *http.Request) 
 }
 
 func (s Server) allHandler(response http.ResponseWriter, request *http.Request) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("Panic: ", r)
+			s.writeError(response, http.StatusInternalServerError, fmt.Errorf("Panic: %v", r))
+			panic(r)
+
+		}
+	}()
 	if request.Method != "POST" {
 		response.Header().Set("Allow", "POST")
 		response.WriteHeader(http.StatusMethodNotAllowed)
@@ -62,6 +70,10 @@ func (s Server) allHandler(response http.ResponseWriter, request *http.Request) 
 		errorHandler.AddInfo(eh.NewContext(0, 0), msg, "algorithm.algo")
 	}
 	algo := algohandler.Handle("algorithm.algo", string(content.Algo), &errorHandler, cube)
+	if errorHandler.HasErrors() {
+		msg := "There are errors in the algorithm. Skipping algorithm execution."
+		errorHandler.AddInfo(eh.NewContext(0, 0), msg, "algorithm.algo")
+	}
 	executor := executor.NewExecutor(&errorHandler)
 	execResult := executor.Execute(cube.Clone(), algo)
 	var messages []eh.Message
@@ -92,6 +104,12 @@ func (s Server) check(response http.ResponseWriter, request *http.Request) {
 }
 
 func (s Server) configHandler(response http.ResponseWriter, request *http.Request) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("Panic: ", r)
+			s.writeError(response, http.StatusInternalServerError, fmt.Errorf("Panic: %v", r))
+		}
+	}()
 	if request.Method != "POST" {
 		response.Header().Set("Allow", "POST")
 		response.WriteHeader(http.StatusMethodNotAllowed)

@@ -134,6 +134,7 @@ steps:
                 do: 4(R' D' R D) U
             if yellow(Right 0 0):
                 do: 2(R' D' R D) U
+            prepare: 
     step orient_top_layer:
         goal: orientation(Up, Front, Right)
         runs: 3

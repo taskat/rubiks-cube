@@ -51,7 +51,7 @@ func (v *branchVisitor) visitIfBranch(ctx *ap.IfBranchContext, last bool) {
 	v.parentVisitor.visitDoDef(ctx.DoDef().(*ap.DoDefContext))
 	if last {
 		parentCtx := ctx.GetParent().GetParent().(*ap.BranchesContext)
-		v.Eh().AddWarning(parentCtx, "Last branch is not a prepare branch", v.FileName())
+		v.Eh().AddError(parentCtx, "Last branch is not a prepare branch", v.FileName())
 	}
 }
 

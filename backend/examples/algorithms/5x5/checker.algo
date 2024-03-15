@@ -1,0 +1,4 @@
+steps:
+    step solve:
+        do: L2 M2 R2 U2 E2 D2 B2 S2 F2
+    
